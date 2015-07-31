@@ -1,0 +1,67 @@
+#parse("common/taglibs.vm")
+<html>
+<head>
+#parse("common/meta.vm")
+<script type="text/javascript">
+	var arJ;
+	var dhxLayout;
+	var myMenu;
+	var mySidebar;
+	$(function() {
+		$("#showtime").text(time());
+		
+		dhxWins = new dhtmlXWindows();
+		dhxLayout = new dhtmlXLayoutObject(document.body, "2U");
+		dhxLayout.items[0].setWidth(200);
+		dhxLayout.items[0].setText("您好！"+time());
+		//dhxLayout.items[0].hideHeader();
+		//dhxLayout.items[0].setWidth(250);
+		dhxLayout.items[1].setText("欢迎使用 "+new Date());
+		
+		mySidebar = dhxLayout.items[0].attachSidebar({
+			width: 200,
+			icons_path: "${SITE_DYN}/js/dhtmlx_std_full/imgs/",
+			xml:"${SITE_DYN}/xml/sidebar.xml?tt="+new Date().getTime()
+		});
+		mySidebar.attachEvent("onSelect", function(id, lastId){
+			tonclick(id)
+		});
+
+	});
+	
+	function tonclick(id){
+		if(id == 'xd1'){
+			dhxLayout.items[1].setText("业务管理");
+			dhxLayout.items[1].attachURL("${SITE_DYN}/busniess/list.html?toPage=true&etc="+new Date().getTime());
+		}else if(id == 'xd2'){
+			dhxLayout.items[1].setText("数据源管理");
+			dhxLayout.items[1].attachURL("${SITE_DYN}/dbs/list.html?toPage=true&etc="+new Date().getTime());
+		}else if(id == 'xd3'){
+			dhxLayout.items[1].setText("SQL语句管理");
+			dhxLayout.items[1].attachURL("${SITE_DYN}/sql/list.html?toPage=true&etc="+new Date().getTime());
+		}else if(id == 'xd4'){
+            dhxLayout.items[1].setText("全局参数管理");
+            dhxLayout.items[1].attachURL("${SITE_DYN}/param/list.html?toPage=true&etc="+new Date().getTime());
+        }else if(id == 'xd5'){
+			dhxLayout.items[1].setText("联合查询");
+			dhxLayout.items[1].attachURL("${SITE_DYN}/q/list.action?toPage=true&etc="+new Date().getTime());
+		}
+	}
+	
+	function time(){
+		var week; 
+		if(new Date().getDay()==0)          week="周日";
+		if(new Date().getDay()==1)          week="周一";
+		if(new Date().getDay()==2)          week="周二";
+		if(new Date().getDay()==3)          week="周三";
+		if(new Date().getDay()==4)          week="周四";
+		if(new Date().getDay()==5)          week="周五";
+		if(new Date().getDay()==6)          week="周六";
+		return ((new Date().getMonth()+1)+"月"+new Date().getDate()+"日 "+week);
+	}
+</script>
+<title></title>
+</head>
+<body>
+</body>
+</html>

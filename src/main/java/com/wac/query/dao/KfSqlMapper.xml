@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wac.query.dao.KfSqlMapper">
+
+	<resultMap id="KfSqlMapper.KfSql" type="com.wac.query.models.KfSql">
+		<id column="id" property="id"/>
+		<result column="sql_name" property="sqlName"/>
+		<result column="busniess_id" property="busniessId"/>
+		<result column="priority" property="priority"/>
+		<result column="data_source_id" property="dataSourceId"/>
+		<result column="sql_status" property="sqlStatus"/>
+		<result column="sql_statement" property="sqlStatement"/>
+		<result column="sql_desc" property="sqlDesc"/>
+		<result column="create_time" property="createTime" javaType="java.util.Date"/>
+		<result column="update_time" property="updateTime" javaType="java.util.Date"/>
+	</resultMap>
+	<sql id="KfSqlMapper.fields">
+		id,sql_name,busniess_id,priority,data_source_id,sql_status,sql_statement,sql_desc,create_time,update_time
+	</sql>
+
+	<sql id="KfSqlMapper.condition">
+		where 1=1
+		<if test="sqlName != null">
+			AND t1.sql_name like concat('%',#{sqlName},'%')
+		</if>
+		<if test="busniessId != null and busniessId > 0">
+			AND t1.busniess_id =#{busniessId}
+		</if>
+		<if test="dataSourceId != null and dataSourceId > 0">
+			AND t1.data_source_id =#{dataSourceId}
+		</if>
+		<if test="sqlStatus != null and sqlStatus > 0">
+			AND t1.sql_status =#{sqlStatus}
+		</if>
+	</sql>
+	<select id="queryByCondition" resultMap="KfSqlMapper.KfSql" parameterType="com.wac.query.models.KfSql" >
+		SELECT <include refid="KfSqlMapper.fields"/>
+		FROM kf_sql t1
+		<include refid="KfSqlMapper.condition" />
+		<choose>
+			<when test="busniessId != null and busniessId > 0">
+				order by priority asc
+			</when>
+			<otherwise>
+				order by  priority,create_time desc
+			</otherwise>
+		</choose>
+		limit #{startIndex},#{endIndex}
+	</select>
+
+	<select id="countByCondition" resultType="int" parameterType="com.wac.query.models.KfSql">
+			SELECT count(*) FROM kf_sql t1
+		<include refid="KfSqlMapper.condition" />
+	</select>
+
+	<select id="queryByPrimaryKey" resultMap="KfSqlMapper.KfSql" parameterType="java.lang.Integer">
+			SELECT <include refid="KfSqlMapper.fields"/> FROM kf_sql t1
+		where t1.id=#{id}
+	</select>
+
+	<delete id="deleteByCondition" parameterType="com.wac.query.models.KfSql">
+		DELETE from kf_sql where id=#{id}
+	</delete>
+	
+	<update id="updateByPrimaryKey" parameterType="com.wac.query.models.KfSql">
+		UPDATE kf_sql
+			SET sql_name=#{sqlName},
+			busniess_id=#{busniessId},
+			priority=#{priority},
+			data_source_Id=#{dataSourceId},
+			sql_status=#{sqlStatus},
+			sql_statement=#{sqlStatement},
+			sql_desc=#{sqlDesc}
+		where id=#{id}
+	</update>
+
+	<insert id="insert" parameterType="com.wac.query.models.KfSql">
+		INSERT INTO kf_sql(sql_name,busniess_id,priority,data_source_id,sql_status,sql_statement,sql_desc,create_time,update_time)
+		VALUES
+		(#{sqlName},#{busniessId},#{priority},#{dataSourceId},#{sqlStatus},#{sqlStatement},#{sqlDesc},#{createTime,jdbcType=TIMESTAMP },#{createTime,jdbcType=TIMESTAMP})
+		<selectKey resultType="int" keyProperty="id">
+			SELECT LAST_INSERT_ID() as id
+		</selectKey>
+	</insert>
+</mapper>

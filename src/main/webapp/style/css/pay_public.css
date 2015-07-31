@@ -1,0 +1,157 @@
+#keyWord {
+	width: 180px;
+	margin-left: 20px;
+}
+
+.showdetail {
+	color: black;
+	height: 128px;
+	background: #CDF;
+	position: absolute;
+	padding: 10px;
+	border: solid;
+	border-color: cornflowerblue;
+	border-style: solid;
+	text-align: left;
+}
+
+.errorMessage {
+	font-size: 12px;
+	font-weight: 300;
+	background-color: #f04124;
+	border-color: #ea2f10;
+	color: #ffffff;
+	padding-right: 35px;
+	padding: 10px;
+}
+
+.popTable {
+	text-align: center;
+	margin: 2px;
+}
+
+.popTable tr {
+	border: 1px;
+	border-style: double;
+}
+
+.popTable tr td {
+	width: 100px;
+	border: 1px;
+	border-style: double;
+}
+
+/* tip */
+.mc {
+	width: 0;
+	height: 0;
+	overflow: hidden;
+	position: absolute;
+}
+
+.mcLt {
+	border-style: dashed solid dashed dashed;
+	border-color: transparent #fff transparent transparent;
+	border-width: 8px;
+}
+
+.mcRt {
+	border-style: dashed dashed dashed solid;
+	border-color: transparent transparent transparent #fff;
+	border-width: 8px;
+}
+
+.mcTt {
+	border-style: dashed dashed solid dashed;
+	border-color: transparent transparent #fff transparent;
+	border-width: 8px;
+}
+
+.mcBt {
+	border-style: solid dashed dashed dashed;
+	border-color: #fff transparent transparent transparent;
+	border-width: 8px;
+}
+
+.orange {
+	color: orange;
+	cursor: pointer;
+}
+
+.orange:hover {
+	color: orange;
+}
+
+.w_tooltip {
+	
+}
+
+.table>tbody>tr>td:last-child {
+	position: relative;
+}
+
+.floatTip {
+	position: absolute;
+	top: 100%;
+	right: 0px;
+	display: none;
+	z-index: 99;
+}
+
+.floatTip .table {
+	margin-bottom: 0;
+}
+
+.floatTip .tipContent {
+	padding: 12px 24px;
+	border: 1px solid #FF4400;
+	background-color: #fff;
+	border-radius: 4px;
+	/*width: 344px;*/
+	font-size: 14px;
+	color: #333;
+	text-align: left;
+}
+
+.floatTip .mc {
+	position: absolute;
+}
+
+.floatTip .mcLt {
+	top: 50%;
+	margin-top: -5px;
+	left: -10px;
+	border-right-color: #FF4400;
+}
+
+.floatTip .mcInner {
+	border-bottom-color: #FFF5BD;
+}
+
+.floatTip .mcTt {
+	right: 0%;
+	top: -16px;
+	border-bottom-color: #FF4400;
+}
+
+.floatTip .mcInner {
+	border-bottom-color: #fff;
+	top: -15px;
+}
+
+#maintable .floatTip tbody tr td {
+	text-align: left;
+}
+
+.floatTip .table>tbody>tr td {
+	height: auto;
+	background-color: #fff !important;
+	border-top: none;
+	padding: 4px;
+	text-align: left;
+	font-size: 14px;
+}
+
+.floatTip .table>tbody>tr.info td {
+	
+}

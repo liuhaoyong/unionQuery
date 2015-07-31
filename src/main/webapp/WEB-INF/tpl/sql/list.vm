@@ -1,0 +1,124 @@
+#parse("common/taglibs.vm")
+<html>
+<head>
+#parse("common/meta.vm")
+<script type="text/javascript">
+var tbl;
+$( function() {
+	tbl = makeTable("sql_table","${SITE_DYN}/sql/list.action");
+});
+
+
+function search(){
+	
+	flashTableStart(tbl,encodeURI(getSearchUrl()));
+}
+
+function getSearchUrl(){
+	var name = $("#search_name1").val();
+	var search_bu = $("#search_bu").val();
+	var search_dbs = $("#search_name1").val();
+	var url = "${SITE_DYN}/sql/list.action?dbsName="+encodeURIComponent(name)+"&busniessId="+search_bu+"&dataSourceId="+search_dbs;
+	return url;
+}
+
+function reset(){
+	$("input[type='text']").val("");
+}
+var dhxWins;
+function edit(id){
+	if(id == null || isNaN(id)){
+		id = 0;
+	}
+	dhxWins= new dhtmlXWindows();
+	var win = dhxWins.createWindow("win", 20, 30, 700, 400);
+	win.setText("添加/修改SQL");
+	win.setModal(true);
+	win.centerOnScreen();
+    win.maximize();
+	win.attachURL("${SITE_DYN}/sql/new.action?id="+id+"&_t="+timestramp());
+	dhxWins.attachEvent("onClose",function(win){
+		flashTable(tbl,encodeURI(getSearchUrl()));
+		return true;
+	});
+
+}
+var dhxWins2;
+function editParam(id){
+	if(id == null || isNaN(id)){
+		id = 0;
+	}
+	dhxWins2= new dhtmlXWindows();
+	var win = dhxWins2.createWindow("win", 20, 30, 700, 400);
+	win.setText("添加/修改SQL参数");
+	win.setModal(true);
+	win.centerOnScreen();
+	win.attachURL("${SITE_DYN}/sql/paramNew.action?id="+id+"&_t="+timestramp());
+	win.maximize();
+	dhxWins2.attachEvent("onClose",function(win){
+		flashTable(tbl,encodeURI(getSearchUrl()));
+		return true;
+	});
+
+}
+
+</script>
+
+<title></title>
+</head>
+<body>
+<div id="dbsListTab" style="width:97%;margin: 5px 5px 0px 5px;">
+	<table id="tool" border="0" width="100%" class="searchtable" align="center">
+			<tr>
+				<td>
+				SQL名称：<input id="search_name1" type='text' size="40">&nbsp;&nbsp;<br>
+				业务：
+				<select id="search_bu">
+					<option value="-1">--</option>
+					#foreach($bu in ${busniessList})
+						<option value="${bu.id}">${bu.busniessName}</option>
+					#end
+				</select>
+				<br>
+				数据源：
+				<select id="search_dbs">
+					<option value="-1">--</option>
+					#foreach($dbs in ${dbsList})
+						<option value="${dbs.id}">${dbs.dbsName}</option>
+					#end
+				</select>
+				<br>
+				<input type="button" value="查询" onclick="search();" class="button"/>
+				&nbsp;
+				<input type="button" value="重置" onclick="reset();" class="button"/>
+					&nbsp;
+					<input type="button" value="新建SQL" onclick="edit(0);" class="button"/>
+				</td>
+			</tr>
+		</table>
+	<table width="100%" cellspacing="0" cellpadding="0" border="1" class="display" id="sql_table">
+	<thead>
+		<tr>
+			<th style="min-width: 60px;">ID</th>
+			<th style="min-width: 150px;">SQL名称</th>
+			<th style="min-width: 75px;">所属业务</th>
+			<th style="min-width: 75px;">所属数据源</th>
+			<th style="min-width: 75px;">优先级</th>
+			<th style="min-width: 75px;">sql语句</th>
+			<th style="min-width: 75px;">备注</th>
+			<th style="min-width: 75px;">状态</th>
+			<th style="min-width: 75px;">创建时间</th>
+			<th style="min-width: 75px;">更新时间</th>
+			<th style="min-width: 77px;">操作</th>
+        </tr>
+
+        </thead>
+        <tbody>
+        
+        </tbody>
+		
+	</table><br>
+
+</div>
+</body>
+</html>

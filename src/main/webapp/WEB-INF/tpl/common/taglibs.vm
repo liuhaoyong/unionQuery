@@ -1,0 +1,1 @@
+#set($SITE_DYN=${request.contextPath})

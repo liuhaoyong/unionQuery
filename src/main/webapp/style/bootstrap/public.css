@@ -1,0 +1,175 @@
+body {
+	font-size: 12px;
+}
+
+input.comment{
+	border: none;
+}
+
+.checkbox-group {
+	display: inline-table;
+	width: 80%;
+}
+
+.typeClass {
+	width: 100px;
+	height: 30px;
+	display: inline-block;
+}
+
+.panel-info {
+	border-color: #ccc;
+}
+
+.panel-info>.panel-heading {
+	color: #ffffff;
+	background-color: #F9F9F9;
+	border-color: #cccccc;
+	height: 45px;
+}
+
+.legend {
+	font-size: 14px;
+	color: #888;
+}
+
+.form-horizontal .control-label {
+	padding-top: 6px;
+}
+
+.form-control {
+	width: 134px;
+	display: inline;
+	height: 30px;
+	padding: 1px 6px;
+	font-size: 10px;
+}
+
+.form-group .btn-primary {
+	color: #ffffff;
+	background-color: #008cba;
+	border-color: #0079a1;
+}
+
+.form-group .btn-default {
+	color: #333333;
+	background-color: #e7e7e7;
+	border-color: #cccccc;
+}
+
+.form-group .btn {
+	display: inline-block;
+	margin-bottom: 0;
+	font-weight: normal;
+	text-align: center;
+	vertical-align: middle;
+	cursor: pointer;
+	background-image: none;
+	white-space: nowrap;
+	padding: 8px 12px;
+	font-size: 15px;
+	line-height: 1.42857143;
+	border-radius: 0;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.titfixed {
+	position: fixed;
+	top: 0;
+	margin-left: -1px;
+	box-shadow: 1px 5px 20px rgba(0, 0, 0, .2)
+}
+
+.titfixed th {
+	
+}
+
+.search-result a {
+	color: #787882
+}
+
+.search-result a cite {
+	padding: 0 5px;
+	font-style: normal;
+	font-weight: 900;
+	color: #0098EC
+}
+
+body .form-group .btn-primary, body .pagination>.active>a {
+	background-color: #259FF2;
+	border: none;
+}
+
+body .table-bordered {
+	border: 1px solid #DCE0E9;
+	border-top: 2px solid #AEBED8;
+}
+
+body .table>thead>tr.info th,body .table>tbody>tr.info th {
+	text-align: center;
+	border-bottom-width: 0;
+	background-color: #EEF5FB;
+	color: #565D63;
+	height: 42px;
+	vertical-align: middle;
+}
+
+body .table>tbody>tr.info td {
+	color: #404348;
+	background-color: #F6F9FE
+}
+
+#maintable tbody tr td {
+	text-align: center;
+}
+
+body .table>tbody>tr td {
+	height: 42px;
+	vertical-align: middle;
+}
+
+.panel-heading {
+	padding: 15px 15px;
+}
+
+body .btn {
+	display: inline-block;
+	margin-bottom: 0;
+	font-weight: normal;
+	text-align: center;
+	vertical-align: middle;
+	cursor: pointer;
+	background-image: none;
+	border: 1px solid transparent;
+	white-space: nowrap;
+	padding: 8px 12px;
+	font-size: 15px;
+	line-height: 1.42857143;
+	border-radius: 0;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+body .btn-primary {
+	color: #ffffff;
+	background-color: #259FF2;
+	border-color: #0079a1;
+}
+
+body .btn-xs {
+	padding: 1px 10px;
+	font-size: 12px;
+	border-color: #CED1D6;
+	border-radius: 0;
+	width: 45px;
+	height: 22px;
+}
+
+#maintable td {
+	word-break: break-all;
+}

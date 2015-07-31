@@ -1,0 +1,76 @@
+input.button1{
+  	  cursor:pointer;
+  	  BORDER-RIGHT: #7b9ebd 1px solid; 
+  	  PADDING-RIGHT: 2px; 
+  	  BORDER-TOP: #7b9ebd 1px solid; 
+  	  PADDING-LEFT: 2px; 
+  	  FONT-SIZE: 12px; 
+  	  FILTER: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr=#D2E6F2, EndColorStr=#D2E6F2); 
+  	  BORDER-LEFT: #7b9ebd 1px solid; 
+  	  COLOR: black; 
+  	  PADDING-TOP: 2px; 
+  	  BORDER-BOTTOM: #7b9ebd 1px solid;
+  	  background-color: #D2E6F2	  
+}
+
+input.button2 {
+  cursor:pointer;
+  color:#444444;
+  font: bold 84%;
+  PADDING-RIGHT: 2px; 
+  PADDING-LEFT: 2px;
+  FONT-SIZE: 12px; 
+  background-color:#D2E6F2;
+  border: 1px solid;
+  text-align:center;
+  border-color: #91A7B4 #91A7B4 #91A7B4 #91A7B4;
+  filter:progid:DXImageTransform.Microsoft.Gradient(GradientType=0,StartColorStr='#EFF9FF',EndColorStr='#6696CA');
+}
+
+input.button {
+  cursor:pointer;
+  color:#050;
+  font: bold 84%;
+  padding:2px 2px 2px 2px;
+  FONT-SIZE: 12px; 
+  background-color:#fed;
+  text-align:center;
+  border: 1px solid;
+  border-color: #696 #363 #363 #696;
+  filter:progid:DXImageTransform.Microsoft.Gradient
+  (GradientType=0,StartColorStr='#ffffff',EndColorStr='#ffeeddaa');
+}
+
+input.button4 {
+  cursor:pointer;
+  color:#FFFFFF;
+  font: bold 84%;
+  PADDING-RIGHT: 2px; 
+  PADDING-LEFT: 2px;
+  FONT-SIZE: 12px; 
+  background-color:#D2E6F2;
+  border: 1px solid;
+  border-color: #91A7B4 #91A7B4 #91A7B4 #91A7B4;
+  filter:progid:DXImageTransform.Microsoft.Gradient
+  (GradientType=0,StartColorStr='#0672D5',EndColorStr='#04509B');
+}
+
+input.button5 {
+  cursor:pointer;
+  color:#444444;
+  font: bold 84%;
+  PADDING-RIGHT: 2px; 
+  PADDING-LEFT: 2px;
+  FONT-SIZE: 12px; 
+  background-color:#D2E6F2;
+  border: 1px solid;
+  text-align:center;
+  border-color: #91A7B4 #91A7B4 #91A7B4 #91A7B4;
+  filter:progid:DXImageTransform.Microsoft.Gradient
+  (GradientType=0,StartColorStr='#EFFFFF',EndColorStr='#D2E6F2');
+  padding:3px 3px 3px 3px;
+}
+
+tr.myDragClass td{
+	background-color:yellow;	
+}

@@ -1,0 +1,93 @@
+#parse("common/taglibs.vm")
+<html>
+<head>
+#parse("common/meta.vm")
+<script type="text/javascript">
+	$( function() {
+		valStatPathInput();
+	});
+	
+	function valStatPathInput(){
+		$("#dbsName").focus();
+			$("#KfdbsInputForm").validate({
+				rules:{
+					"dbsName":{required: true},
+					"userName":{required: true},
+					"pwd":{required: true},
+					"driverType":{required: true},
+					"jdbcUrl":{required: true}
+	          	},
+			    messages: {
+		        },
+				submitHandler : function(form) {
+		        	var options= {
+		  			        success: showResponse,
+		  			        type:"post", 
+		  			        resetForm : false,
+		  			        contentType: "application/x-www-form-urlencoded; charset=utf-8"
+		  			    };
+						$("#KfdbsInputForm").ajaxSubmit(options);
+						function showResponse(data) {
+							if(data.indexOf("ok")!=-1){
+								showOk(null);
+								//flashTable(parent.tbl,"${SITE_DYN}/dbs/list.action");
+								parent.dhxWins.unload();
+							}else{
+								showError(null);
+							}
+			  			 	$(document).unbind("ajaxStart");
+			  			}
+						return false;
+		        		
+			   }
+					
+			});
+	}
+	
+</script>
+<title></title>
+</head>
+<body>
+<div class="mainContainer" style="margin: 5px 5px 0px 5px;">
+
+<form method="post" modelAttribute="kfDatabaseSource" action="save.action" id="KfdbsInputForm">
+	<input type="hidden" name="id" id="id" value="$!kfDatabaseSource.id"/>
+	<table class="form" style="width: 600px;">
+		<tr>
+			<td class="label_required" nowrap="nowrap">名称(*)</td>
+			<td><input type='text' name="dbsName"  size="45" id="dbsName" maxlength="100" value="$!kfDatabaseSource.dbsName"/></td>
+		</tr>
+		<tr>
+			<td class="label_required" nowrap="nowrap">用户名(*)</td>
+			<td><input type='text' name="userName" size="45" id="userName" maxlength="100"  value="$!kfDatabaseSource.userName"/></td>
+		</tr>
+		<tr>
+			<td class="label_required" nowrap="nowrap">密码(*)</td>
+			<td><input type='text' name="pwd" size="45" id="pwd" maxlength="100" value="$!kfDatabaseSource.pwd"/></td>
+		</tr>
+		<tr>
+			<td class="label_required" nowrap="nowrap">驱动类型(*)</td>
+			<td>
+				<select name="driverType" id="driverType">
+					#foreach($k in ${driverMap.keySet()})
+						<option #if($!kfDatabaseSource.driverType == $!driverMap.get($k)) selected="selected" #end value="$!driverMap.get($k)">${k}</option>
+					#end
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td class="label_required" nowrap="nowrap">JDBC字符串</td>
+			<td>
+				<textarea name="jdbcUrl" id="jdbcUrl" cols="50" rows="25">$!kfDatabaseSource.jdbcUrl</textarea>
+			</td>
+		</tr>
+	<tr>
+		<td colspan="2" class="buttons">
+				<input type="submit" value="保存" class="button"/>&nbsp;
+		</td>
+	</tr>
+</table>
+</form>
+</div>
+</body>
+</html>

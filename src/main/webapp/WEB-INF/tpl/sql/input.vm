@@ -1,0 +1,116 @@
+#parse("common/taglibs.vm")
+<html>
+<head>
+    #parse("common/meta.vm")
+    <script type="text/javascript">
+        $(function () {
+            valStatPathInput();
+        });
+
+        function valStatPathInput() {
+            $("#sqlName").focus();
+            $("#KfsqlInputForm").validate({
+                rules: {
+                    "sqlName": {required: true},
+                    "busniessId": {required: true},
+                    "priority": {required: true, digits: true, range: [0, 99]},
+                    "dataSourceId": {required: true},
+                    "sqlStatus": {required: true},
+                    "sqlStatement": {required: true}
+                },
+                messages: {},
+                submitHandler: function (form) {
+                    var options = {
+                        success: showResponse,
+                        type: "post",
+                        resetForm: false,
+                        contentType: "application/x-www-form-urlencoded; charset=utf-8"
+                    };
+                    $("#KfsqlInputForm").ajaxSubmit(options);
+                    function showResponse(data) {
+                        if (data.indexOf("ok") != -1) {
+                            showOk(null);
+                            //flashTable(parent.tbl, "${SITE_DYN}/sql/list.action");
+                            parent.dhxWins.unload();
+                        } else {
+                            showError(null);
+                        }
+                        $(document).unbind("ajaxStart");
+                    }
+
+                    return false;
+
+                }
+
+            });
+        }
+
+    </script>
+    <title></title>
+</head>
+<body>
+<div class="mainContainer" style="margin: 5px 5px 0px 5px;">
+
+    <form method="post" modelAttribute="kfSql" action="save.action" id="KfsqlInputForm">
+        <input type="hidden" name="id" id="id" value="$!kfSql.id"/>
+        <table class="form" style="width: 600px;">
+            <tr>
+                <td class="label_required" nowrap="nowrap">SQL名称(*)</td>
+                <td><input type="text" name="sqlName" size="45" id="sqlName" maxlength="100"  value="$!kfSql.sqlName"/></td>
+            </tr>
+            <tr>
+                <td class="label_required" nowrap="nowrap">所属业务(*)</td>
+                <td>
+                    <select name="busniessId" id="busniessId">
+                        #foreach($k in ${busniessList})
+                            <option #if($!kfSql.busniessId == $!k.id) selected="selected" #end  value="${k.id}">${k.busniessName}</option>
+                        #end
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="label_required" nowrap="nowrap">所属数据源(*)</td>
+                <td>
+                    <select name="dataSourceId" id="dataSourceId">
+                    	#foreach($k in ${dbsList})
+                            <option #if($!kfSql.dataSourceId == $!k.id) selected="selected" #end   value="${k.id}">${k.dbsName}</option>
+                        #end
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="label_required" nowrap="nowrap">优先级(*)</td>
+                <td><input type="text" name="priority" size="3" id="priority" maxlength="2"  value="$!kfSql.priority"/></td>
+            </tr>
+            <tr>
+                <td class="label_required" nowrap="nowrap">SQL语句(*)</td>
+                <td>
+                    <textarea name="sqlStatement" id="sqlStatement" cols="50" rows="30">$!kfSql.sqlStatement</textarea>
+                </td>
+            </tr>
+            <tr>
+                <td class="label_required" nowrap="nowrap">状态(*)</td>
+                <td>
+                    <select name="sqlStatus" id="sqlStatus">
+                        #foreach($k in ${statusMap.keySet()})
+                            <option  #if($!kfSql.sqlStatus == $k) selected="selected" #end value="$k">$!statusMap.get($k)</option>
+                        #end
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="label" nowrap="nowrap">备注</td>
+                <td>
+                    <textarea name="sqlDesc" id="sqlDesc" cols="50" rows="3">$!kfSql.sqlDesc</textarea>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="buttons">
+                    <input type="submit" value="保存" class="button"/>&nbsp;
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+</body>
+</html>

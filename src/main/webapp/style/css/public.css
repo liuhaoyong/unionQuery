@@ -1,0 +1,44 @@
+body,h1,h2,h3,h4,h5,h6,hr,p,blockquote,dl,dt,dd,ul,ol,li,pre,form,fieldset,legend,button,input,textarea,th,td,div{margin:0;padding:0}body,button,textarea{font:12px/1.5 tahoma,'Microsoft Yahei','宋体',arial,\5b8b\4f53,sans-serif}
+h1,h2,h3,h4,h5,h6{font-size:100%}address,cite,dfn,em,var{font-style:normal}
+code,kbd,pre,samp{font-family:courier new,courier,monospace}
+small{font-size:12px}ul,ol{list-style:none}a{text-decoration:none}a:hover{text-decoration:underline}
+a:focus{outline:0}sup{vertical-align:text-top}sub{vertical-align:text-bottom}legend{color:#000}
+fieldset,img{border:0}button,input,select,textarea{font-size:100%}table{border-collapse:collapse;border-spacing:0}
+a{color:#069}a:hover{/*color:#f60;*/ text-decoration:none}
+/* font size */
+.f12{font-size:12px}.f13{font-size:13px}.f14{font-size:14px}.f16{font-size:16px}.f20{font-size:20px}
+/* font bold */
+.fb{font-weight:bold}.fn{font-weight:normal}
+.t2{text-indent:2em}
+/* line-height */
+.lh150{line-height:150%}.lh180{line-height:180%}.lh200{line-height:200%}
+.unl{text-decoration:underline}
+.no_unl{text-decoration:none}
+/* position */
+.tc{text-align:center}.tr{text-align:right}.tl{text-align:left}
+.bc{margin-left:auto;margin-right:auto}
+.fr{float:right;display:inline}.fl{float:left;display:inline}
+.cb{clear:both}.cr{clear:right}.cl{clear:left}
+.vm{vertical-align:middle}.pr{position:relative}.pa{position:absolute}.abs—right{position:absolute;right:0}.zoom{zoom:1}
+.hidden{visibility:hidden}.none{display:none}
+.w60{width:60px;}
+.mgt10{margin-top:10px;}.mgb10{margin-bottom:10px;}.mgt20{margin-top:20px;}.mgb20{margin-bottom:20px;}
+.bgeee{background:#eee;}
+.bdrut5{
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+.bdrub5{
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+/* clearfix */
+.clearfix:after{content:".";display:block;height:0;clear:both;visibility:hidden}.clearfix{display:inline-block;}
+*html .clearfix{height:1%}.clearfix{display:block;clear:both}
+/*color*/
+.gray{ color:#999999}
+.green{ color:green;}
+.red{ color:#F00}
+.org{ color:#f60}
+
+.loading{min-height: 200px;background: url(/style/img/loading.gif) no-repeat 50%;}

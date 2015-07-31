@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wac.query.dao.KfBusniessMapper">
+
+	<resultMap id="KfBusniessMapper.KfBusniess" type="com.wac.query.models.KfBusniess">
+		<id column="id" property="id"/>
+		<result column="busniess_name" property="busniessName"/>
+		<result column="create_time" property="createTime" javaType="java.util.Date"/>
+		<result column="update_time" property="updateTime" javaType="java.util.Date"/>
+	</resultMap>
+	
+	<sql id="KfBusniessMapper.fields">
+		id,busniess_name,create_time,update_time
+	</sql>
+	
+	<sql id="KfBusniessMapper.condition">
+		where 1=1
+		<if test="busniessName != null">
+			AND t1.busniess_name like concat('%',#{busniessName},'%')
+		</if>
+	</sql>
+
+	<select id="queryByCondition" parameterType="com.wac.query.models.KfBusniess" resultMap="KfBusniessMapper.KfBusniess" >
+		SELECT <include refid="KfBusniessMapper.fields"/>
+		FROM kf_busniess t1
+		<include refid="KfBusniessMapper.condition" />
+		order by  create_time desc
+		limit #{startIndex},#{endIndex}
+	</select>
+
+	<select id="countByCondition" resultType="int" parameterType="com.wac.query.models.KfBusniess">
+    	<![CDATA[ 
+			SELECT count(*) FROM kf_busniess t1
+		]]>
+		<include refid="KfBusniessMapper.condition" />
+	</select>
+
+	<select id="queryByPrimaryKey" resultMap="KfBusniessMapper.KfBusniess" parameterType="java.lang.Integer">
+			SELECT <include refid="KfBusniessMapper.fields"/> FROM kf_busniess t1
+		where t1.id=#{id}
+	</select>
+
+	<delete id="deleteByCondition" parameterType="com.wac.query.models.KfBusniess">
+		DELETE from kf_busniess where id=#{id}
+	</delete>
+	
+	<update id="updateByPrimaryKey" parameterType="com.wac.query.models.KfBusniess">
+		UPDATE kf_busniess
+			SET busniess_name=#{busniessName}
+		where id=#{id}
+	</update>
+
+	<insert id="insert" parameterType="com.wac.query.models.KfBusniess">
+		INSERT INTO kf_busniess(busniess_name,create_time,update_time)
+		VALUES
+		(#{busniessName},#{createTime,jdbcType=TIMESTAMP },#{createTime,jdbcType=TIMESTAMP})
+		<selectKey resultType="int" keyProperty="id">
+			SELECT LAST_INSERT_ID() as id
+		</selectKey>
+	</insert>
+</mapper>

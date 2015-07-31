@@ -1,0 +1,66 @@
+#parse("common/taglibs.vm")
+<html>
+<head>
+	#parse("common/meta.vm")
+<script type="text/javascript">
+	$( function() {
+		valStatPathInput();
+	});
+	
+	function valStatPathInput(){
+		$("#busniessName").focus();
+			$("#KfBusniessInputForm").validate({
+				rules:{
+					"busniessName":{required: true}
+	          	},
+			    messages: {
+		        },
+				submitHandler : function(form) {
+		        	var options= {
+		  			        success: showResponse,
+		  			        type:"post", 
+		  			        resetForm : false,
+		  			        contentType: "application/x-www-form-urlencoded; charset=utf-8"
+		  			    };
+						$("#KfBusniessInputForm").ajaxSubmit(options);
+						function showResponse(data) {
+							console.log(data);
+							if(data=="ok"){
+								showOk(null);
+								//flashTable(parent.tbl,"${SITE_DYN}/busniess/list.action");
+								parent.dhxWins.unload();
+							}else if(data=="error"){
+								showError(null);
+							}
+			  			 	$(document).unbind("ajaxStart");
+			  			}
+						return false;
+		        		
+			   }
+					
+			});
+	}
+	
+</script>
+<title></title>
+</head>
+<body>
+<div class="mainContainer" style="margin: 5px 5px 0px 5px;">
+
+<form method="post" modelAttribute="kfBusniess" action="save.action" id="KfBusniessInputForm">
+	<input type="hidden" name="id" id="id" value="$!kfBusniess.id"/>
+	<table class="form" style="width: 400px;">
+	<tr>
+		<td class="label_required" nowrap="nowrap">业务名称(*)</td>
+		<td><input type="text" name="busniessName"  size="45" id="busniessName" maxlength="100" value="$!kfBusniess.busniessName"/></td>
+	</tr>
+	<tr>
+		<td colspan="2" class="buttons">
+				<input type="submit" value="保存" class="button"/>&nbsp;
+		</td>
+	</tr>
+</table>
+</form>
+</div>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wac.query.dao.KfDatabaseSourceMapper">
+
+	<resultMap id="KfDatabaseSourceMapper.KfDatabaseSource" type="com.wac.query.models.KfDatabaseSource">
+		<id column="id" property="id"/>
+		<result column="dbs_name" property="dbsName"/>
+		<result column="user_name" property="userName"/>
+		<result column="pwd" property="pwd"/>
+		<result column="jdbc_url" property="jdbcUrl"/>
+		<result column="driver_type" property="driverType"/>
+		<result column="create_time" property="createTime" javaType="java.util.Date"/>
+		<result column="update_time" property="updateTime" javaType="java.util.Date"/>
+	</resultMap>
+	<sql id="KfDatabaseSourceMapper.fields">
+		id,dbs_name,user_name,pwd,jdbc_url,driver_type,create_time,update_time
+	</sql>
+	<sql id="KfDatabaseSourceMapper.condition">
+		where 1=1
+		<if test="dbsName != null">
+			AND t1.dbs_name like concat('%',#{dbsName},'%')
+		</if>
+	</sql>
+
+	<select id="queryByCondition" parameterType="com.wac.query.models.KfDatabaseSource" resultMap="KfDatabaseSourceMapper.KfDatabaseSource" >
+		SELECT <include refid="KfDatabaseSourceMapper.fields"/>
+		FROM kf_database_source t1
+		<include refid="KfDatabaseSourceMapper.condition" />
+		order by  id desc
+		limit #{startIndex},#{endIndex}
+	</select>
+
+	<select id="countByCondition" resultType="int" parameterType="com.wac.query.models.KfDatabaseSource">
+			SELECT count(*) FROM kf_database_source t1
+		<include refid="KfDatabaseSourceMapper.condition" />
+	</select>
+
+	<select id="queryByPrimaryKey" resultMap="KfDatabaseSourceMapper.KfDatabaseSource" parameterType="java.lang.Integer">
+			SELECT <include refid="KfDatabaseSourceMapper.fields"/> FROM kf_database_source t1
+		where t1.id=#{id}
+	</select>
+
+	<delete id="deleteByCondition" parameterType="com.wac.query.models.KfDatabaseSource">
+		DELETE from kf_database_source where id=#{id}
+	</delete>
+	
+	<update id="updateByPrimaryKey" parameterType="com.wac.query.models.KfDatabaseSource">
+		UPDATE kf_database_source
+			SET dbs_name=#{dbsName},
+			user_name=#{userName},
+			pwd=#{pwd},
+			jdbc_url=#{jdbcUrl},
+			driver_type=#{driverType}
+		where id=#{id}
+	</update>
+
+	<insert id="insert" parameterType="com.wac.query.models.KfDatabaseSource">
+		INSERT INTO kf_database_source(dbs_name,user_name,pwd,jdbc_url,driver_type,create_time,update_time)
+		VALUES
+		(#{dbsName},#{userName},#{pwd},#{jdbcUrl},#{driverType},#{createTime,jdbcType=TIMESTAMP },#{createTime,jdbcType=TIMESTAMP})
+		<selectKey resultType="int" keyProperty="id">
+			SELECT LAST_INSERT_ID() as id
+		</selectKey>
+	</insert>
+</mapper>

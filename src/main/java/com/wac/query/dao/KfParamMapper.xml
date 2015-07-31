@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wac.query.dao.KfParamMapper">
+
+	<resultMap id="KfParamMapper.KfParam" type="com.wac.query.models.KfParam">
+		<id column="id" property="id"/>
+		<result column="param_name" property="paramName"/>
+		<result column="field_name" property="fieldName"/>
+		<result column="memo" property="memo"/>
+		<result column="create_time" property="createTime" javaType="java.util.Date"/>
+		<result column="update_time" property="updateTime" javaType="java.util.Date"/>
+	</resultMap>
+
+	<sql id="KfParamMapper.fields">
+		id,param_name,field_name,memo,create_time,update_time
+	</sql>
+
+	<sql id="KfParamMapper.condition">
+		where 1=1
+	</sql>
+	<select id="queryByCondition" resultMap="KfParamMapper.KfParam" parameterType="com.wac.query.models.KfParam">
+		SELECT <include refid="KfParamMapper.fields"/>
+		FROM kf_param t1
+		<include refid="KfParamMapper.condition" />
+		order by id desc
+		limit #{startIndex},#{endIndex}
+	</select>
+
+	<select id="countByCondition" resultType="int" parameterType="com.wac.query.models.KfParam">
+			SELECT count(*) FROM kf_param t1
+		<include refid="KfParamMapper.condition" />
+	</select>
+
+	<select id="queryByPrimaryKey" resultMap="KfParamMapper.KfParam" parameterType="java.lang.Integer">
+			SELECT <include refid="KfParamMapper.fields"/> FROM kf_param t1
+		where t1.id=#{id}
+	</select>
+
+	<delete id="deleteByCondition" parameterType="com.wac.query.models.KfParam">
+		DELETE from kf_param where id=#{id}
+	</delete>
+	
+	<update id="updateByPrimaryKey" parameterType="com.wac.query.models.KfParam">
+		UPDATE kf_param
+			SET param_name=#{paramName},
+			field_name=#{fieldName},
+			memo=#{memo}
+		where id=#{id}
+	</update>
+
+	<insert id="insert" parameterType="com.wac.query.models.KfParam">
+		INSERT INTO kf_param(param_name,field_name,memo,create_time,update_time)
+		VALUES
+		(#{paramName},#{fieldName},#{memo},#{createTime,jdbcType=TIMESTAMP },#{createTime,jdbcType=TIMESTAMP})
+		<selectKey resultType="int" keyProperty="id">
+			SELECT LAST_INSERT_ID() as id
+		</selectKey>
+	</insert>
+</mapper>

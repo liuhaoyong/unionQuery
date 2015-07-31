@@ -1,0 +1,234 @@
+
+<!-- <link href="$SITE_DYN/js/dhtmlxTabbar/dhtmlxtabbar.css" type="text/css" rel="stylesheet" />
+<link href="$SITE_DYN/js/dhtmlxtree/dhtmlxtree.css" type="text/css" rel="stylesheet" /> -->
+<link href="$SITE_DYN/js/dhtmlx_std_full/dhtmlx.css" rel="stylesheet" type="text/css" />
+<link href="$SITE_DYN/js/forms.css" rel="stylesheet" type="text/css" />
+<link href="$SITE_DYN/js/button.css" rel="stylesheet" type="text/css" />
+<link href="$SITE_DYN/js/style.css" rel="stylesheet" type="text/css" />
+<link href="$SITE_DYN/js/jquery-validate/jquery.validate.css" type="text/css" rel="stylesheet" />
+<link href="$SITE_DYN/js/DataTables-1.7.5/media/css/demo_page.css" type="text/css" rel="stylesheet" />
+<link href="$SITE_DYN/js/DataTables-1.7.5/media/css/demo_table_jui.css" type="text/css" rel="stylesheet" />
+<link href="$SITE_DYN/js/DataTables-1.7.5/media/css/demo_table.css" type="text/css" rel="stylesheet" />
+<!--<link href="$SITE_DYN/js/jquery-ui-1.8.14.custom/css/redmond/jquery-ui-1.8.14.custom.css" type="text/css" rel="stylesheet" />  -->
+<!-- <link href="$SITE_DYN/js/jquery-ui-1.8.14.custom/css/smoothness/jquery-ui.css" type="text/css" rel="stylesheet" />
+<link href="$SITE_DYN/js/umeditor1_2_2/themes/default/css/umeditor.min.css" type="text/css" rel="stylesheet" />
+ -->
+<!-- JavaScript -->
+<script src="$SITE_DYN/js/DatePicker/WdatePicker.js" type="text/javascript"></script>
+<script src="$SITE_DYN/js/jquery-1.8.3.min.js" type="text/javascript" ></script>
+<script src="$SITE_DYN/js/jquery-validate/jquery.validate.min.js" type="text/javascript" ></script>
+<script src="$SITE_DYN/js/jquery-validate/localization/messages_cn.js" type="text/javascript" ></script>
+<script src="$SITE_DYN/js/jquery.metadata.js" type="text/javascript" ></script>
+<script src="$SITE_DYN/js/jquery.form.js" type="text/javascript" ></script>
+<script src="$SITE_DYN/js/jquery.blockUI.js" type="text/javascript" ></script>
+<script src="$SITE_DYN/js/jquery.MultiFile.pack.js" type="text/javascript" ></script>
+<!-- <script src="$SITE_DYN/js/jquery.tablednd_0_5.js" type="text/javascript" ></script>-->
+<!-- <script src="$SITE_DYN/js/hcharts/highcharts.js" type="text/javascript"></script>
+<script src="$SITE_DYN/js/hcharts/modules/no-data-to-display.src.js" type="text/javascript"></script> -->
+<!-- <script src="$SITE_DYN/js/dhtmlxTabbar/dhtmlxcommon.js" type="text/javascript" ></script>
+<script src="$SITE_DYN/js/dhtmlxTabbar/dhtmlxtabbar.js" type="text/javascript" ></script>
+<script src="$SITE_DYN/js/dhtmlxtree/dhtmlxtree.js" type="text/javascript" ></script>
+<script src="$SITE_DYN/js/dhtmlxtree/ext/dhtmlxtree_json.js" type="text/javascript" ></script> -->
+<script src="$SITE_DYN/js/dhtmlx_std_full/dhtmlx.js" type="text/javascript" ></script>
+<script src="$SITE_DYN/js/DataTables-1.7.5/media/js/jquery.dataTables.js" type="text/javascript" ></script>
+<!-- <script src="$SITE_DYN/js/jquery-ui-1.8.14.custom/js/jquery-ui-1.8.14.custom.min.js" type="text/javascript" ></script>
+<script src="$SITE_DYN/js/jquery.uploadpic.js" type="text/javascript" ></script> -->
+<!-- <script src="$SITE_DYN/js/ckeditor/ckeditor.js" type="text/javascript" ></script>
+<script src="$SITE_DYN/js/umeditor1_2_2/umeditor.config.js" type="text/javascript" ></script>
+<script src="$SITE_DYN/js/umeditor1_2_2/umeditor.min.js" type="text/javascript" ></script>
+<script src="$SITE_DYN/js/umeditor1_2_2/dialogs/image/image.js" type="text/javascript" ></script>
+<script src="$SITE_DYN/js/umeditor1_2_2/dialogs/link/link.js" type="text/javascript" ></script>
+<script src="$SITE_DYN/js/umeditor1_2_2/dialogs/emotion/emotion.js" type="text/javascript" ></script> -->
+
+
+<script type="text/javascript">
+
+	//获取当前时间戳
+	function timestramp(){
+		return Date.parse(new Date());
+	}
+	//制表
+	function makeTable(tableId,ajaxUrl){
+		jQuery.fn.dataTableExt.oPagination.iFullNumbersShowPages=7;
+		var tbl = $('#'+tableId).dataTable({
+			'iDisplayLength':10,
+			"aLengthMenu": [[10, 20,35, 50, 100], [10, 20,35,50, 100]],
+			'bLengthChange': true,
+	        "bServerSide": true,
+	        "sAjaxSource": ajaxUrl,      //mvc后台ajax调用接口。
+	        'bPaginate': true,                      //是否分页。
+	        "bProcessing": true,                    //当datatable获取数据时候是否显示正在处理提示信息。
+	        'bFilter': false,                       //是否使用内置的过滤功能。      
+	        'sPaginationType': 'full_numbers',      //分页样式
+	        'bSort':false,
+	        "bSortClasses": false,
+	        "bJQueryUI": false,
+	        "bRetrieve":true,
+	        "bDestroy":true,
+	        //"sDom": '<"top"iflp<"clear">>rt<"bottom"iflp<"clear">>',
+	      	//"sDom": '<"toolbar">frtip',
+	        "oLanguage": {                         
+	                "sLengthMenu": "每页显示 _MENU_ 条记录",  
+	                "sZeroRecords": "没有检索到数据",  
+	                "sInfo": "当前数据是从第 _START_ 到第 _END_ 条数据；总共有 _TOTAL_ 条记录",  
+	                "sInfoEmtpy": "没有数据",  
+	                "sProcessing": "正在加载...",  
+	                "oPaginate": {  
+	                    "sFirst": "首页",  
+	                    "sPrevious": "<",  
+	                    "sNext": ">",  
+	                    "sLast": "尾页"  
+	                }  
+	            } 
+
+	    });
+		return tbl;
+	}
+	
+	function makeTab(tabId,title,url){
+		var isW = url.indexOf("?")==-1;
+		var tabbar = new dhtmlXTabBar(tabId, "top");
+		tabbar.setHrefMode("ajax-html");
+		//tabbar.setSize(document.body.clientWidth-30,document.body.clientHeight-20);
+		tabbar.setImagePath("${SITE_DYN}/js/dhtmlx_std_full/imgs/");
+		//tabbar.setStyle("silver");
+		tabbar.setOffset("10");
+		tabbar.setMargin("5");
+		tabbar.addTab("list", title, "150px");
+		var mytime = timestramp(); //获取当前时间
+		var p = "?_t="+mytime;
+		if(!isW){
+			p = "&_t="+mytime;
+		}
+		tabbar.setContentHref("list", url+p);
+		tabbar.enableTabCloseButton(true);
+		tabbar.setTabActive("list");
+		return tabbar;
+	}
+	//刷新表格
+	function flashTable(tbl,url){
+		var mytime = timestramp(); //获取当前时间
+		var isW = url.indexOf("?")==-1;
+		var p = "?_t="+mytime;
+		if(!isW){
+			p = "&_t="+mytime;
+		}
+		var oSettings = tbl.fnSettings();
+        oSettings.sAjaxSource = url+p;
+        //alert(oSettings.sAjaxSource);
+        tbl.fnClearTable(0);
+        tbl.fnDraw();
+	}
+	
+	//刷新表格从第一页开始
+	function flashTableStart(tbl,url){
+		var mytime = timestramp(); //获取当前时间
+		var isW = url.indexOf("?")==-1;
+		var p = "?_t="+mytime;
+		if(!isW){
+			p = "&_t="+mytime;
+		}
+		var oSettings = tbl.fnSettings();
+        oSettings.sAjaxSource = url+p;
+        //alert(oSettings.sAjaxSource);
+        tbl.fnClearTable(0);
+        tbl.fnDrawStart();
+	}
+
+	function showOk(val){
+		if(val==null || jQuery.trim(val)==''){
+			val = "操作成功！";
+		}
+		jQuery.blockUI({
+			message:'<table width="250px"><tr><td height="50px;" width="30px;"><img src="${SITE_DYN}/js/jquery-validate/checked.gif" /></td><td>'+val+'</td></tr></table>',
+			timeout:1500
+		});
+	}
+	function showError(val){
+		if(val==null || jQuery.trim(val)==''){
+			val = "操作失败！";
+		}
+		val = "<img src='${SITE_DYN}/js/jquery-validate/unchecked.gif' />&nbsp;"+val;
+		$("#_showErrorWord").html(val);
+		jQuery.blockUI({ message: $('#_showError'), css: { width: '275px' } }); 
+	}
+	function showError2(val){
+		Ext.MessageBox.show({
+                     title: '操作提示',
+                     msg: data.message,
+                     buttons: Ext.MessageBox.OK,
+                     icon: Ext.MessageBox.WARNING,
+                     minWidth: 180
+                 }); 
+	}
+	function showLoadingMsg(val){
+		if(val==null || jQuery.trim(val)==''){
+			val = "处理中,请稍后.....";
+		}
+		$("#_showSomeWord").html(val);
+		jQuery.blockUI({
+			message:$('#_showSomeMsg')
+			,css: { width: '275px' }
+		});
+	}
+	function _showErrorClose(){
+		jQuery.unblockUI(); 
+        return false; 
+	}
+	
+	function copyToClipboard(txt) {   
+        if(window.clipboardData) {   
+                window.clipboardData.clearData();   
+                window.clipboardData.setData("Text", txt);   
+        } else if(navigator.userAgent.indexOf("Opera") != -1) {   
+             window.location = txt;   
+        } else if (window.netscape) {   
+             try {   
+                  netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");   
+             } catch (e) {   
+                  alert("被浏览器拒绝！\n请在浏览器地址栏输入'about:config'并回车\n然后将'signed.applets.codebase_principal_support'设置为'true'");   
+             }   
+             var clip = Components.classes['@mozilla.org/widget/clipboard;1'].createInstance(Components.interfaces.nsIClipboard);   
+             if (!clip)   
+                  return;   
+             var trans = Components.classes['@mozilla.org/widget/transferable;1'].createInstance(Components.interfaces.nsITransferable);   
+             if (!trans)   
+                  return;   
+             trans.addDataFlavor('text/unicode');   
+             var str = new Object();   
+             var len = new Object();   
+             var str = Components.classes["@mozilla.org/supports-string;1"].createInstance(Components.interfaces.nsISupportsString);   
+             var copytext = txt;   
+             str.data = copytext;   
+             trans.setTransferData("text/unicode",str,copytext.length*2);   
+             var clipid = Components.interfaces.nsIClipboard;   
+             if (!clip)   
+                  return false;   
+             clip.setData(trans,null,clipid.kGlobalClipboard);   
+             alert("复制成功！"); 
+        }   
+   }  
+</script>
+<div id="_showError" style="display:none; cursor: default"> 
+	<table width="100%">
+		<tr>
+			<td align="center" height="40px" id='_showErrorWord'>
+			</td>
+		</tr>
+    	<tr>
+    		<td align="center" >
+    			<input type="button" id="_showError_close" value=" 关 闭 " class="button" onclick="_showErrorClose();"/>
+    		</td>
+    	</tr>
+    </table>
+</div> 
+<div id="_showSomeMsg" style="display:none; cursor: default"> 
+	<table width="100%">
+		<tr>
+			<td align="center" height="40px" id='_showSomeWord'>
+			</td>
+		</tr>
+    </table>
+</div> 
+
+

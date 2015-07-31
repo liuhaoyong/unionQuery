@@ -1,0 +1,104 @@
+/* Form fields
+-------------------------------------------------------------- */
+input[type=text],input[type=password],input.text,input.title,textarea,select
+	{
+	background-color: #fff;
+	border: 1px solid #bbb;
+}
+
+input[type=text]:focus,input[type=password]:focus,input.text:focus,input.title:focus,textarea:focus,select:focus
+	{
+	border-color: #666;
+}
+
+input[type=text],input[type=password],input.text,input.title,textarea,select
+	{
+	margin: 3px 0;
+	padding: 2px;
+}
+
+input[type=checkbox],input[type=radio],input.checkbox,input.radio {
+	position: relative;
+	top: .25em;
+}
+
+/* Success, notice and error boxes
+-------------------------------------------------------------- */
+div.error,div.notice,div.success {
+	padding: 0.6em;
+	margin-bottom: 1em;
+	border: 2px solid #ddd;
+}
+
+div.error {
+	background: #FBE3E4;
+	color: #8a1f11;
+	border-color: #FBC2C4;
+}
+
+div.notice {
+	background: #FFF6BF;
+	color: #514721;
+	border-color: #FFD324;
+}
+
+div.success {
+	background: #E6EFC2;
+	color: #264409;
+	border-color: #C6D880;
+}
+
+.error a {
+	color: #8a1f11;
+}
+
+.notice a {
+	color: #514721;
+}
+
+.success a {
+	color: #264409;
+}
+
+table.form {
+	background-color: #DDDDDD;
+	border: 0;
+	margin: 0 !important;
+	border-right: 1px solid #999999;
+	border-bottom: 1px solid #999999;
+}
+
+.form td {
+	padding: 0px 0px 0px 4px;
+}
+
+.form caption.labe {
+	background-color: #E1EEF4;
+	padding: 5px 5px 5px 5px;
+	width: 80%;	 
+	font-family: 宋体, arial, helvetica, sans-serif;
+	font-size: 14px;
+	text-align: left;
+}
+
+.form td.label {
+	text-align: right;
+	width: 80px;
+}
+
+.form td.label_required {
+	text-align: right;
+	width: 80px;
+	color: #F66200;
+}
+
+.form td.buttons {
+	text-align: right;
+	padding-top: 10px;
+	padding-right: 10px;
+	border-top: 1px dotted #999999;
+}
+
+.form span.required {
+	color: red;
+}

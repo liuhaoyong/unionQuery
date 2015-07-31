@@ -1,0 +1,65 @@
+#parse("common/taglibs.vm")
+<html>
+<head>
+	#parse("common/meta.vm")
+<script type="text/javascript">
+var tbl;
+$( function() {
+	tbl = makeTable("param_table","${SITE_DYN}/param/list.html");
+});
+
+
+var dhxWins;
+function edit(id){
+	if(id == null || isNaN(id)){
+		id = 0;
+	}
+	dhxWins = new dhtmlXWindows();
+	var win = dhxWins.createWindow("win", 20, 30, 500, 250);
+	win.setText("添加/修改全局参数");
+	win.setModal(true);
+	//win.setPosition(5, 60);
+	dhxWins.window("win").centerOnScreen();
+	win.attachURL("${SITE_DYN}/param/new.action?id="+id+"&_t="+timestramp());
+	dhxWins.attachEvent("onClose",function(w){
+		flashTable(tbl,"${SITE_DYN}/param/list.action");
+		return true;
+	});
+
+}
+
+</script>
+
+<title></title>
+</head>
+<body>
+<div id="paramListTab" style="width:97%;margin: 5px 5px 0px 5px;">
+    <table id="tool" border="0" width="100%" class="searchtable" align="center">
+        <tr>
+            <td>
+                <input type="button" value="新建全局参数" onclick="edit(0);" class="button"/>
+            </td>
+        </tr>
+    </table>
+	<table width="100%" cellspacing="0" cellpadding="0" border="1" class="display" id="param_table">
+	<thead>
+		<tr>
+			<th style="min-width: 60px;">ID</th>
+			<th style="min-width: 150px;">参数名称</th>
+            <th style="min-width: 150px;">字段名称</th>
+            <th style="min-width: 150px;">备注</th>
+			<th style="min-width: 75px;">创建时间</th>
+			<th style="min-width: 75px;">更新时间</th>
+			<th style="min-width: 77px;">操作</th>
+        </tr>
+
+        </thead>
+        <tbody>
+        
+        </tbody>
+		
+	</table><br>
+
+</div>
+</body>
+</html>

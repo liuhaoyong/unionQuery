@@ -1,0 +1,79 @@
+#parse("common/taglibs.vm")
+<html>
+<head>
+    #parse("common/meta.vm")
+    <script type="text/javascript">
+        $(function () {
+            valStatPathInput();
+        });
+
+        function valStatPathInput() {
+            $("#paramName").focus();
+            $("#KfParamInputForm").validate({
+                rules: {
+                    "paramName": {required: true},
+                    "fieldName": {required: true}
+                },
+                messages: {},
+                submitHandler: function (form) {
+                    var options = {
+                        success: showResponse,
+                        type: "post",
+                        resetForm: false,
+                        contentType: "application/x-www-form-urlencoded; charset=utf-8"
+                    };
+                    $("#KfParamInputForm").ajaxSubmit(options);
+                    function showResponse(data) {
+                        console.log(data);
+                        if (data == "ok") {
+                            showOk(null);
+                            //flashTable(parent.tbl, "${SITE_DYN}/param/list.action");
+                            parent.dhxWins.unload();
+                        } else if (data == "error") {
+                            showError(null);
+                        }
+                        $(document).unbind("ajaxStart");
+                    }
+
+                    return false;
+
+                }
+
+            });
+        }
+
+    </script>
+    <title></title>
+</head>
+<body>
+<div class="mainContainer" style="margin: 5px 5px 0px 5px;">
+
+    <form method="post" modelAttribute="kfParam" action="save.action" id="KfParamInputForm">
+        <input type="hidden" name="id" id="id" value="$!kfParam.id"/>
+        <table class="form" style="width: 400px;">
+            <tr>
+                <td class="label_required" nowrap="nowrap">参数名称(*)</td>
+                <td><input type="text" name="paramName" size="45" id="paramName" maxlength="100"
+                           value="$!kfParam.paramName"/></td>
+            </tr>
+            <tr>
+                <td class="label_required" nowrap="nowrap">字段名称(*)</td>
+                <td><input type="text" name="fieldName" size="45" id="fieldName" maxlength="100"
+                           value="$!kfParam.fieldName"/></td>
+            </tr>
+            <tr>
+                <td class="label" nowrap="nowrap">备注</td>
+                <td>
+                    <textarea id="memo" name="memo">$!kfParam.memo</textarea>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="buttons">
+                    <input type="submit" value="保存" class="button"/>&nbsp;
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+</body>
+</html>

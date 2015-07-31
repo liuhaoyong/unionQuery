@@ -1,0 +1,13 @@
+label.error {
+	color: red;
+	display: inline;
+	padding-top: 2px;
+	padding-left: 16px;
+	font-style: italic;
+	background: url("unchecked.gif") no-repeat;
+	margin-left: 2px;
+}
+
+input.error {
+	border: 1px red dashed;
+}

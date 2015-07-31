@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sidebar>
+	<item id="xd1" text="业务管理" icon="video.png"/>
+	<item id="xd2" text="数据源管理" icon="video.png"/>
+	<item id="xd3" text="SQL语句管理" icon="video.png"/>
+	<item id="xd4" text="全局参数管理" icon="video.png"/>
+	<item type="separator"/>
+	<item id="xd5" text="联合查询" icon="video.png"/>
+</sidebar>

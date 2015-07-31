@@ -1,0 +1,110 @@
+#parse("common/taglibs.vm")
+<html>
+<head>
+#parse("common/meta.vm")
+<script type="text/javascript">
+
+	function search(){
+		$("#dataArea").text('');
+	
+        var bid = $("#bid").val();
+        var paramId = $("#paramId").val();
+        var paramValue = $("#paramValue").val();
+
+        if(bid == null || bid <=0
+        || paramId==null || paramId<=0
+        || paramValue==null || paramValue==''){
+            showError("请正确填写参数！");
+            return ;
+        }
+
+        $("#searchButton").attr("disabled","disabled");
+
+        dhtmlx.message({
+            text:"数据检索中。。。",
+            expire:5000
+        });
+
+        var url = "${SITE_DYN}/q/list.html?bid="+bid+"&paramValue="+encodeURIComponent(paramValue)+"&paramId="+paramId;
+
+        jQuery.ajax({
+            url : url,
+            cache : false,
+            type : "GET",
+            async : false,
+            success : function(data) {
+            	var index1 = data.indexOf("error");
+                if(index1 >= 0 && index1 <5){
+                	dhtmlx.confirm({
+                				ok:"关闭", cancel:"调试",
+								title:"Error",
+								type:"alert-error",
+								text:"出错了，请检查配置是否正确！",
+								callback:function(a){
+									if(!a){
+										$("#dataArea").text(data.substring(6,data.length));
+									}
+								}
+							});
+                }else{
+                	$("#dataArea").html(data);
+                }
+                $("#searchButton").removeAttr("disabled");
+            }
+        });
+    }
+
+	function getParam(){
+		var bid = $("#bid").val();
+		if(bid <= 0){
+			$("#paramId").children("option").remove();
+			return ;
+		}
+        var url = "${SITE_DYN}/q/getParams.html?busniessId="+bid;
+        jQuery.ajax({
+            url : url,
+            cache : false,
+            type : "GET",
+            async : false,
+            success : function(data) {
+				if(data == 'error'){
+                    showError("获取参数发生错误！");
+				}else{
+                    $("#paramId").html(data);
+                }
+            }
+        });
+    }
+
+</script>
+
+<title></title>
+</head>
+<body>
+<div id="dbsListTab" style="width:97%;margin: 5px 5px 0px 5px;">
+	<table id="tool" border="0" width="100%" class="searchtable" align="center">
+			<tr>
+				<td>
+				业务：
+				<select id="bid" onchange="getParam();">
+					<option value="-1">-请选择-</option>
+					#foreach($bu in ${busniessList})
+						<option #if($!kfQuery.bid == $bu.id) selected="selected" #end value="${bu.id}">${bu.busniessName}</option>
+					#end
+				</select>
+				<br>
+				参数：
+				<select id="paramId">
+
+				</select>
+				<br>
+				参数值：	<input id="paramValue" type='text' size="40" value="$!kfQuery.paramValue">&nbsp;&nbsp;<br>
+				<input type="button" value="查询" onclick="search();" id="searchButton" class="button"/>
+				</td>
+			</tr>
+		</table>
+	<div id="dataArea"></div>
+
+</div>
+</body>
+</html>
