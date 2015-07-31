@@ -32,6 +32,6 @@
 
 
 	<root level="info">
-		<appender-ref ref="encoding" />
+		<appender-ref ref="querylogfile" />
 		<appender-ref ref="console" />
 	</root>
