@@ -93,7 +93,9 @@ public class KfQueryService extends QueryHelper{
                 buildResult(sql,paramId,paramValue,info,usedSql,resultList);
             });
 
-            logger.info(String.format("resultList:[%s]", JsonTool.writeValueAsString(resultList)));
+            if(logger.isDebugEnabled()){
+            	logger.debug(String.format("resultList:[%s]", JsonTool.writeValueAsString(resultList)));
+            }
             /**
              * 生成表格，排序结果
              */
