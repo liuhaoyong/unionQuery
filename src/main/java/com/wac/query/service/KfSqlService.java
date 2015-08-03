@@ -1,6 +1,5 @@
 package com.wac.query.service;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -56,10 +55,10 @@ public class KfSqlService extends AbstractService<KfSql,KfSql>{
     @Override
     public String tableJson(KfSql param, String sEcho, List<KfSql> list) {
         int total = numOfTotal(param);
-        List<List<String>> aaData = new LinkedList();
+        List<List<String>> aaData = new LinkedList<>();
 
         for (KfSql b : list) {
-            List<String> slist = new LinkedList();
+            List<String> slist = new LinkedList<>();
             slist.add("" + b.getId());
             slist.add(b.getSqlName());
             KfBusniess bus = kfBusniessService.selectByPk(b.getBusniessId());
@@ -97,7 +96,7 @@ public class KfSqlService extends AbstractService<KfSql,KfSql>{
      */
     public List<KfSqlParam> getParams(int sqlId){
         if(sqlId <= 0){
-            return new LinkedList();
+            return new LinkedList<KfSqlParam>();
         }
         KfSqlParam param = new KfSqlParam();
         param.setSqlId(sqlId);
@@ -113,7 +112,7 @@ public class KfSqlService extends AbstractService<KfSql,KfSql>{
      */
     public List<KfSql> getSqlByBusniess(int bid){
         if(bid <= 0){
-            return Collections.EMPTY_LIST;
+            return new LinkedList<KfSql>();
         }
         KfSql sql = new KfSql();
         sql.setBusniessId(bid);
