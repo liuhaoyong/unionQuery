@@ -26,7 +26,6 @@ import com.wac.query.models.KfSqlParam;
 import com.wac.query.service.KfBusniessService;
 import com.wac.query.service.KfDatabaseSourceService;
 import com.wac.query.service.KfParamService;
-import com.wac.query.service.KfQueryService;
 import com.wac.query.service.KfSqlService;
 import com.wac.query.utils.JsonTool;
 
@@ -36,7 +35,7 @@ import com.wac.query.utils.JsonTool;
 @Controller
 @RequestMapping("/sql")
 public class KfSqlAction extends AbstractAction {
-	private static Logger logger = LoggerFactory.getLogger(KfQueryService.class);
+	private static Logger logger = LoggerFactory.getLogger(KfSqlAction.class);
 
     @Resource
     private KfSqlService kfSqlService;
@@ -167,7 +166,7 @@ public class KfSqlAction extends AbstractAction {
                 throw new NullPointerException("sqlId is null");
             }
 
-            List<KfSqlParam> paramList = new ArrayList();
+            List<KfSqlParam> paramList = new ArrayList<>();
             Date now = new Date(System.currentTimeMillis());
             for (int i=0;i<paramId.length;i++) {
                 if(StringUtils.isBlank(paramId[i]) || Integer.parseInt(paramId[i]) <= 0){
@@ -181,10 +180,10 @@ public class KfSqlAction extends AbstractAction {
                 p.setSqlId(sqlId);
                 p.setId(Integer.valueOf(ids[i]));
                 if(!StringUtils.endsWithIgnoreCase(sqlField[i],"defaultXXX")){
-                    p.setSqlField(sqlField[i]);
+                    p.setSqlField(StringUtils.trim(sqlField[i]));
                 }else{
                     KfParam kp = kfParamService.selectByPk(p.getParamId());
-                    p.setSqlField(kp!=null?kp.getFieldName():null);
+                    p.setSqlField(StringUtils.trim(kp!=null?kp.getFieldName():null));
                 }
 
                 p.setCreateTime(now);

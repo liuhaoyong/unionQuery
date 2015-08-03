@@ -108,14 +108,16 @@ public class KfQueryService extends QueryHelper{
     }
     
     /**
-     * 生成表格,排序记过
+     * 生成表格,排序记录
      * @param sqlShowMap
      * @param resultList
      */
     private String makeTable(List<SimpleResult> resultList){
+    	//根据优先级排序显示顺序
     	if (!CollectionUtils.isEmpty(resultList)) {
             Collections.sort(resultList, new ClearingProcessorComparator());
         }
+    	//生成table html
     	StringBuilder tables = new StringBuilder();
     	List<String> list = resultList.stream()
     			.filter(result -> result != null && result.getSql() != null) //如果没有找到相关的sql就不需要再进行处理了
@@ -201,9 +203,9 @@ public class KfQueryService extends QueryHelper{
                 .map(sqlParam->{return sqlParam.getSqlField();})
                 .findFirst();
         logger.info(String.format("sqlParamMap:[%s]", JsonTool.writeValueAsString(sqlParamMap)));
-        Map<String,String> fieldMap = new HashMap<String,String>();
-        Map<String,String> paramFieldMap = new LinkedHashMap<String,String>();
-        Map<String,String> needToShowParamFieldMap = new HashMap<String,String>();
+        Map<String,String> fieldMap = new HashMap<String,String>();//所有字段的map
+        Map<String,String> paramFieldMap = new LinkedHashMap<String,String>();//作为参数字段的map
+        Map<String,String> needToShowParamFieldMap = new HashMap<String,String>();//需要显示的参数字段的map
         
         sql.setSqlStatement(StringUtils.replaceEach(sql.getSqlStatement(), new String[]{"\n","\t","/n","/t"}, new String[]{"","","",""}));
         String currentFieldStr = StringUtils.substringBetween(sql.getSqlStatement(),"select","from");
@@ -249,6 +251,7 @@ public class KfQueryService extends QueryHelper{
          * 生成SimpleResult
          */
         SqlRowSetMetaData metaData = rowSet.getMetaData();
+        //封装表头
         for (int i = 1; i <= metaData.getColumnCount(); i++) {
         	String returnfield = fieldMap.get(metaData.getColumnName(i));
         	String returnShow = metaData.getColumnLabel(i);
@@ -265,6 +268,7 @@ public class KfQueryService extends QueryHelper{
             result.getHeads().add(new ColumnDetail(returnfield,returnShow,show,isParamColumn));
         }
         
+        //封装值
         Map<Integer,String> newLoopParamPair = new LinkedHashMap<>();
         int rowNum = 0;
         while (rowSet.next()) {
@@ -301,7 +305,7 @@ public class KfQueryService extends QueryHelper{
         resultList.add(result);
         
         /**
-         * 排除已经查询过的sql，排除已经查询过的条件
+         * 排除已经查询过的sql
          */
         usedSql.put(sql.getId(), sql);
         

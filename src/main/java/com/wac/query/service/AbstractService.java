@@ -5,8 +5,7 @@ package com.wac.query.service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
@@ -35,8 +34,9 @@ public abstract class AbstractService<T extends ParamBean /** 查询条件*/, E 
 	private static Logger logger = LoggerFactory.getLogger(AbstractService.class);
     protected AbstractMapper abstractMapper;
 
-    protected static final ExecutorService pool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 10);
-    protected static final  AsyncEventBus eventOf影响联合查询缓存 = new AsyncEventBus(pool);
+    protected static final ForkJoinPool forkJoinPool = new ForkJoinPool(Runtime.getRuntime().availableProcessors() * 10);
+    //protected static final ExecutorService pool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 10);
+    protected static final  AsyncEventBus eventOf影响联合查询缓存 = new AsyncEventBus(forkJoinPool);
     
     
     /**
