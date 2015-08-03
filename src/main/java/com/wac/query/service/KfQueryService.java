@@ -115,7 +115,9 @@ public class KfQueryService extends QueryHelper{
             Collections.sort(resultList, new ClearingProcessorComparator());
         }
     	StringBuilder tables = new StringBuilder();
-    	List<String> list = resultList.stream().map(result->{
+    	List<String> list = resultList.stream()
+    			.filter(result -> result != null && result.getSql() != null) //如果没有找到相关的sql就不需要再进行处理了
+    			.map(result->{
     		StringBuilder sb = new StringBuilder("<br><font color='blue'><h3>"+result.getSql().getSqlName()+"</h3></font><br>");
     		sb.append("<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"1\" class=\"display\" id=\""+result.getSql().getId()+"_table\">");
     		sb.append("<thead><tr>");
@@ -142,7 +144,7 @@ public class KfQueryService extends QueryHelper{
     		tables.append(table);
     	});
     	
-    	return tables.toString();
+    	return StringUtils.defaultIfBlank(tables.toString(),"nothing");
     }
     
     /** 查询结果排序器 */

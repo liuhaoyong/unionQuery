@@ -5,7 +5,7 @@
 <script type="text/javascript">
 
 	function search(){
-		$("#dataArea").text('');
+		$("#dataArea").text('数据检索中。。。');
 	
         var bid = $("#bid").val();
         var paramId = $("#paramId").val();
@@ -20,10 +20,7 @@
 
         $("#searchButton").attr("disabled","disabled");
 
-        dhtmlx.message({
-            text:"数据检索中。。。",
-            expire:5000
-        });
+        
 
         var url = "${SITE_DYN}/q/list.html?bid="+bid+"&paramValue="+encodeURIComponent(paramValue)+"&paramId="+paramId;
 
@@ -33,7 +30,9 @@
             type : "GET",
             async : false,
             success : function(data) {
+            	$("#dataArea").text('');
             	var index1 = data.indexOf("error");
+            	var index2 = data.indexOf("nothing");
                 if(index1 >= 0 && index1 <5){
                 	dhtmlx.confirm({
                 				ok:"关闭", cancel:"调试",
@@ -45,6 +44,11 @@
 										$("#dataArea").text(data.substring(6,data.length));
 									}
 								}
+							});
+                }else if(index2 >= 0 && index2 <5){
+                	dhtmlx.alert({
+								type:"alert-warning",
+								text:"没有找到数据！"
 							});
                 }else{
                 	$("#dataArea").html(data);

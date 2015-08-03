@@ -8,7 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +30,7 @@ import com.wac.query.service.KfSqlService;
 @Controller
 @RequestMapping("/q")
 public class KfQueryAction extends AbstractAction {
-    private static Logger logger = Logger.getLogger(KfQueryAction.class);
+	private static Logger logger = LoggerFactory.getLogger(KfQueryAction.class);
 
     @Resource
     private KfSqlService kfSqlService;
@@ -68,6 +69,10 @@ public class KfQueryAction extends AbstractAction {
         }
         
 		String json = kfQueryService.query(kfQuery.getBid(),kfQuery.getParamId(),kfQuery.getParamValue());
+		logger.info(String.format("Query result:[%s]", StringUtils.abbreviate(json, 50)));
+		if(logger.isDebugEnabled()){
+			logger.debug(String.format("Query result:[%s]", json));
+		}
 		this.renderText(response, json);
         return null;
     }
