@@ -214,11 +214,23 @@ public class KfQueryService extends QueryHelper{
             boolean include = false;
             for (String currentField : currentFields) {
                 String[] arr = StringUtils.split(currentField," ");
-                String s = StringUtils.split(currentField," ")[0];
-                fieldMap.put(StringUtils.trim(arr.length>1?StringUtils.isBlank(arr[1])?s:arr[1]:s),StringUtils.trim(s));
-                if(StringUtils.equalsIgnoreCase(sqlParam.getSqlField().trim(),s.trim())){
-                	paramFieldMap.put(StringUtils.trim(arr.length>1?StringUtils.isBlank(arr[1])?s:arr[1]:s),StringUtils.trim(s));
-                	needToShowParamFieldMap.put(StringUtils.trim(arr.length>1?StringUtils.isBlank(arr[1])?s:arr[1]:s),StringUtils.trim(s));
+                String rawField = arr[0];
+                String alias = arr.length > 1 ? arr[arr.length - 1] : null;
+                
+                //是否为case语句
+                if(StringUtils.startsWithIgnoreCase(currentField, "case") 
+                		&& (StringUtils.equalsIgnoreCase(arr[arr.length - 1], "end") 
+                				|| StringUtils.equalsIgnoreCase(arr[arr.length - 2], "end") )){
+                	rawField = arr[1];
+                	if(StringUtils.equalsIgnoreCase(arr[arr.length - 1], "end")){
+                		alias = null;
+                	}
+                }
+                
+                fieldMap.put(StringUtils.trim(arr.length>1?StringUtils.isBlank(alias)?rawField:alias:rawField),StringUtils.trim(rawField));
+                if(StringUtils.equalsIgnoreCase(sqlParam.getSqlField().trim(),rawField.trim())){
+                	paramFieldMap.put(StringUtils.trim(arr.length>1?StringUtils.isBlank(alias)?rawField:alias:rawField),StringUtils.trim(rawField));
+                	needToShowParamFieldMap.put(StringUtils.trim(arr.length>1?StringUtils.isBlank(alias)?rawField:alias:rawField),StringUtils.trim(rawField));
                     include = true;
                     break;
                 }
