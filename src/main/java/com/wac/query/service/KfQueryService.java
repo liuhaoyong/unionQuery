@@ -217,7 +217,7 @@ public class KfQueryService extends QueryHelper{
                 String rawField = arr[0];
                 String alias = arr.length > 1 ? arr[arr.length - 1] : null;
                 
-                //是否为case语句
+                //是否为case语句==
                 if(StringUtils.startsWithIgnoreCase(currentField, "case") 
                 		&& (StringUtils.equalsIgnoreCase(arr[arr.length - 1], "end") 
                 				|| StringUtils.equalsIgnoreCase(arr[arr.length - 2], "end") )){
