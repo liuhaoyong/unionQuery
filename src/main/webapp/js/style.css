@@ -1,8 +1,9 @@
 /* tudou channel */
 * {
 	margin: 0;
-	padding: 0;
-	font-size: 12px;
+	padding: 1px 1px 1px 1px;
+	font-size: 13px;
+	font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
 }
 
 li{list-style-position: inside;}
@@ -11,7 +12,7 @@ body {
 	margin: 0;
 	padding: 0;
 	background: #FFF;
-	font-size: 12px;
+	font-size: 15px;
 	font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
 	color: #444;
 }
@@ -31,11 +32,20 @@ a:hover {
 }
 
 select,input,button {
-*	padding: 2px 0 0 0 !important;
-	padding: 0;
+*	padding: 1px 1px 1px 1px !important;
 	font-size: 12px;
 	font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
 	color: #333;
+	overflow: hidden;
+}
+
+select.s_select {
+*	padding: 1px 1px 1px 1px !important;
+	font-size: 12px;
+	width:240px;
+	font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
+	color: #333;
+	overflow: hidden;
 }
 
 
@@ -425,21 +435,21 @@ table.gridtable td {
 
 table.searchtable{
 	border: 1px solid #646464;
-	background:#b1e1ed ; 
-	margin: 3px 0px;
-	padding: 3px 0
+	background:#F5F5F5 ; 
+	margin: 3px 3px 3px 3px;
+	padding: 3px 3px 3px 3px;
 }
 
 table.searchtable th{
 	border-width: 0px;
-	padding: 3px;
-	margin: 3px 0px;
+	padding: 3px 3px 3px 3px;
+	margin: 3px 3px 3px 3px;
 	border-style: solid;
 }
 
 table.searchtable td {
 	border-width: 0px;
-	padding: 3px;
-	margin: 3px 0px;
+	padding: 3px 3px 3px 3px;
+	margin: 3px 3px 3px 3px;
 	border-style: solid;
 }

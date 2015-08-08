@@ -126,21 +126,21 @@ table.display {
 }
 
 table.display thead th {
-	padding: 3px 18px 3px 10px;
+	padding: 15px 18px 15px 18px;
 	border-bottom: 1px solid black;
 	font-weight: bold;
-	background-color: #2589CE;
-	color:#FFF;
+	background-color: #F9F9F9;
+	color:#212121;
 	cursor: pointer;
 	* cursor: hand;
 }
 
 table.display tfoot th {
-	padding: 3px 18px 3px 10px;
+	padding: 15px 18px 15px 18px;
 	border-top: 1px solid black;
 	font-weight: bold;
-	background-color: #2589CE;
-	color:#FFF;
+	background-color: #F9F9F9;
+	color:#212121;
 	cursor: pointer;
 	* cursor: hand;
 }
@@ -150,7 +150,7 @@ table.display tr.heading2 td {
 }
 
 table.display td {
-	padding: 3px 10px;
+	padding: 10px 10px;
 }
 
 table.display td.center {
@@ -232,11 +232,11 @@ tr.even {
 }
 */
 tr.odd {
-	background-color: #b1e1ed;
+	background-color: #FFF;
 }
 
 tr.even {
-	background-color: #FFF;
+	background-color: #F9F9F9;
 }
 
 

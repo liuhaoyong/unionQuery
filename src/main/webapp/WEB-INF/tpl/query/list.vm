@@ -90,7 +90,7 @@
 			<tr>
 				<td>
 				业务：
-				<select id="bid" onchange="getParam();">
+				<select id="bid" onchange="getParam();" class="s_select">
 					<option value="-1">-请选择-</option>
 					#foreach($bu in ${busniessList})
 						<option #if($!kfQuery.bid == $bu.id) selected="selected" #end value="${bu.id}">${bu.busniessName}</option>
@@ -98,7 +98,7 @@
 				</select>
 				<br>
 				参数：
-				<select id="paramId">
+				<select id="paramId" class="s_select">
 
 				</select>
 				<br>
