@@ -36,8 +36,9 @@ input.button {
 	cursor: pointer;
 	background-image: none;
 	white-space: nowrap;
-	padding: 8px 12px;
-	font-size: 15px;
+	padding: 5px 10px;
+	font-size: 13px;
+	font-family: Arial;
 	line-height: 1.42857143;
 	border-radius: 0;
 	color: #ffffff;

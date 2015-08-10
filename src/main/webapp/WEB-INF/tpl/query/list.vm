@@ -90,19 +90,38 @@
 			<tr>
 				<td>
 				业务：
+				</td>
+				<td>
 				<select id="bid" onchange="getParam();" class="s_select">
 					<option value="-1">-请选择-</option>
 					#foreach($bu in ${busniessList})
 						<option #if($!kfQuery.bid == $bu.id) selected="selected" #end value="${bu.id}">${bu.busniessName}</option>
 					#end
 				</select>
-				<br>
+				</td>
+				<td>
+			</tr>
+			<tr>
+				<td>
 				参数：
+				</td>
+				<td>
 				<select id="paramId" class="s_select">
 
 				</select>
-				<br>
-				参数值：	<input id="paramValue" type='text' size="40" value="$!kfQuery.paramValue">&nbsp;&nbsp;<br>
+				</td>
+				<td>
+			</tr>
+			<tr>
+				<td>	
+				参数值：	
+				</td>
+				<td>
+				<input id="paramValue" type='text' size="40" value="$!kfQuery.paramValue">
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
 				<input type="button" value="查询" onclick="search();" id="searchButton" class="button"/>
 				</td>
 			</tr>

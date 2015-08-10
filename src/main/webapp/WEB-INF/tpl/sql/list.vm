@@ -17,7 +17,7 @@ function search(){
 function getSearchUrl(){
 	var name = $("#search_name1").val();
 	var search_bu = $("#search_bu").val();
-	var search_dbs = $("#search_name1").val();
+	var search_dbs = $("#search_dbs").val();
 	var url = "${SITE_DYN}/sql/list.action?dbsName="+encodeURIComponent(name)+"&busniessId="+search_bu+"&dataSourceId="+search_dbs;
 	return url;
 }
@@ -70,24 +70,41 @@ function editParam(id){
 <div id="dbsListTab" style="width:97%;margin: 5px 5px 0px 5px;">
 	<table id="tool" border="0" width="100%" class="searchtable" align="center">
 			<tr>
+				<td style="width:3px">
+				SQL名称：
+				</td>
 				<td>
-				SQL名称：<input id="search_name1" type='text' size="40">&nbsp;&nbsp;<br>
+				<input id="search_name1" type='text' size="40">&nbsp;&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td>
 				业务：
+				</td>
+				<td>
 				<select id="search_bu">
 					<option value="-1">--</option>
 					#foreach($bu in ${busniessList})
 						<option value="${bu.id}">${bu.busniessName}</option>
 					#end
 				</select>
-				<br>
+				</td>
+			</tr>
+			<tr>
+				<td>
 				数据源：
+				</td>
+				<td>
 				<select id="search_dbs">
 					<option value="-1">--</option>
 					#foreach($dbs in ${dbsList})
 						<option value="${dbs.id}">${dbs.dbsName}</option>
 					#end
 				</select>
-				<br>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
 				<input type="button" value="查询" onclick="search();" class="button"/>
 				&nbsp;
 				<input type="button" value="重置" onclick="reset();" class="button"/>
