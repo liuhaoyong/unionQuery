@@ -140,6 +140,7 @@ table.display tfoot th {
 	border-top: 1px solid black;
 	font-weight: bold;
 	background-color: #EEF5FB;
+	border-top: 3px solid #0B779C;
 	color:#212121;
 	cursor: pointer;
 	* cursor: hand;
