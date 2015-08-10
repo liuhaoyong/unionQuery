@@ -1,4 +1,4 @@
-input.button {
+input.buttonssss {
 	background: #3498db;
 	background-image: -webkit-linear-gradient(top, #3498db, #2980b9);
 	background-image: -moz-linear-gradient(top, #3498db, #2980b9);
@@ -25,7 +25,24 @@ input.button:hover {
 	text-decoration: none;
 }
 
-
+input.button {
+	background: #259FF2;
+	display: inline-block;
+	border: none;
+	margin-bottom: 0;
+	font-weight: normal;
+	text-align: center;
+	vertical-align: middle;
+	cursor: pointer;
+	background-image: none;
+	white-space: nowrap;
+	padding: 8px 12px;
+	font-size: 15px;
+	line-height: 1.42857143;
+	border-radius: 0;
+	color: #ffffff;
+	-webkit-user-select: none;
+}
 
 tr.myDragClass td {
 	background-color: yellow;

@@ -129,7 +129,7 @@ table.display thead th {
 	padding: 15px 18px 15px 18px;
 	border-bottom: 1px solid black;
 	font-weight: bold;
-	background-color: #F9F9F9;
+	background-color: #EEF5FB;
 	color:#212121;
 	cursor: pointer;
 	* cursor: hand;
@@ -139,7 +139,7 @@ table.display tfoot th {
 	padding: 15px 18px 15px 18px;
 	border-top: 1px solid black;
 	font-weight: bold;
-	background-color: #F9F9F9;
+	background-color: #EEF5FB;
 	color:#212121;
 	cursor: pointer;
 	* cursor: hand;
@@ -236,7 +236,7 @@ tr.odd {
 }
 
 tr.even {
-	background-color: #F9F9F9;
+	background-color: #F6F9FE;
 }
 
 
