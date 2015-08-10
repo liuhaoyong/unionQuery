@@ -127,7 +127,7 @@ table.display {
 
 table.display thead th {
 	padding: 15px 18px 15px 18px;
-	border-bottom: 1px solid black;
+	border-bottom: 3px solid #0B779C;
 	font-weight: bold;
 	background-color: #EEF5FB;
 	color:#212121;
@@ -237,6 +237,14 @@ tr.odd {
 
 tr.even {
 	background-color: #F6F9FE;
+}
+
+table.display tr:hover {
+	background-color:#eeefdc;
+}
+
+table.display tr:hover td{
+	background:none;
 }
 
 
