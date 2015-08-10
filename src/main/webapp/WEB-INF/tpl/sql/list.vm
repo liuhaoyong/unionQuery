@@ -18,7 +18,7 @@ function getSearchUrl(){
 	var name = $("#search_name1").val();
 	var search_bu = $("#search_bu").val();
 	var search_dbs = $("#search_dbs").val();
-	var url = "${SITE_DYN}/sql/list.action?dbsName="+encodeURIComponent(name)+"&busniessId="+search_bu+"&dataSourceId="+search_dbs;
+	var url = "${SITE_DYN}/sql/list.action?sqlName="+encodeURIComponent(name)+"&busniessId="+search_bu+"&dataSourceId="+search_dbs;
 	return url;
 }
 
