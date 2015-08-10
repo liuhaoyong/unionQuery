@@ -1,5 +1,6 @@
 package com.wac.query.service;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,6 +41,9 @@ public class KfSqlService extends AbstractService<KfSql,KfSql>{
 
     @Resource
     private KfSqlParamMapper kfSqlParamMapper;
+    
+    @Resource
+    private KfParamService kfParamService;
 
     @Override
     @Resource(name="kfSqlMapper")
@@ -72,8 +76,7 @@ public class KfSqlService extends AbstractService<KfSql,KfSql>{
             slist.add(b.getCreateTime()!=null?DateFormatUtils.ISO_DATETIME_FORMAT.format(b.getCreateTime()):"");
             slist.add(b.getUpdateTime()!=null?DateFormatUtils.ISO_DATETIME_FORMAT.format(b.getUpdateTime()):"");
             //slist.add("<a href=\"#\" onclick=\"edit('"+b.getId()+"')\">修改</a>");
-            slist.add("<a href='#' onclick='edit("+b.getId()+")'>修改</a>&nbsp;" +
-                    "<a href='#' onclick='editParam("+b.getId()+")'>参数配置</a>");
+            slist.add("<a href='#' onclick='edit("+b.getId()+")'>修改</a>");
             aaData.add(slist);
         }
         PageVo vo = new PageVo(sEcho,total+"",total+"",aaData);
@@ -138,6 +141,7 @@ public class KfSqlService extends AbstractService<KfSql,KfSql>{
      * @param list
      */
     public void saveParams(List<KfSqlParam> list,Integer sqlId){
+    	
         if(list == null || list.isEmpty()){
             logger.warn("list is empty..");
             return;
@@ -147,6 +151,7 @@ public class KfSqlService extends AbstractService<KfSql,KfSql>{
             logger.error("KfSql[id="+sqlId+"] is null..");
             return;
         }
+        
 
         //原有的参数id
         List<Integer> oldParamIds = sql.getParams().stream().map(param -> {
@@ -181,11 +186,26 @@ public class KfSqlService extends AbstractService<KfSql,KfSql>{
         eventOf影响联合查询缓存.post(new ClearUnionQueryCacheBySqlEvent(sqlId));
     }
     
+    
+    @Override
+    @Transactional(propagation= Propagation.REQUIRED,readOnly=false)
+    public int insert(KfSql e){
+        e.setCreateTime(new Date(System.currentTimeMillis()));
+        
+        int sqlId = abstractMapper.insert(e);
+        
+        this.saveParams(e.getParams(), sqlId);
+        
+        return sqlId;
+    }
+
+    
     @Override
     @Transactional(propagation= Propagation.REQUIRED,readOnly=false)
     public int update(KfSql e){
         int count = abstractMapper.updateByPrimaryKey(e);
-        eventOf影响联合查询缓存.post(new ClearUnionQueryCacheBySqlEvent(e.getId()));
+        this.saveParams(e.getParams(), e.getId());
+        //eventOf影响联合查询缓存.post(new ClearUnionQueryCacheBySqlEvent(e.getId()));
         return count;
     }
     

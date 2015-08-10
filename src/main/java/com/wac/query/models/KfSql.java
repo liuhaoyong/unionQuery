@@ -19,15 +19,75 @@ public class KfSql extends BaseBean{
     private Integer sqlStatus;
     private String sqlStatement;
     private String sqlDesc;
+    
+    
+    private String[] pids;
+    private String[] paramId;
+    private String[] sqlField;
+    private String[] paramDesc;
 
 
     private List<KfSqlParam> params = new LinkedList();
     
     private Map<String,KfSqlParam> sqlParamMap = null;
     
-    
+	/**
+	 * @return the pids
+	 */
+	public String[] getPids() {
+		return pids;
+	}
 
-    /**
+	/**
+	 * @param pids the pids to set
+	 */
+	public void setPids(String[] pids) {
+		this.pids = pids;
+	}
+
+	/**
+	 * @return the paramId
+	 */
+	public String[] getParamId() {
+		return paramId;
+	}
+
+	/**
+	 * @param paramId the paramId to set
+	 */
+	public void setParamId(String[] paramId) {
+		this.paramId = paramId;
+	}
+
+	/**
+	 * @return the sqlField
+	 */
+	public String[] getSqlField() {
+		return sqlField;
+	}
+
+	/**
+	 * @param sqlField the sqlField to set
+	 */
+	public void setSqlField(String[] sqlField) {
+		this.sqlField = sqlField;
+	}
+
+	/**
+	 * @return the paramDesc
+	 */
+	public String[] getParamDesc() {
+		return paramDesc;
+	}
+
+	/**
+	 * @param paramDesc the paramDesc to set
+	 */
+	public void setParamDesc(String[] paramDesc) {
+		this.paramDesc = paramDesc;
+	}
+
+	/**
 	 * @return the sqlParamMap
 	 */
 	public Map<String, KfSqlParam> getSqlParamMap() {

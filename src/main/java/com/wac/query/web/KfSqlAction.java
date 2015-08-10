@@ -98,8 +98,10 @@ public class KfSqlAction extends AbstractAction {
         }
         model.addAttribute("busniessList", kfBusniessService.all(new KfBusniess()));
         model.addAttribute("dbsList", kfDatabaseSourceService.all(new KfDatabaseSource()));
-        model.addAttribute("paramList", com.getParams());
+        //model.addAttribute("paramList", com.getParams());
         model.addAttribute("statusMap", SqlStatusEnum.停用.toMap());
+        List<KfParam> paramList = kfParamService.all(new KfParam());
+        model.addAttribute("paramList", paramList);
         return "sql/input";
     }
 
@@ -112,6 +114,38 @@ public class KfSqlAction extends AbstractAction {
     @RequestMapping(method = RequestMethod.POST, value = "/save")
     public String save(HttpServletRequest request, HttpServletResponse response, KfSql pro) {
         try {
+        	logger.info("sqlId");
+            logger.info("String[] pids:"+pro.getPids()==null?"null": JsonTool.writeValueAsString(pro.getPids()));
+            logger.info("String[] paramId:"+pro.getParamId()==null?"null": JsonTool.writeValueAsString(pro.getParamId()));
+            logger.info("String[] sqlField:"+pro.getSqlField()==null?"null": JsonTool.writeValueAsString(pro.getSqlField()));
+            logger.info("String[] paramDesc:" + pro.getParamDesc() == null ? "null" : JsonTool.writeValueAsString(pro.getParamDesc()));
+            
+            List<KfSqlParam> paramList = new ArrayList<>();
+            Date now = new Date(System.currentTimeMillis());
+            for (int i=0;i<pro.getParamId().length;i++) {
+                if(StringUtils.isBlank(pro.getParamId()[i]) || Integer.parseInt(pro.getParamId()[i]) <= 0){
+                    continue;
+                }
+                KfSqlParam p = new KfSqlParam();
+                p.setParamId(Integer.valueOf(pro.getParamId()[i]));
+                if(!StringUtils.endsWithIgnoreCase(pro.getParamDesc()[i],"defaultXXX")){
+                    p.setParamDesc(pro.getParamDesc()[i]);
+                }
+                p.setSqlId(pro.getId());
+                p.setId(Integer.valueOf(pro.getPids()[i]));
+                if(!StringUtils.endsWithIgnoreCase(pro.getSqlField()[i],"defaultXXX")){
+                    p.setSqlField(StringUtils.trim(pro.getSqlField()[i]));
+                }else{
+                    KfParam kp = kfParamService.selectByPk(p.getParamId());
+                    p.setSqlField(StringUtils.trim(kp!=null?kp.getFieldName():null));
+                }
+
+                p.setCreateTime(now);
+                paramList.add(p);
+            }
+            
+            pro.setParams(paramList);
+            
             if (pro.getId() == null || pro.getId() <= 0) {
                 kfSqlService.insert(pro);
             } else {
@@ -131,6 +165,7 @@ public class KfSqlAction extends AbstractAction {
      * @param model
      * @return
      */
+    @Deprecated
     @RequestMapping(method = RequestMethod.GET, value = "/paramNew")
     public String toParamInput(HttpServletRequest request, Integer id, Model model) {
         KfSql com = kfSqlService.selectByPk(id);
@@ -147,6 +182,7 @@ public class KfSqlAction extends AbstractAction {
      * @param
      * @return
      */
+    @Deprecated
     @RequestMapping(method = RequestMethod.POST, value = "/saveParam")
     public String saveParam(HttpServletRequest request,
                             HttpServletResponse response,

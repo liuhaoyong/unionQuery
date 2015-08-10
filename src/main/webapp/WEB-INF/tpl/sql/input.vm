@@ -20,6 +20,24 @@
                 },
                 messages: {},
                 submitHandler: function (form) {
+                	$("input[name='sqlField']").each(function(){
+                        var obj = $(this);
+                        if(obj.val  == null || obj.val()==''){
+                            obj.val("defaultXXX");
+                        }
+                    });
+                    $("input[name='paramDesc']").each(function(){
+                        var obj = $(this);
+                        if(obj.val  == null || obj.val()==''){
+                            obj.val("defaultXXX");
+                        }
+                    });
+                    $("input[name='pids']").each(function(){
+                        var obj = $(this);
+                        if(obj.val  == null || obj.val()==''){
+                            obj.val("0");
+                        }
+                    });
                     var options = {
                         success: showResponse,
                         type: "post",
@@ -45,6 +63,23 @@
             });
         }
 
+		function addParam(obj){
+            var newTr = $("#paramsTr").clone(true);
+            $(newTr).closest("tr").find("select").val("-1");
+            $(newTr).closest("tr").find("input[type='text']").val("");
+            $(newTr).closest("tr").find("input[name='pids']").val("");
+            $(newTr).insertAfter($(obj).closest("tr"));
+        }
+
+        function delParam(obj){
+            if($("tr[name='ptr']").length > 1){
+                $(obj).closest("tr").remove();
+            }else{
+                //$(obj).closest("tr").find("select").val("-1");
+                //$(obj).closest("tr").find("input[type='text']").val("");
+                showError("请至少保留一个查询参数！");
+            }
+        }
     </script>
     <title></title>
 </head>
@@ -104,8 +139,68 @@
                     <textarea name="sqlDesc" id="sqlDesc" cols="50" rows="3">$!kfSql.sqlDesc</textarea>
                 </td>
             </tr>
+        </table>
+        <br>
+        <table class="form" style="margin: 5px 5px 0px 5px;">
+            #if($!{kfSql.getParams().size()} > 0)
+                #set($count = 0)
+                #foreach($sqlParam in $kfSql.params)
+                    <tr #if($count == 0) id="paramsTr" #end name="ptr" >
+                        <td nowrap="nowrap">
+                            参数：<input type="hidden" name="pids" value="$!sqlParam.id">
+                            <select name="paramId" title="tplSelect">
+                                <option value="-1">-请选择-</option>
+                                #foreach($param in $paramList)
+                                    <option #if($sqlParam.paramId == $param.id) selected="selected" #end value="$param.id">$!{param.paramName}($!{param.fieldName})</option>
+                                #end
+                            </select>
+                        </td>
+                        <td>
+                            字段名：
+                            <input type="text" name="sqlField" size="45"  maxlength="100"  value="#if($stringUtils.isBlank($!sqlParam.sqlField)) $!param.sqlField #else $sqlParam.sqlField #end"/>
+                        </td>
+                        <td>
+                            备注：
+                            <input type="text" name="paramDesc" size="45"  maxlength="100"  value="$!sqlParam.paramDesc"/>
+                        </td>
+                        <td>
+                            <input type="button" value="添加" class="button" onclick="addParam(this);"/>
+                            &nbsp;
+                            <input type="button" value="删除" class="button" onclick="delParam(this);"/>
+                        </td>
+                    </tr>
+                    #set($count = $count + 1)
+                #end
+            #else ##如果列表没有就默认显示一个模板
+                <tr id="paramsTr"  name="ptr" >
+                    <td nowrap="nowrap">
+                        参数：<input type="hidden" name="pids" value="0">
+                        <select name="paramId" title="tplSelect">
+                            <option value="-1">-请选择-</option>
+                        #foreach($param in $paramList)
+                            <option value="$param.id">$!{param.paramName}($!{param.fieldName})</option>
+                        #end
+                        </select>
+                    </td>
+                    <td>
+                        字段名：
+                        <input type="text" name="sqlField" size="45"  maxlength="100"  value=""/>
+                    </td>
+                    <td>
+                        备注：
+                        <input type="text" name="paramDesc" size="45"  maxlength="100"  value=""/>
+                    </td>
+                    <td>
+                        <input type="button" value="添加" class="button" onclick="addParam(this);"/>
+                        &nbsp;
+                        <input type="button" value="删除" class="button" onclick="delParam(this);"/>
+                    </td>
+                </tr>
+            #end
+
+
             <tr>
-                <td colspan="2" class="buttons">
+                <td colspan="4" class="buttons">
                     <input type="submit" value="保存" class="button"/>&nbsp;
                 </td>
             </tr>
