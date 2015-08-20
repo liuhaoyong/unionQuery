@@ -382,7 +382,7 @@
 		<profile>
 			<id>pro</id>
 			<properties>
-				<profiles.active>www</profiles.active>
+				<profiles.active>production</profiles.active>
 			</properties>
 		</profile>
 	</profiles>
