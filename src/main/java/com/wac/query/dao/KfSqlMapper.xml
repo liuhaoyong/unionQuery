@@ -43,7 +43,7 @@
 				order by priority asc
 			</when>
 			<otherwise>
-				order by  priority,create_time desc
+				order by  priority,id desc
 			</otherwise>
 		</choose>
 		limit #{startIndex},#{endIndex}
