@@ -10,11 +10,11 @@
 		<result column="pwd" property="pwd"/>
 		<result column="jdbc_url" property="jdbcUrl"/>
 		<result column="driver_type" property="driverType"/>
-		<result column="create_time" property="createTime" javaType="java.util.Date"/>
-		<result column="update_time" property="updateTime" javaType="java.util.Date"/>
+		<result column="created_time" property="createTime" javaType="java.util.Date"/>
+		<result column="updated_time" property="updateTime" javaType="java.util.Date"/>
 	</resultMap>
 	<sql id="KfDatabaseSourceMapper.fields">
-		id,dbs_name,user_name,pwd,jdbc_url,driver_type,create_time,update_time
+		id,dbs_name,user_name,pwd,jdbc_url,driver_type,created_time,updated_time
 	</sql>
 	<sql id="KfDatabaseSourceMapper.condition">
 		where 1=1
@@ -56,7 +56,7 @@
 	</update>
 
 	<insert id="insert" parameterType="com.wac.query.models.KfDatabaseSource">
-		INSERT INTO kf_database_source(dbs_name,user_name,pwd,jdbc_url,driver_type,create_time,update_time)
+		INSERT INTO kf_database_source(dbs_name,user_name,pwd,jdbc_url,driver_type,created_time,updated_time)
 		VALUES
 		(#{dbsName},#{userName},#{pwd},#{jdbcUrl},#{driverType},#{createTime,jdbcType=TIMESTAMP },#{createTime,jdbcType=TIMESTAMP})
 		<selectKey resultType="int" keyProperty="id">

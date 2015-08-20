@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	   xmlns:websocket="http://www.springframework.org/schema/websocket"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx.xsd
+	http://www.springframework.org/schema/jee 
+	http://www.springframework.org/schema/jee/spring-jee.xsd
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/aop 
+	http://www.springframework.org/schema/aop/spring-aop.xsd
+	http://www.springframework.org/schema/websocket
+    http://www.springframework.org/schema/websocket/spring-websocket.xsd"
+	default-autowire="byName">
+	<description>Spring公共配置文件</description>
+
+	<context:annotation-config />
+	<context:component-scan base-package="com.wac" />
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="ignoreUnresolvablePlaceholders" value="true"/>
+		<property name="locations">
+			<list>
+				<value>classpath:app.properties</value>
+			</list>
+		</property>
+		<property name="order" value="1" />
+	</bean>
+
+	<!-- <bean id="commonDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" >
+		<property name="driverClass" value="${mysql.driver}" />
+		<property name="jdbcUrl" value="${common.r.jdbc.url}" />
+		<property name="user" value="${common.r.jdbc.username}" />
+		<property name="password" value="${common.r.jdbc.password}" />
+		<property name="initialPoolSize" value="${common.r.initialPoolSize}" />
+		<property name="minPoolSize" value="${common.r.minPoolSize}" />
+		<property name="maxPoolSize" value="${common.r.maxPoolSize}" />
+		<property name="acquireIncrement" value="${common.r.acquireIncrement}" />
+		<property name="maxIdleTime" value="${common.r.maxIdleTime}" />
+		<property name="checkoutTimeout" value="${common.r.checkoutTimeout}" />
+		<property name="testConnectionOnCheckin" value="true" />
+		<property name="idleConnectionTestPeriod" value="120" /> 
+	</bean> -->
+	<bean id="commonDataSource"  class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <!-- 基本属性 url、user、password -->
+        <property name="url" value="${connection.url}"/>
+        <property name="username" value="${connection.username}"/>
+        <property name="password" value="${connection.password}"/>
+        <property name="connectionProperties" value="config.decrypt=${connection.decrypt}" />
+        <!-- 配置初始化大小、最小、最大 -->
+        <property name="initialSize" value="${druid.initialSize}"/>
+        <property name="minIdle" value="${druid.minIdle}"/>
+        <property name="maxActive" value="${druid.maxActive}"/>
+        <!-- 配置获取连接等待超时的时间 -->
+        <property name="maxWait" value="${druid.maxWait}"/>
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="${druid.timeBetweenEvictionRunsMillis}" />
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="${druid.minEvictableIdleTimeMillis}" />
+        <property name="validationQuery" value="${druid.validationQuery}" />
+        <property name="testWhileIdle" value="${druid.testWhileIdle}" />
+        <property name="testOnBorrow" value="${druid.testOnBorrow}" />
+        <property name="testOnReturn" value="${druid.testOnReturn}" />
+        <!-- 打开PSCache，并且指定每个连接上PSCache的大小  如果用Oracle，则把poolPreparedStatements配置为true，mysql可以配置为false。-->
+        <property name="poolPreparedStatements" value="${druid.poolPreparedStatements}" />
+        <property name="maxPoolPreparedStatementPerConnectionSize" value="${druid.maxPoolPreparedStatementPerConnectionSize}" />
+        <!-- 配置监控统计拦截的filters -->
+        <property name="filters" value="${druid.filters}" />
+    </bean>
+	<bean id="commonSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="commonDataSource" />
+		<property name="typeAliasesPackage" value="com.wac.query.models" />
+	</bean>
+	
+	<!-- 配置事务支持 -->
+	<bean id="commonManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="commonDataSource"></property>
+	</bean>
+	<tx:annotation-driven transaction-manager="commonManager"/>
+
+	<bean name="commonMapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.wac.query.dao,com.wac.business.datastatistics.persistence,com.wac.business.setting.persistence,com.wac.common.persistence,com.wac.user.persistence" />
+		<property name="sqlSessionFactory" ref="commonSqlSessionFactory" />
+	</bean>
+
+	<!--<websocket:handlers>
+		<websocket:mapping path="/ws" handler="wsHandler"/>
+		<websocket:handshake-interceptors>
+			<bean class="com.wac.query.web.websocket.HandshakeInterceptor"/>
+		</websocket:handshake-interceptors>
+		<websocket:sockjs/>
+	</websocket:handlers>
+	<bean id="wsHandler" class="com.wac.query.web.websocket.WsHandler"/>-->
+</beans>
+

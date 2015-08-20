@@ -6,12 +6,12 @@
 	<resultMap id="KfBusniessMapper.KfBusniess" type="com.wac.query.models.KfBusniess">
 		<id column="id" property="id"/>
 		<result column="busniess_name" property="busniessName"/>
-		<result column="create_time" property="createTime" javaType="java.util.Date"/>
-		<result column="update_time" property="updateTime" javaType="java.util.Date"/>
+		<result column="created_time" property="createTime" javaType="java.util.Date"/>
+		<result column="updated_time" property="updateTime" javaType="java.util.Date"/>
 	</resultMap>
 	
 	<sql id="KfBusniessMapper.fields">
-		id,busniess_name,create_time,update_time
+		id,busniess_name,created_time,updated_time
 	</sql>
 	
 	<sql id="KfBusniessMapper.condition">
@@ -52,7 +52,7 @@
 	</update>
 
 	<insert id="insert" parameterType="com.wac.query.models.KfBusniess">
-		INSERT INTO kf_busniess(busniess_name,create_time,update_time)
+		INSERT INTO kf_busniess(busniess_name,created_time,updated_time)
 		VALUES
 		(#{busniessName},#{createTime,jdbcType=TIMESTAMP },#{createTime,jdbcType=TIMESTAMP})
 		<selectKey resultType="int" keyProperty="id">

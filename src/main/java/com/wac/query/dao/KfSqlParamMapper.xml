@@ -8,12 +8,12 @@
 		<result column="param_id" property="paramId"/>
 		<result column="sql_field" property="sqlField"/>
 		<result column="param_desc" property="paramDesc"/>
-		<result column="create_time" property="createTime" javaType="java.util.Date"/>
-		<result column="update_time" property="updateTime" javaType="java.util.Date"/>
+		<result column="created_time" property="createTime" javaType="java.util.Date"/>
+		<result column="updated_time" property="updateTime" javaType="java.util.Date"/>
 	</resultMap>
 
 	<sql id="KfSqlParamMapper.fields">
-		id,sql_id,param_id,sql_field,param_desc,create_time,update_time
+		id,sql_id,param_id,sql_field,param_desc,created_time,updated_time
 	</sql>
 
 	<sql id="KfSqlParamMapper.condition">
@@ -53,7 +53,7 @@
 	</update>
 
 	<insert id="insert" parameterType="com.wac.query.models.KfSqlParam">
-		INSERT INTO kf_sql_param(sql_id,param_id,sql_field,param_desc,create_time,update_time)
+		INSERT INTO kf_sql_param(sql_id,param_id,sql_field,param_desc,created_time,updated_time)
 		VALUES
 		(#{sqlId},#{paramId},#{sqlField},#{paramDesc},#{createTime,jdbcType=TIMESTAMP },#{createTime,jdbcType=TIMESTAMP})
 		<selectKey resultType="int" keyProperty="id">

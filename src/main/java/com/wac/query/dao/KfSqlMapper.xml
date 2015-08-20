@@ -12,11 +12,11 @@
 		<result column="sql_status" property="sqlStatus"/>
 		<result column="sql_statement" property="sqlStatement"/>
 		<result column="sql_desc" property="sqlDesc"/>
-		<result column="create_time" property="createTime" javaType="java.util.Date"/>
-		<result column="update_time" property="updateTime" javaType="java.util.Date"/>
+		<result column="created_time" property="createTime" javaType="java.util.Date"/>
+		<result column="updated_time" property="updateTime" javaType="java.util.Date"/>
 	</resultMap>
 	<sql id="KfSqlMapper.fields">
-		id,sql_name,busniess_id,priority,data_source_id,sql_status,sql_statement,sql_desc,create_time,update_time
+		id,sql_name,busniess_id,priority,data_source_id,sql_status,sql_statement,sql_desc,created_time,updated_time
 	</sql>
 
 	<sql id="KfSqlMapper.condition">
@@ -76,7 +76,7 @@
 	</update>
 
 	<insert id="insert" parameterType="com.wac.query.models.KfSql">
-		INSERT INTO kf_sql(sql_name,busniess_id,priority,data_source_id,sql_status,sql_statement,sql_desc,create_time,update_time)
+		INSERT INTO kf_sql(sql_name,busniess_id,priority,data_source_id,sql_status,sql_statement,sql_desc,created_time,updated_time)
 		VALUES
 		(#{sqlName},#{busniessId},#{priority},#{dataSourceId},#{sqlStatus},#{sqlStatement},#{sqlDesc},#{createTime,jdbcType=TIMESTAMP },#{createTime,jdbcType=TIMESTAMP})
 		<selectKey resultType="int" keyProperty="id">
