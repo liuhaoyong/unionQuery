@@ -3,7 +3,6 @@ package com.wac.query.factory;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Resource;
 
@@ -14,8 +13,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.druid.pool.DruidDataSource;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
-import com.wac.common.web.helper.SecurityDataSource;
 import com.wac.query.enums.DriverTypeEnum;
 import com.wac.query.models.KfDatabaseSource;
 import com.wac.query.service.KfDatabaseSourceService;
@@ -80,7 +79,7 @@ public class DefaultDataSourceFactory implements DataSourceFactory {
             logger.info("=====================================================");
             
             if(StringUtils.equalsIgnoreCase(env,"www")){//正式环境
-                SecurityDataSource ds = new SecurityDataSource();
+                /*SecurityDataSource ds = new SecurityDataSource();
                 ds.setDriverClass(DriverTypeEnum.getByCode(kfds.getDriverType()).driverStr());
                 ds.setJdbcUrl(kfds.getJdbcUrl());
                 ds.setUsername(kfds.getUserName());
@@ -91,12 +90,33 @@ public class DefaultDataSourceFactory implements DataSourceFactory {
                 ds.setAcquireIncrement(1);
                 ds.setStatementsCacheSize(10);
                 ds.setReleaseHelperThreads(1);
-                ds.setConnectionTestStatement("SELECT 1");
+                ds.setConnectionTestStatement("SELECT 1");*/
+            	
+            	DruidDataSource ds = new DruidDataSource();
+            	ds.setUrl(kfds.getJdbcUrl());
+            	ds.setUsername(kfds.getUserName());
+            	ds.setPassword(kfds.getPwd());
+            	ds.setConnectionProperties("config.decrypt=true");
+            	ds.setInitialSize(1);
+            	ds.setMinIdle(10);
+            	ds.setMaxActive(50);
+            	ds.setMaxWait(60000);
+            	ds.setTimeBetweenEvictionRunsMillis(60000);
+            	ds.setMinEvictableIdleTimeMillis(300000);
+            	ds.setValidationQuery("SELECT 'x'");
+            	ds.setTestWhileIdle(true);
+            	ds.setTestOnBorrow(false);
+            	ds.setTestOnReturn(false);
+            	ds.setPoolPreparedStatements(true);
+            	ds.setMaxPoolPreparedStatementPerConnectionSize(20);
+            	ds.setFilters("wall,config");
+            	
+            	ds.init();
 
                 JdbcTemplate template = new JdbcTemplate(ds);
                 templateMap.put(kfds.getId(), template);
             }else{
-                ComboPooledDataSource ds =  new ComboPooledDataSource();
+               /* ComboPooledDataSource ds =  new ComboPooledDataSource();
                 ds.setDriverClass(DriverTypeEnum.getByCode(kfds.getDriverType()).driverStr());
                 ds.setJdbcUrl(kfds.getJdbcUrl());
                 ds.setUser(kfds.getUserName());
@@ -108,7 +128,26 @@ public class DefaultDataSourceFactory implements DataSourceFactory {
                 ds.setMaxIdleTime(20);
                 ds.setCheckoutTimeout(3000);
                 ds.setTestConnectionOnCheckin(true);
-                ds.setIdleConnectionTestPeriod(120);
+                ds.setIdleConnectionTestPeriod(120);*/
+            	
+            	DruidDataSource ds = new DruidDataSource();
+            	ds.setUrl(kfds.getJdbcUrl());
+            	ds.setUsername(kfds.getUserName());
+            	ds.setPassword(kfds.getPwd());
+            	ds.setConnectionProperties("config.decrypt=false");
+            	ds.setInitialSize(1);
+            	ds.setMinIdle(10);
+            	ds.setMaxActive(50);
+            	ds.setMaxWait(60000);
+            	ds.setTimeBetweenEvictionRunsMillis(60000);
+            	ds.setMinEvictableIdleTimeMillis(300000);
+            	ds.setValidationQuery("SELECT 'x'");
+            	ds.setTestWhileIdle(true);
+            	ds.setTestOnBorrow(false);
+            	ds.setTestOnReturn(false);
+            	ds.setPoolPreparedStatements(true);
+            	ds.setMaxPoolPreparedStatementPerConnectionSize(20);
+            	ds.setFilters("wall,config");
 
                 JdbcTemplate template = new JdbcTemplate(ds);
                 templateMap.put(kfds.getId(), template);
