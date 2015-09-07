@@ -201,23 +201,23 @@ public class KfQueryService extends QueryHelper{
         Optional<String> field = sql.getParams().stream()
         		.filter(sqlParam -> sqlParam.getParamId().intValue() == paramId)
                 .map(sqlParam->{return sqlParam.getSqlField();})
-                .findFirst();
+                .findFirst(); //查找对应的参数field
         logger.info(String.format("sqlParamMap:[%s]", JsonTool.writeValueAsString(sqlParamMap)));
-        Map<String,String> fieldMap = new HashMap<String,String>();//所有字段的map
+        Map<String,String> fieldMap = new HashMap<String,String>();//所有字段的map  原字段/别名 -> 原字段的对应关系
         Map<String,String> paramFieldMap = new LinkedHashMap<String,String>();//作为参数字段的map
         Map<String,String> needToShowParamFieldMap = new HashMap<String,String>();//需要显示的参数字段的map
         
-        sql.setSqlStatement(StringUtils.replaceEach(sql.getSqlStatement(), new String[]{"\n","\t","/n","/t"}, new String[]{"","","",""}));
+        sql.setSqlStatement(StringUtils.replaceEach(sql.getSqlStatement(), new String[]{"\n","\t","/n","/t","'","\""," as "," AS ","-"}, new String[]{"","","","","",""," "," ",""}));
         String currentFieldStr = StringUtils.substringBetween(sql.getSqlStatement(),"select","from");
         String[] currentFields = currentFieldStr.split(",");
         for(KfSqlParam sqlParam : sql.getParams()){
             boolean include = false;
             for (String currentField : currentFields) {
                 String[] arr = StringUtils.split(currentField," ");
-                String rawField = arr[0];
-                String alias = arr.length > 1 ? arr[arr.length - 1] : null;
+                String rawField = arr[0];//原sql字段
+                String alias = arr.length > 1 ? arr[arr.length - 1] : null;//如果有别名的话则放别名
                 
-                //是否为case语句==
+                //是否为case语句==,如果是的话原sql字段和别名需要重新找
                 if(StringUtils.startsWithIgnoreCase(currentField, "case") 
                 		&& (StringUtils.equalsIgnoreCase(arr[arr.length - 1], "end") 
                 				|| StringUtils.equalsIgnoreCase(arr[arr.length - 2], "end") )){
@@ -227,15 +227,16 @@ public class KfQueryService extends QueryHelper{
                 	}
                 }
                 
-                fieldMap.put(StringUtils.trim(arr.length>1?StringUtils.isBlank(alias)?rawField:alias:rawField),StringUtils.trim(rawField));
-                if(StringUtils.equalsIgnoreCase(sqlParam.getSqlField().trim(),rawField.trim())){
-                	paramFieldMap.put(StringUtils.trim(arr.length>1?StringUtils.isBlank(alias)?rawField:alias:rawField),StringUtils.trim(rawField));
-                	needToShowParamFieldMap.put(StringUtils.trim(arr.length>1?StringUtils.isBlank(alias)?rawField:alias:rawField),StringUtils.trim(rawField));
+                String mapKey = StringUtils.trim(arr.length>1?StringUtils.isBlank(alias)?rawField:alias:rawField);
+                fieldMap.put(mapKey,StringUtils.trim(rawField));
+                if(StringUtils.equalsIgnoreCase(sqlParam.getSqlField().trim(),rawField.trim())){//如果sql的参数与select中的字段相同 则说明参数字段也会作为展示字段
+                	paramFieldMap.put(mapKey,StringUtils.trim(rawField));
+                	needToShowParamFieldMap.put(mapKey,StringUtils.trim(rawField));
                     include = true;
                     break;
                 }
             }
-            if(!include){
+            if(!include){//如果select展示的字段不包括参数字段的话,要作为返回值返回,以便根据参数返回值可以递归查询下面的sql
             	String sqlField = sqlParam.getSqlField();
             	String al = StringUtils.defaultString(info.getAggregatedParams().get(sqlParam.getParamId()).getParamName(),"");
                 currentFieldStr = currentFieldStr + "," + sqlField + " " + al;
@@ -246,6 +247,7 @@ public class KfQueryService extends QueryHelper{
 
         logger.info(String.format("fieldMap:[%s]", JsonTool.writeValueAsString(fieldMap)));
         
+        //拼接执行的sql
         StringBuilder sqlStat = new StringBuilder("select "+currentFieldStr+" from " + StringUtils.substringAfter(sql.getSqlStatement(),"from"));
         if(!StringUtils.containsIgnoreCase(sql.getSqlStatement(),"where")){
             sqlStat.append(" where 1=1 ");
@@ -267,13 +269,14 @@ public class KfQueryService extends QueryHelper{
         for (int i = 1; i <= metaData.getColumnCount(); i++) {
         	String returnfield = fieldMap.get(metaData.getColumnName(i));
         	String returnShow = metaData.getColumnLabel(i);
-            logger.info("metaData.getColumnName(i)="+returnfield+"  metaData.getColumnLabel(i)="+returnShow);
+            logger.info("metaData.getColumnName(i)="+metaData.getColumnName(i)+"  metaData.getColumnLabel(i)="+metaData.getColumnLabel(i));
+            logger.info("returnfield="+returnfield+"  returnShow="+returnShow);
             
             boolean show = true;
             boolean isParamColumn = false;
-            if(paramFieldMap.get(metaData.getColumnName(i)) != null){
+            if(paramFieldMap.get(metaData.getColumnName(i)) != null){//如果返回的结果字段是参数字段
             	isParamColumn = true;
-            	if(needToShowParamFieldMap.get(metaData.getColumnName(i)) == null){
+            	if(needToShowParamFieldMap.get(metaData.getColumnName(i)) == null){//判断这个参数字段是否要作为结果展示出来
             		show = false;
             	}
             }
@@ -281,7 +284,7 @@ public class KfQueryService extends QueryHelper{
         }
         
         //封装值
-        Map<Integer,String> newLoopParamPair = new LinkedHashMap<>();
+        Map<Integer,String> newLoopParamPair = new LinkedHashMap<>(); //参数id->参数值
         int rowNum = 0;
         while (rowSet.next()) {
         	List<String> rowList = new ArrayList<String>();
@@ -334,7 +337,7 @@ public class KfQueryService extends QueryHelper{
         	}
         	
         	sqls.stream().forEach(s->{
-        		if(!usedSql.containsKey(s.getId())){
+        		if(!usedSql.containsKey(s.getId())){//过滤已经被使用的sql
         			buildResult(s,map.getKey(),map.getValue(),info,usedSql ,resultList);
         		}
         	});
