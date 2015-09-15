@@ -304,7 +304,9 @@ public class KfQueryService extends QueryHelper{
                  */
                 if(cd.isParamColumn() && StringUtils.isNotBlank(valueStr)){
                 	KfSqlParam pp = sqlParamMap.get(cd.getColumnName());
-                	newLoopParamPair.put(pp.getParamId(), valueStr);
+                	if(pp != null){
+                		newLoopParamPair.put(pp.getParamId(), valueStr);
+                	}
                 }
                 if(cd.isShow()){
                 	rowList.add(valueStr);
