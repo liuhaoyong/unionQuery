@@ -207,7 +207,7 @@ public class KfQueryService extends QueryHelper{
         Map<String,String> paramFieldMap = new LinkedHashMap<String,String>();//作为参数字段的map
         Map<String,String> needToShowParamFieldMap = new HashMap<String,String>();//需要显示的参数字段的map
         
-        sql.setSqlStatement(StringUtils.replaceEach(sql.getSqlStatement(), new String[]{"\n","\t","/n","/t"," as "," AS "}, new String[]{"","","",""," "," "}));
+        sql.setSqlStatement(StringUtils.replaceEach(sql.getSqlStatement(), new String[]{"\n","\t","/n","/t"," as "," AS ","  "}, new String[]{"","","",""," "," "," "}));
         String currentFieldStr = StringUtils.substringBetween(sql.getSqlStatement(),"select","from");
         String[] currentFields = currentFieldStr.split(",");
         for(KfSqlParam sqlParam : sql.getParams()){
@@ -248,13 +248,23 @@ public class KfQueryService extends QueryHelper{
         logger.info(String.format("fieldMap:[%s]", JsonTool.writeValueAsString(fieldMap)));
         
         //拼接执行的sql
-        StringBuilder sqlStat = new StringBuilder("select "+currentFieldStr+" from " + StringUtils.substringAfter(sql.getSqlStatement(),"from"));
-        if(!StringUtils.containsIgnoreCase(sql.getSqlStatement(),"where")){
-            sqlStat.append(" where 1=1 ");
+        StringBuilder sqlStat = new StringBuilder("select "+currentFieldStr+" from " + StringUtils.substringAfter(sql.getSqlStatement()," from "));
+        StringBuilder whereStr = new StringBuilder();
+        if(!StringUtils.containsIgnoreCase(sql.getSqlStatement()," where ")){
+        	whereStr.append(" where 1=1 ");
         }
-        sqlStat.append(" and ").append(field.get()).append("=").append("\""+paramValue+"\"");
+        whereStr.append(" and ").append(field.get()).append("=").append("\""+paramValue+"\"");
 
+        if(StringUtils.containsIgnoreCase(sqlStat.toString(), " order by ")){
+        	String afterOrderBy = StringUtils.substringAfter(sqlStat.toString(), "order by");
+        	String beforeOrderBy = StringUtils.substringBefore(sqlStat.toString(), "order by");
+        	sqlStat = new StringBuilder();
+        	sqlStat.append(beforeOrderBy).append(whereStr).append(" order by ").append(afterOrderBy);
+        }else{
+        	sqlStat.append(whereStr);
+        }
         logger.info(String.format("sql:[%s]", sqlStat.toString()));
+        
         
         /**
          * 执行sql
