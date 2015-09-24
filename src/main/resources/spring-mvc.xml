@@ -18,15 +18,13 @@
         <context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
 	</context:component-scan>
 	
-	<!-- <context:annotation-config />
-	<context:component-scan base-package="com.wac" />
-	<aop:aspectj-autoproxy proxy-target-class="true" />
-	<mvc:annotation-driven /> -->
-	
-	<bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+	<aop:config proxy-target-class="true"></aop:config>
+    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
         <property name="securityManager" ref="securityManager"/>
     </bean>
-	<mvc:annotation-driven />
+
+    <mvc:annotation-driven/>
+	
 	
 	<bean id="defaultHandlerMapping" class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
 		<property name="defaultHandler">
