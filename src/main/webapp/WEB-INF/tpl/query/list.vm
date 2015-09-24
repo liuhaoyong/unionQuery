@@ -5,7 +5,7 @@
 <script type="text/javascript">
 
 	function search(){
-		$("#dataArea").text('数据检索中。。。');
+		$("#dataArea").html('<font color="blue">数据检索中。。。</font>');
 	
         var bid = $("#bid").val();
         var paramId = $("#paramId").val();
