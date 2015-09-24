@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -54,6 +55,7 @@ public class KfQueryAction extends AbstractAction {
      * @throws UnsupportedEncodingException
      */
     @RequestMapping(method = RequestMethod.GET, value = "/list")
+    @RequiresPermissions("unionquery:q:*")
     public String list(HttpServletRequest request, HttpServletResponse response,
                        String toPage,
            KfQuery kfQuery, Model model) throws UnsupportedEncodingException {
@@ -84,6 +86,7 @@ public class KfQueryAction extends AbstractAction {
      * @param model
      */
     @RequestMapping(method = RequestMethod.GET, value = "/getParams")
+    @RequiresPermissions("unionquery:q:*")
     public void getParams(HttpServletRequest request,HttpServletResponse response, int busniessId, Model model) {
         try {
             QueryRelatedInfo info = kfQueryService.getQueryRelatedInfo(busniessId);

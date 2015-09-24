@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -57,6 +58,7 @@ public class KfSqlAction extends AbstractAction {
      * @return
      */
     @RequestMapping(method = RequestMethod.GET, value = "/list")
+    @RequiresPermissions("unionquery:sql:*")
     public String list(HttpServletRequest request, HttpServletResponse response, String toPage, KfSql param, Model model) throws UnsupportedEncodingException {
         boolean isPage = StringUtils.equalsIgnoreCase(toPage, "true");
         if (StringUtils.isNotBlank(param.getSqlName())) {
@@ -84,6 +86,7 @@ public class KfSqlAction extends AbstractAction {
      * @return
      */
     @RequestMapping(method = RequestMethod.GET, value = "/new")
+    @RequiresPermissions("unionquery:sql:*")
     public String toInput(HttpServletRequest request, Integer id, Model model) {
         KfSql com = new KfSql();
         if (id == null || id.intValue() == 0) {
@@ -112,6 +115,7 @@ public class KfSqlAction extends AbstractAction {
      * @return
      */
     @RequestMapping(method = RequestMethod.POST, value = "/save")
+    @RequiresPermissions("unionquery:sql:*")
     public String save(HttpServletRequest request, HttpServletResponse response, KfSql pro) {
         try {
         	logger.info("sqlId");
@@ -119,6 +123,10 @@ public class KfSqlAction extends AbstractAction {
             logger.info("String[] paramId:"+pro.getParamId()==null?"null": JsonTool.writeValueAsString(pro.getParamId()));
             logger.info("String[] sqlField:"+pro.getSqlField()==null?"null": JsonTool.writeValueAsString(pro.getSqlField()));
             logger.info("String[] paramDesc:" + pro.getParamDesc() == null ? "null" : JsonTool.writeValueAsString(pro.getParamDesc()));
+            
+            if(!StringUtils.containsIgnoreCase(pro.getSqlStatement(), "select ")){
+            	throw new IllegalArgumentException("不能设置非select语句");
+            }
             
             List<KfSqlParam> paramList = new ArrayList<>();
             Date now = new Date(System.currentTimeMillis());
@@ -154,7 +162,7 @@ public class KfSqlAction extends AbstractAction {
             this.renderText(response, MESSAGE_OK);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            this.renderText(response, MESSAGE_ERROR);
+            this.renderText(response, e.getMessage());
         }
         return null;
     }
@@ -167,6 +175,7 @@ public class KfSqlAction extends AbstractAction {
      */
     @Deprecated
     @RequestMapping(method = RequestMethod.GET, value = "/paramNew")
+    @RequiresPermissions("unionquery:sql:*")
     public String toParamInput(HttpServletRequest request, Integer id, Model model) {
         KfSql com = kfSqlService.selectByPk(id);
         model.addAttribute("kfSql", com);
@@ -184,6 +193,7 @@ public class KfSqlAction extends AbstractAction {
      */
     @Deprecated
     @RequestMapping(method = RequestMethod.POST, value = "/saveParam")
+    @RequiresPermissions("unionquery:sql:*")
     public String saveParam(HttpServletRequest request,
                             HttpServletResponse response,
                             Integer sqlId,

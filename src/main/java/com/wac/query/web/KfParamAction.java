@@ -2,8 +2,10 @@ package com.wac.query.web;
 
 import com.wac.query.models.KfParam;
 import com.wac.query.service.KfParamService;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.UnsupportedEncodingException;
 
 /**
@@ -36,6 +39,7 @@ public class KfParamAction extends AbstractAction {
      * @return
      */
     @RequestMapping(method=RequestMethod.GET,value="/list")
+    @RequiresPermissions("unionquery:param:*")
     public String list(HttpServletRequest request,HttpServletResponse response,String toPage,KfParam param,Model model) throws UnsupportedEncodingException {
         boolean isPage = StringUtils.equalsIgnoreCase(toPage, "true");
 
@@ -49,6 +53,7 @@ public class KfParamAction extends AbstractAction {
 
 
     @RequestMapping(method=RequestMethod.GET,value="/new")
+    @RequiresPermissions("unionquery:param:*")
     public String toInput(HttpServletRequest request,Integer id,Model model){
         KfParam com = new KfParam();
         if(id == null || id.intValue() == 0){
@@ -70,6 +75,7 @@ public class KfParamAction extends AbstractAction {
      * @return
      */
     @RequestMapping(method=RequestMethod.POST,value="/save")
+    @RequiresPermissions("unionquery:param:*")
     public String save(HttpServletRequest request,HttpServletResponse response,KfParam pro){
         try{
             if(pro.getId()==null || pro.getId()<=0){

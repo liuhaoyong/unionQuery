@@ -207,7 +207,7 @@ public class KfQueryService extends QueryHelper{
         Map<String,String> paramFieldMap = new LinkedHashMap<String,String>();//作为参数字段的map
         Map<String,String> needToShowParamFieldMap = new HashMap<String,String>();//需要显示的参数字段的map
         
-        sql.setSqlStatement(StringUtils.replaceEach(sql.getSqlStatement(), new String[]{"\n","\t","/n","/t"," as "," AS ","  "}, new String[]{"","","",""," "," "," "}));
+        sql.setSqlStatement(StringUtils.replaceEach(sql.getSqlStatement(), new String[]{"\n","\t","/n","/t"," as "," AS ","  ",";"}, new String[]{" "," "," "," "," "," "," ",""}));
         String currentFieldStr = StringUtils.substringBetween(sql.getSqlStatement(),"select","from");
         String[] currentFields = currentFieldStr.split(",");
         for(KfSqlParam sqlParam : sql.getParams()){
@@ -262,6 +262,10 @@ public class KfQueryService extends QueryHelper{
         	sqlStat.append(beforeOrderBy).append(whereStr).append(" order by ").append(afterOrderBy);
         }else{
         	sqlStat.append(whereStr);
+        }
+        
+        if(!StringUtils.containsIgnoreCase(sqlStat.toString(), " limit ")){
+        	sqlStat.append(" limit 0,100");
         }
         logger.info(String.format("sql:[%s]", sqlStat.toString()));
         

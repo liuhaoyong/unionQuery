@@ -2,8 +2,10 @@ package com.wac.query.web;
 
 import com.wac.query.models.KfBusniess;
 import com.wac.query.service.KfBusniessService;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.UnsupportedEncodingException;
 
 /**
@@ -36,6 +39,7 @@ public class KfBusniessAction extends AbstractAction {
      * @return
      */
     @RequestMapping(method=RequestMethod.GET,value="/list")
+    @RequiresPermissions("unionquery:busniess:*")
     public String list(HttpServletRequest request,HttpServletResponse response,String toPage,KfBusniess param,Model model) throws UnsupportedEncodingException {
         boolean isPage = StringUtils.equalsIgnoreCase(toPage, "true");
 
@@ -56,6 +60,7 @@ public class KfBusniessAction extends AbstractAction {
 
 
     @RequestMapping(method=RequestMethod.GET,value="/new")
+    @RequiresPermissions("unionquery:busniess:*")
     public String toInput(HttpServletRequest request,Integer id,Model model){
         KfBusniess com = new KfBusniess();
         if(id == null || id.intValue() == 0){
@@ -77,6 +82,7 @@ public class KfBusniessAction extends AbstractAction {
      * @return
      */
     @RequestMapping(method=RequestMethod.POST,value="/save")
+    @RequiresPermissions("unionquery:busniess:*")
     public String save(HttpServletRequest request,HttpServletResponse response,KfBusniess pro){
         try{
             if(pro.getId()==null || pro.getId()<=0){

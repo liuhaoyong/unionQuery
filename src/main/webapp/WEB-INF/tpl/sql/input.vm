@@ -51,7 +51,7 @@
                             //flashTable(parent.tbl, "${SITE_DYN}/sql/list.action");
                             parent.dhxWins.unload();
                         } else {
-                            showError(null);
+                            showError(data);
                         }
                         $(document).unbind("ajaxStart");
                     }
