@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * @author huangjinsheng
  */
-public class KfQuery extends ParamBean{
+public class KfMultiQuery extends ParamBean{
 
     private static final long serialVersionUID = 7508623487147522020L;
 

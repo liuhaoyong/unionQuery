@@ -15,6 +15,7 @@ import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -28,11 +29,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import com.wac.query.models.ColumnDetail;
+import com.wac.query.models.KfSingleQuery;
 import com.wac.query.models.KfSql;
 import com.wac.query.models.KfSqlParam;
 import com.wac.query.models.QueryRelatedInfo;
 import com.wac.query.models.SimpleResult;
 import com.wac.query.utils.JsonTool;
+import com.wac.query.utils.PageVo;
 
 
 /**
@@ -48,7 +51,7 @@ public class KfQueryService extends QueryHelper{
      * @return
      * @throws ExecutionException
      */
-    public QueryRelatedInfo getQueryRelatedInfo(int bussniessId) throws ExecutionException {
+    public QueryRelatedInfo getQueryRelatedInfo(int bussniessId) throws ExecutionException{
         if(bussniessId <= 0){
             throw new IllegalArgumentException("bussniessId["+bussniessId+"] <= 0");
         }
@@ -59,6 +62,151 @@ public class KfQueryService extends QueryHelper{
             }
         });
     }
+    
+    /**
+     * 
+     * @param kfSingleQuery
+     * @return
+     */
+    public String singleQuery(KfSingleQuery query){
+    	try{
+    		QueryRelatedInfo info = this.getQueryRelatedInfo(query.getBid());
+    		KfSql sql = info.getSqls().get(0);
+    		sql.setSqlStatement(StringUtils.replaceEach(sql.getSqlStatement(), new String[]{"\n","\t","/n","/t"," as "," AS ","  ",";"}, new String[]{" "," "," "," "," "," "," ",""}));
+    		
+    		/**
+             * sql数据源
+             */
+            Optional<JdbcTemplate> template = dataSourceFactory.loadTemplate(sql.getDataSourceId());
+            if(!template.isPresent()){
+                throw new NullPointerException("can not found datasouce : sourceId:["+sql.getDataSourceId()+"]");
+            }
+            
+            int total = template.get().queryForObject(buildSingleQuerySql(query,info,sql,true), Integer.class);
+            
+            List<List<String>> aaData = new LinkedList<>();
+            SqlRowSet rowSet = template.get().queryForRowSet(buildSingleQuerySql(query,info,sql,false));
+            
+            int titleSize = getSingleParamTitle(info).size();
+            while (rowSet.next()) {
+            	List<String> slist = new LinkedList<>();
+            	for(int i=1;i<=titleSize;i++){
+            		Object value = rowSet.getObject(i);
+            		String valueStr = "";
+                    if (value instanceof Timestamp) {
+                    	valueStr = getDate(value);
+                    } else {
+                    	valueStr = value == null?"":value.toString();
+                    }
+                    
+                    slist.add(valueStr);        
+            	}
+            	
+            	aaData.add(slist);
+            }    
+            
+            PageVo vo = new PageVo(query.getsEcho(),total+"",total+"",aaData);
+            return vo.toString();
+    	}catch(Exception e){
+            logger.error(e.getMessage(),e);
+            return "error," + printErrorTrace(e);
+        }
+    }
+    
+    /**
+     * 
+     * @param query
+     * @param info
+     * @param sql
+     * @param count
+     * @return
+     */
+    private String buildSingleQuerySql(KfSingleQuery query,QueryRelatedInfo info,KfSql sql,boolean count){
+    	StringBuilder sqlStat = new StringBuilder();
+    	if(count){
+    		sqlStat = new StringBuilder("select count(*) from " + StringUtils.substringAfter(sql.getSqlStatement()," from "));
+    	}else{
+    		String currentFieldStr = StringUtils.substringBetween(sql.getSqlStatement(),"select","from");
+    		sqlStat = new StringBuilder("select "+currentFieldStr+" from " + StringUtils.substringAfter(sql.getSqlStatement()," from "));
+    	}
+    	
+        StringBuilder whereStr = new StringBuilder();
+        if(!StringUtils.containsIgnoreCase(sql.getSqlStatement()," where ")){
+        	whereStr.append(" where 1=1 ");
+        }
+        
+        for(int i=0;i<query.getParamIds().length;i++){
+        	Integer paramId = Integer.valueOf(query.getParamIds()[i]);
+        	String paramValue = query.getParamValues()[i];
+        	if(StringUtils.equalsIgnoreCase(paramValue, "defaultXXX")){
+        		continue;
+        	}
+        	
+        	Optional<String> field = sql.getParams().stream()
+            		.filter(sqlParam -> sqlParam.getParamId().intValue() == paramId)
+                    .map(sqlParam->{return sqlParam.getSqlField();})
+                    .findFirst();
+        	
+        	whereStr.append(" and ").append(field.get()).append("=").append("\""+paramValue+"\"");
+        }
+
+        if(StringUtils.containsIgnoreCase(sqlStat.toString(), " order by ")){
+        	String afterOrderBy = StringUtils.substringAfter(sqlStat.toString(), "order by");
+        	String beforeOrderBy = StringUtils.substringBefore(sqlStat.toString(), "order by");
+        	sqlStat = new StringBuilder();
+        	sqlStat.append(beforeOrderBy).append(whereStr).append(" order by ").append(afterOrderBy);
+        }else{
+        	sqlStat.append(whereStr);
+        }
+        
+        if(!count){
+        	query.cal();
+        	sqlStat.append(" limit ").append(query.getStartIndex()).append(",").append(query.getEndIndex());
+        }
+        
+        logger.info(String.format("singlqQuerySql:[%s]", sqlStat.toString()));
+        
+        return sqlStat.toString();
+    }
+    
+    /**
+     * 
+     * @param info
+     * @return
+     */
+    public String getSingleParamTableTitle(QueryRelatedInfo info){
+    	StringBuilder table = new StringBuilder("<br><font color='blue'><h3>"+info.getSqls().get(0).getSqlName()+"  (<span id='spanTime'></span>ms)</h3></font><br>");
+    	table.append("<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"1\" class=\"display\" id=\"query_table\">");
+    	table.append("<thead><tr>");
+    	for (String currentField : getSingleParamTitle(info)) {
+            String[] arr = StringUtils.split(currentField," ");
+            String rawField = arr[0];//原sql字段
+            String alias = arr.length > 1 ? arr[arr.length - 1] : null;//如果有别名的话则放别名
+            
+            table.append("<th style=\"min-width: 60px;\">");
+            table.append(StringUtils.isBlank(alias)?rawField:alias);
+            table.append("</th>");
+            
+    	}
+    	table.append("</tr></thead>");
+    	table.append("<tbody>");
+    	table.append("</tbody>");
+    	table.append("</table><br>");
+    	
+    	return table.toString();
+    }
+    
+    /**
+     * 
+     * @param info
+     * @return
+     */
+    private List<String> getSingleParamTitle(QueryRelatedInfo info){
+    	String currentFieldStr = StringUtils.substringBetween(info.getSqls().get(0).getSqlStatement(),"select","from");
+    	String[] currentFields = currentFieldStr.split(",");
+    	return Stream.of(currentFields).collect(Collectors.toList());
+    }
+    
 
 
     /**
@@ -122,7 +270,7 @@ public class KfQueryService extends QueryHelper{
     	List<String> list = resultList.stream()
     			.filter(result -> result != null && result.getSql() != null) //如果没有找到相关的sql就不需要再进行处理了
     			.map(result->{
-    		StringBuilder sb = new StringBuilder("<br><font color='blue'><h3>"+result.getSql().getSqlName()+"</h3></font><br>");
+    		StringBuilder sb = new StringBuilder("<br><font color='blue'><h3>"+result.getSql().getSqlName()+"  ("+result.getTime()+"ms)</h3></font><br>");
     		sb.append("<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"1\" class=\"display\" id=\""+result.getSql().getId()+"_table\">");
     		sb.append("<thead><tr>");
     		result.getHeads().stream()
@@ -273,7 +421,9 @@ public class KfQueryService extends QueryHelper{
         /**
          * 执行sql
          */
+        long time = System.currentTimeMillis();
         SqlRowSet rowSet = template.get().queryForRowSet(sqlStat.toString());
+        long lastTime = System.currentTimeMillis() - time;
         
         /**
          * 生成SimpleResult
@@ -333,6 +483,7 @@ public class KfQueryService extends QueryHelper{
         }
         result.setTotalRow(rowNum);
         result.setPriorityLevel(sql.getPriority());
+        result.setTime(lastTime);
         resultList.add(result);
         
         /**

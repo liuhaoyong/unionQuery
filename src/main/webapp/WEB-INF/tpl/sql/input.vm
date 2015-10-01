@@ -22,19 +22,19 @@
                 submitHandler: function (form) {
                 	$("input[name='sqlField']").each(function(){
                         var obj = $(this);
-                        if(obj.val  == null || obj.val()==''){
+                        if(obj.val()  == null || obj.val()==''){
                             obj.val("defaultXXX");
                         }
                     });
                     $("input[name='paramDesc']").each(function(){
                         var obj = $(this);
-                        if(obj.val  == null || obj.val()==''){
+                        if(obj.val()  == null || obj.val()==''){
                             obj.val("defaultXXX");
                         }
                     });
                     $("input[name='pids']").each(function(){
                         var obj = $(this);
-                        if(obj.val  == null || obj.val()==''){
+                        if(obj.val()  == null || obj.val()==''){
                             obj.val("0");
                         }
                     });

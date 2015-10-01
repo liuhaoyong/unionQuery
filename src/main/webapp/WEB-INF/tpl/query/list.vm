@@ -5,24 +5,68 @@
 <script type="text/javascript">
 
 	function search(){
-		$("#dataArea").html('<font color="blue">数据检索中。。。</font>');
-	
-        var bid = $("#bid").val();
+		var st = $("#searchType").val();
+		if(st == 'single'){
+			singleSearch();
+		}else{
+			$("#dataArea").html('');
+			multiSearch();
+		}
+    }
+    
+    var tbl;
+    function singleSearch(){
+    	var hasV = false;
+    	$("input[name='param_ids_']").each(function(){
+        	var obj = $(this);
+            if(obj.val  != null && obj.val()!=''){
+            	hasV = true;
+            }
+        });
+        
+        if(!hasV){
+        	showError("请正确填写参数！");
+		    return ;
+        }
+    
+    	var bid = $("#bid").val();
+    	var url = "${SITE_DYN}/q/singleList.html?bid="+bid;
+    
+    	$("input[name='param_ids_']").each(function(){
+        	var obj = $(this);
+        	var idStr = obj.attr("id");
+        	var strs = idStr.split("_"); 
+            url = url + "&paramIds="+strs[1];
+            if(obj.val()  == null || obj.val()==''){
+            	url = url + "&paramValues=defaultXXX";
+            }else{
+            	url = url + "&paramValues="+encodeURIComponent(obj.val());
+            }
+        });
+        var timestamp = (new Date()).valueOf();
+        if($("#query_table_length").attr("id")!=null){
+        	flashTableStart(tbl,url);
+        }else{
+	        tbl = makeTable("query_table",url);
+        }
+        var lastTime = (new Date()).valueOf() - timestamp;
+        $("#spanTime").text(lastTime);
+    }
+    
+    function multiSearch(){
+    	var bid = $("#bid").val();
         var paramId = $("#paramId").val();
         var paramValue = $("#paramValue").val();
-
-        if(bid == null || bid <=0
-        || paramId==null || paramId<=0
-        || paramValue==null || paramValue==''){
-            showError("请正确填写参数！");
-            return ;
-        }
-
-        $("#searchButton").attr("disabled","disabled");
-
-        
-
-        var url = "${SITE_DYN}/q/list.html?bid="+bid+"&paramValue="+encodeURIComponent(paramValue)+"&paramId="+paramId;
+	
+		
+		if(bid == null || bid <=0
+		        || paramId==null || paramId<=0
+		        || paramValue==null || paramValue==''){
+		            showError("请正确填写参数！");
+		            return ;
+		        }
+		
+		var url = "${SITE_DYN}/q/multiList.html?bid="+bid+"&paramValue="+encodeURIComponent(paramValue)+"&paramId="+paramId;
 
         jQuery.ajax({
             url : url,
@@ -53,7 +97,6 @@
                 }else{
                 	$("#dataArea").html(data);
                 }
-                $("#searchButton").removeAttr("disabled");
             }
         });
     }
@@ -74,10 +117,35 @@
 				if(data == 'error'){
                     showError("获取参数发生错误！");
 				}else{
-                    $("#paramId").html(data);
+                    //$("#paramArea").html(data);
+                    
+                    var obj = jQuery.parseJSON(data);
+                    if(obj.type == 'multi'){
+                    	multiParam(obj);
+                    }else{
+                    	singleParam(obj);
+                    }
+                    
                 }
             }
         });
+    }
+    
+    function multiParam(obj){
+    	$("#valueArea").show();
+    	$("#paramArea").show();
+        $("#searchType").val("multi");
+        $("#paramArea_show").html(obj.html);
+        $("tr[name='singleParams']").remove();
+        $("#dataArea").html("");
+    }
+    
+    function singleParam(obj){
+    	$("#valueArea").hide();
+        $("#paramArea").hide();
+        $("#searchType").val("single");
+        $("#busniessArea").after(obj.html);
+        $("#dataArea").html(obj.table);
     }
 
 </script>
@@ -87,11 +155,12 @@
 <body>
 <div id="dbsListTab" style="width:97%;margin: 5px 5px 0px 5px;">
 	<table id="tool" border="0" width="100%" class="searchtable" align="center">
-			<tr>
+			<tr id="busniessArea">
 				<td>
 				业务：
 				</td>
 				<td>
+				<input type="hidden" id="searchType">
 				<select id="bid" onchange="getParam();" class="s_select">
 					<option value="-1">-请选择-</option>
 					#foreach($bu in ${busniessList})
@@ -101,18 +170,16 @@
 				</td>
 				<td>
 			</tr>
-			<tr>
+			<tr id="paramArea">
 				<td>
 				参数：
 				</td>
-				<td>
-				<select id="paramId" class="s_select">
+				<td id="paramArea_show">
 
-				</select>
 				</td>
 				<td>
 			</tr>
-			<tr>
+			<tr id="valueArea">
 				<td>	
 				参数值：	
 				</td>

@@ -64,7 +64,7 @@ public class QueryHelper extends AbstractService<ParamBean,BaseBean>{
                 .stream()
                 .filter(sql -> sql.getSqlStatus().intValue() == SqlStatusEnum.正常.toInt())
                 .collect(Collectors.toList());
-        info.getSqls().addAll(sqls);
+        info.setSqls(sqls);
 
         Map<Integer,KfSql> tempSqlMap = sqls.stream()
                 .collect(Collectors.toMap(KfSql::getId, (v) -> v));
@@ -78,7 +78,7 @@ public class QueryHelper extends AbstractService<ParamBean,BaseBean>{
                 })
                 .flatMap(params -> params.stream())
                 .collect(Collectors.toList());
-        info.getSqls().addAll(sqls);
+        //info.getSqls().addAll(sqls);
 
         /**
          * 获取所有的全局参数

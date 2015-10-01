@@ -25,7 +25,7 @@
 		SELECT <include refid="KfBusniessMapper.fields"/>
 		FROM kf_busniess t1
 		<include refid="KfBusniessMapper.condition" />
-		order by  id desc
+		order by  busniess_name
 		limit #{startIndex},#{endIndex}
 	</select>
 

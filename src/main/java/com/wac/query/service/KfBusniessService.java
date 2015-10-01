@@ -45,10 +45,10 @@ public class KfBusniessService extends AbstractService<KfBusniess,KfBusniess>{
     @Override
     public String tableJson(KfBusniess kfBusniess, String sEcho, List<KfBusniess> list) {
         int total = numOfTotal(kfBusniess);
-        List<List<String>> aaData = new LinkedList();
+        List<List<String>> aaData = new LinkedList<>();
 
         for (KfBusniess b : list) {
-            List<String> slist = new LinkedList();
+            List<String> slist = new LinkedList<>();
             slist.add(""+b.getId());
             slist.add(b.getBusniessName());
             slist.add(b.getCreateTime()!=null?DateFormatUtils.ISO_DATETIME_FORMAT.format(b.getCreateTime()):"");

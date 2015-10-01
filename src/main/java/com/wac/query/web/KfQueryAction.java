@@ -16,8 +16,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.alibaba.fastjson.JSONObject;
 import com.wac.query.models.KfBusniess;
-import com.wac.query.models.KfQuery;
+import com.wac.query.models.KfMultiQuery;
+import com.wac.query.models.KfSingleQuery;
 import com.wac.query.models.QueryRelatedInfo;
 import com.wac.query.service.KfBusniessService;
 import com.wac.query.service.KfDatabaseSourceService;
@@ -41,9 +43,26 @@ public class KfQueryAction extends AbstractAction {
     private KfDatabaseSourceService kfDatabaseSourceService;
     @Resource
     private KfParamService kfParamService;
-
     @Resource
     private KfQueryService kfQueryService;
+    
+    
+    /**
+    *
+    * @param request
+    * @param response
+    * @param kfQuery
+    * @param model
+    * @return
+    * @throws UnsupportedEncodingException
+    */
+   @RequestMapping(method = RequestMethod.GET, value = "/list")
+   @RequiresPermissions("unionquery:q:*")
+   public String list(HttpServletRequest request, HttpServletResponse response,
+          KfMultiQuery kfQuery, Model model) throws UnsupportedEncodingException {
+	   model.addAttribute("busniessList", kfBusniessService.all(new KfBusniess()));
+       return "query/list";
+   }
 
     /**
      *
@@ -54,30 +73,55 @@ public class KfQueryAction extends AbstractAction {
      * @return
      * @throws UnsupportedEncodingException
      */
-    @RequestMapping(method = RequestMethod.GET, value = "/list")
+    @RequestMapping(method = RequestMethod.GET, value = "/multiList")
     @RequiresPermissions("unionquery:q:*")
-    public String list(HttpServletRequest request, HttpServletResponse response,
-                       String toPage,
-           KfQuery kfQuery, Model model) throws UnsupportedEncodingException {
-        boolean isPage = StringUtils.equalsIgnoreCase(toPage, "true");
-        if (isPage) {
-            model.addAttribute("busniessList", kfBusniessService.all(new KfBusniess()));
-            return "query/list";
-        }
-        if (StringUtils.isNotBlank(kfQuery.getParamValue())) {
-            kfQuery.setParamValue(java.net.URLDecoder.decode(
-                    StringUtils.defaultString(kfQuery.getParamValue()),
+    public String multiList(HttpServletRequest request, HttpServletResponse response,
+           KfMultiQuery kfMultiQuery, Model model) throws UnsupportedEncodingException {
+        if (StringUtils.isNotBlank(kfMultiQuery.getParamValue())) {
+        	kfMultiQuery.setParamValue(java.net.URLDecoder.decode(
+                    StringUtils.defaultString(kfMultiQuery.getParamValue()),
                     "utf-8"));
         }
         
-		String json = kfQueryService.query(kfQuery.getBid(),kfQuery.getParamId(),kfQuery.getParamValue());
-		logger.info(String.format("Query result:[%s]", StringUtils.abbreviate(json, 50)));
+		String json = kfQueryService.query(kfMultiQuery.getBid(),kfMultiQuery.getParamId(),kfMultiQuery.getParamValue());
+		logger.info(String.format("multiQuery result:[%s]", StringUtils.abbreviate(json, 50)));
 		if(logger.isDebugEnabled()){
-			logger.debug(String.format("Query result:[%s]", json));
+			logger.debug(String.format("multiQuery result:[%s]", json));
 		}
 		this.renderText(response, json);
         return null;
     }
+    
+    /**
+    *
+    * @param request
+    * @param response
+    * @param kfQuery
+    * @param model
+    * @return
+    * @throws UnsupportedEncodingException
+    */
+   @RequestMapping(method = RequestMethod.GET, value = "/singleList")
+   @RequiresPermissions("unionquery:q:*")
+   public String singleList(HttpServletRequest request, HttpServletResponse response,
+		   KfSingleQuery kfSingleQuery, Model model) throws UnsupportedEncodingException {
+       if (kfSingleQuery.getParamValues() != null && kfSingleQuery.getParamValues().length > 0) {
+    	   for (int i = 0;i< kfSingleQuery.getParamValues().length ;i++) {
+    		   kfSingleQuery.getParamValues()[i] = java.net.URLDecoder.decode(
+                       StringUtils.defaultString(kfSingleQuery.getParamValues()[i]),
+                       "utf-8");
+    	   }
+           
+       }
+       
+		String json = kfQueryService.singleQuery(kfSingleQuery);
+		logger.info(String.format("singleQuery result:[%s]", StringUtils.abbreviate(json, 50)));
+		if(logger.isDebugEnabled()){
+			logger.debug(String.format("singleQuery result:[%s]", json));
+		}
+		this.renderText(response, json);
+       return null;
+   }
 
     /**
      *
@@ -90,11 +134,30 @@ public class KfQueryAction extends AbstractAction {
     public void getParams(HttpServletRequest request,HttpServletResponse response, int busniessId, Model model) {
         try {
             QueryRelatedInfo info = kfQueryService.getQueryRelatedInfo(busniessId);
+            JSONObject json = new JSONObject();
             StringBuilder sb = new StringBuilder();
-            info.getAggregatedParams().entrySet().stream().forEach(map -> {
-                sb.append("<option value='"+map.getKey()+"'>").append(map.getValue().getParamName()).append("</option>");
-            });
-            this.renderText(response,sb.toString());
+            if(info.getSqls().size() > 1){ //多条sql不支持分页和多条件查询等特性
+            	sb.append("<select id=\"paramId\" class=\"s_select\">");
+            	info.getAggregatedParams().entrySet().stream().forEach(map -> {
+            		sb.append("<option value='"+map.getKey()+"'>").append(map.getValue().getParamName()).append("</option>");
+                });
+            	sb.append("</select>");
+            	json.put("type", "multi");
+            }else{
+            	info.getAggregatedParams().entrySet().stream().forEach(map -> {
+            		sb.append("<tr name=\"singleParams\">")
+            		.append("<td>").append(map.getValue().getParamName()).append("</td>")
+            		.append("<td>").append("<input type='text' size='40' name='param_ids_' id='param_"+map.getKey()+"'>")
+            		.append("</td>")
+            		.append("</tr>");
+                });
+            	json.put("type", "single");
+            	
+            	//分页表
+            	json.put("table", kfQueryService.getSingleParamTableTitle(info));
+            }
+            json.put("html", sb.toString());
+            this.renderText(response,json.toJSONString());
         } catch (ExecutionException e) {
             logger.error(e.getMessage(),e);
             this.renderText(response,"error");

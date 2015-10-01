@@ -28,8 +28,26 @@ public class SimpleResult implements java.io.Serializable {
      * 列值
      */
     private List<List<String>> valuesList = new LinkedList<>();
+    
+    private long time;
+    
+    
 
-    public KfSql getSql() {
+    /**
+	 * @return the time
+	 */
+	public long getTime() {
+		return time;
+	}
+
+	/**
+	 * @param time the time to set
+	 */
+	public void setTime(long time) {
+		this.time = time;
+	}
+
+	public KfSql getSql() {
         return sql;
     }
 
