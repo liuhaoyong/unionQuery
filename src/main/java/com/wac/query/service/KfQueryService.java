@@ -17,7 +17,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -123,13 +123,20 @@ public class KfQueryService extends QueryHelper{
      */
     private String buildSingleQuerySql(KfSingleQuery query,QueryRelatedInfo info,KfSql sql,boolean count){
     	StringBuilder sqlStat = new StringBuilder();
+
+        String oldSql = "";
     	if(count){
-    		sqlStat = new StringBuilder("select count(*) from " + StringUtils.substringAfter(sql.getSqlStatement()," from "));
+            oldSql = "select count(*) from " + StringUtils.substringAfter(sql.getSqlStatement()," from ");
     	}else{
-    		String currentFieldStr = StringUtils.substringBetween(sql.getSqlStatement(),"select","from");
-    		sqlStat = new StringBuilder("select "+currentFieldStr+" from " + StringUtils.substringAfter(sql.getSqlStatement()," from "));
+            oldSql = sql.getSqlStatement();
     	}
-    	
+
+        //单表分页查询，需要去除原有sql的limit语句
+        if(StringUtils.containsIgnoreCase(oldSql," limit ")){
+            oldSql = StringUtils.substringBefore(oldSql," limit ");
+        }
+        sqlStat.append(oldSql);
+
         StringBuilder whereStr = new StringBuilder();
         if(!StringUtils.containsIgnoreCase(sql.getSqlStatement()," where ")){
         	whereStr.append(" where 1=1 ");

@@ -132,6 +132,7 @@
     }
     
     function multiParam(obj){
+        $("tr[name='singleParams']").remove();
     	$("#valueArea").show();
     	$("#paramArea").show();
         $("#searchType").val("multi");
@@ -141,6 +142,7 @@
     }
     
     function singleParam(obj){
+		$("tr[name='singleParams']").remove();
     	$("#valueArea").hide();
         $("#paramArea").hide();
         $("#searchType").val("single");
