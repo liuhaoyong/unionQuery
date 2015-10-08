@@ -136,7 +136,7 @@ public class KfQueryAction extends AbstractAction {
             QueryRelatedInfo info = kfQueryService.getQueryRelatedInfo(busniessId);
             JSONObject json = new JSONObject();
             StringBuilder sb = new StringBuilder();
-            if(info.getSqls().size() > 1){ //多条sql不支持分页和多条件查询等特性
+            if(info.getSqls().size() > 1 || info.getSqls().size() <= 0){ //多条sql不支持分页和多条件查询等特性
             	sb.append("<select id=\"paramId\" class=\"s_select\">");
             	info.getAggregatedParams().entrySet().stream().forEach(map -> {
             		sb.append("<option value='"+map.getKey()+"'>").append(map.getValue().getParamName()).append("</option>");
