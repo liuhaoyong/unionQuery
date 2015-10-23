@@ -410,15 +410,20 @@ public class KfQueryService extends QueryHelper{
         }
         whereStr.append(" and ").append(field.get()).append("=").append("\""+paramValue+"\"");
 
-        if(StringUtils.containsIgnoreCase(sqlStat.toString(), " order by ")){
-        	String afterOrderBy = StringUtils.substringAfter(sqlStat.toString(), "order by");
-        	String beforeOrderBy = StringUtils.substringBefore(sqlStat.toString(), "order by");
-        	sqlStat = new StringBuilder();
-        	sqlStat.append(beforeOrderBy).append(whereStr).append(" order by ").append(afterOrderBy);
-        }else{
-        	sqlStat.append(whereStr);
+        if(StringUtils.containsIgnoreCase(sqlStat.toString(), " group by ")){
+            String afterGroupBy = StringUtils.substringAfter(sqlStat.toString(), "group by");
+            String beforeGroupBy = StringUtils.substringBefore(sqlStat.toString(), "group by");
+            sqlStat = new StringBuilder();
+            sqlStat.append(beforeGroupBy).append(whereStr).append(" group by ").append(afterGroupBy);
+        }else if (StringUtils.containsIgnoreCase(sqlStat.toString(), " order by ")){
+            String afterOrderBy = StringUtils.substringAfter(sqlStat.toString(), "order by");
+            String beforeOrderBy = StringUtils.substringBefore(sqlStat.toString(), "order by");
+            sqlStat = new StringBuilder();
+            sqlStat.append(beforeOrderBy).append(whereStr).append(" order by ").append(afterOrderBy);
+        }else {
+            sqlStat.append(whereStr);
         }
-        
+
         if(!StringUtils.containsIgnoreCase(sqlStat.toString(), " limit ")){
         	sqlStat.append(" limit 0,100");
         }
