@@ -40,7 +40,7 @@
 	</select>
 
 	<delete id="deleteByCondition" parameterType="com.wac.query.models.KfSqlParam">
-		DELETE from kf_sql_param where id=#{id}
+		DELETE from kf_sql_param where param_id=#{paramId}
 	</delete>
 	
 	<update id="updateByPrimaryKey" parameterType="com.wac.query.models.KfSqlParam">

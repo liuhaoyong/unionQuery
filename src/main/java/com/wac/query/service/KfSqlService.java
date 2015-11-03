@@ -1,20 +1,5 @@
 package com.wac.query.service;
 
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
-
-import org.apache.commons.lang.time.DateFormatUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.google.common.eventbus.Subscribe;
 import com.wac.query.dao.AbstractMapper;
 import com.wac.query.dao.KfSqlParamMapper;
@@ -25,6 +10,19 @@ import com.wac.query.models.KfDatabaseSource;
 import com.wac.query.models.KfSql;
 import com.wac.query.models.KfSqlParam;
 import com.wac.query.utils.PageVo;
+import org.apache.commons.lang.time.DateFormatUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author huangjinsheng on 2015/6/23.
@@ -179,7 +177,7 @@ public class KfSqlService extends AbstractService<KfSql,KfSql>{
 
         delParamIds.stream().forEach(id -> {
             KfSqlParam p = new KfSqlParam();
-            p.setId(id);
+            p.setParamId(id);
             kfSqlParamMapper.deleteByCondition(p);
         });
         
