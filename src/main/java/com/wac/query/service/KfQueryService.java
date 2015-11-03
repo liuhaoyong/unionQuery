@@ -214,7 +214,8 @@ public class KfQueryService extends QueryHelper{
      * @return
      */
     private List<String> getSingleParamTitle(QueryRelatedInfo info){
-    	String currentFieldStr = StringUtils.substringBetween(info.getSqls().get(0).getSqlStatement(),"select","from");
+        logger.info("getSingleParamTitle QueryRelatedInfo: " + info);
+        String currentFieldStr = StringUtils.substringBetween(info.getSqls().get(0).getSqlStatement(),"select","from");
     	String[] currentFields = currentFieldStr.split(",");
     	return Stream.of(currentFields).collect(Collectors.toList());
     }
