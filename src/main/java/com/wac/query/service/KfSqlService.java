@@ -177,7 +177,7 @@ public class KfSqlService extends AbstractService<KfSql,KfSql>{
 
         delParamIds.stream().forEach(id -> {
             KfSqlParam p = new KfSqlParam();
-            p.setParamId(id);
+            p.setId(id);
             kfSqlParamMapper.deleteByCondition(p);
         });
         
