@@ -396,6 +396,7 @@
 		</profile>
 	</profiles>
 	<build>
+		<finalName>wac-unionQuery</finalName>
 		<resources>
 			<resource>
 				<directory>${basedir}/src/main/java</directory>
