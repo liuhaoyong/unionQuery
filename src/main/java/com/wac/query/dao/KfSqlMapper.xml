@@ -27,6 +27,16 @@
 		<if test="busniessId != null and busniessId > 0">
 			AND t1.busniess_id =#{busniessId}
 		</if>
+		<if test="busniessId == null and busniessIds != null">
+			AND t1.busniess_id in
+				<foreach item="item" index="index" collection="busniessIds" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+		</if>
+		<!--如果没配置权限不显示记录-->
+		<if test="busniessIds == null">
+			AND t1.busniess_id = -1
+		</if>
 		<if test="dataSourceId != null and dataSourceId > 0">
 			AND t1.data_source_id =#{dataSourceId}
 		</if>

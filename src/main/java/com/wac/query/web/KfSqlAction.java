@@ -1,16 +1,16 @@
 package com.wac.query.web;
 
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.wac.query.enums.SqlStatusEnum;
+import com.wac.query.models.*;
+import com.wac.query.service.KfBusniessService;
+import com.wac.query.service.KfDatabaseSourceService;
+import com.wac.query.service.KfParamService;
+import com.wac.query.service.KfSqlService;
+import com.wac.query.utils.JsonTool;
 import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -18,17 +18,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.wac.query.enums.SqlStatusEnum;
-import com.wac.query.models.KfBusniess;
-import com.wac.query.models.KfDatabaseSource;
-import com.wac.query.models.KfParam;
-import com.wac.query.models.KfSql;
-import com.wac.query.models.KfSqlParam;
-import com.wac.query.service.KfBusniessService;
-import com.wac.query.service.KfDatabaseSourceService;
-import com.wac.query.service.KfParamService;
-import com.wac.query.service.KfSqlService;
-import com.wac.query.utils.JsonTool;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author huangjinsheng on 2015/6/18.
@@ -68,15 +64,39 @@ public class KfSqlAction extends AbstractAction {
         } else {
             param.setSqlName(null);
         }
+
+        List<KfBusniess> kfBusniessList = getKfBusniesses();
+
+        List<Integer> businessIds = new ArrayList<>();
+        for (KfBusniess kfBusniess : kfBusniessList) {
+            businessIds.add(kfBusniess.getId());
+        }
+        if (businessIds != null && businessIds.size() > 0) {
+            param.setBusniessIds(businessIds);
+        }
+        System.out.println("businessIds: " + businessIds);
+
         param.setSqlStatus(SqlStatusEnum.正常.toInt());
         String json = kfSqlService.tableJson(param, param.getsEcho(), kfSqlService.search(param));
         if (isPage) {
-            model.addAttribute("busniessList", kfBusniessService.all(new KfBusniess()));
+            model.addAttribute("busniessList", kfBusniessList);
             model.addAttribute("dbsList", kfDatabaseSourceService.all(new KfDatabaseSource()));
             return "sql/list";
         }
         this.renderText(response, json);
         return null;
+    }
+
+    private List<KfBusniess> getKfBusniesses() {
+        Subject currentUser = SecurityUtils.getSubject();
+        List<KfBusniess> allBusinessList = kfBusniessService.all(new KfBusniess());
+        List<KfBusniess> kfBusniessList = new ArrayList<>();
+        for (KfBusniess kfBusniess : allBusinessList) {
+            if (currentUser.isPermitted("business:" + kfBusniess.getId())) {
+                kfBusniessList.add(kfBusniess);
+            }
+        }
+        return kfBusniessList;
     }
 
     /**
@@ -99,7 +119,8 @@ public class KfSqlAction extends AbstractAction {
             }
             model.addAttribute(com);
         }
-        model.addAttribute("busniessList", kfBusniessService.all(new KfBusniess()));
+        List<KfBusniess> kfBusniessList = getKfBusniesses();
+        model.addAttribute("busniessList", kfBusniessList);
         model.addAttribute("dbsList", kfDatabaseSourceService.all(new KfDatabaseSource()));
         //model.addAttribute("paramList", com.getParams());
         model.addAttribute("statusMap", SqlStatusEnum.停用.toMap());
