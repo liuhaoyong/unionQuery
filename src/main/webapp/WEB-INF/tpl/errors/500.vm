@@ -1,0 +1,9 @@
+#parse("common/taglibs.vm")
+<html>
+<head>
+	#parse("common/meta.vm")
+</head>
+<body>
+没有权限！
+</body>
+</html>

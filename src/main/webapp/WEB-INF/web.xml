@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee"
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
 		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_1.xsd">
-<display-name>query</display-name>
+		 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         version="3.0">
+    <display-name>query</display-name>
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>classpath*:META-INF/client/*-bops-shiro.xml,classpath:/*-context.xml</param-value>
@@ -25,6 +26,7 @@
 	<filter>
 		<filter-name>encodingFilter</filter-name>
 		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <async-supported>true</async-supported>
 		<init-param>
 			<param-name>encoding</param-name>
 			<param-value>utf-8</param-value>
@@ -33,7 +35,6 @@
 			<param-name>forceEncoding</param-name>
 			<param-value>true</param-value>
 		</init-param>
-		<async-supported>true</async-supported>
 	</filter>
 	<filter-mapping>
 		<filter-name>encodingFilter</filter-name>
@@ -77,8 +78,12 @@
 	</welcome-file-list>
 	<error-page>
 		<error-code>404</error-code>
-		<location>/404.jsp</location>
-	</error-page>
+        <location>/exception/nopage.html</location>
+    </error-page>
+	<error-page>
+		<error-code>500</error-code>
+        <location>/exception/error.html</location>
+    </error-page>
 	<session-config>
 		<session-timeout>360</session-timeout>
 	</session-config>
