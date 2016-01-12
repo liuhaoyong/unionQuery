@@ -20,7 +20,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>3.8.1</version>
+			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -366,6 +366,11 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>4.1.5.RELEASE</version>
+		</dependency>
 	</dependencies>
 	<profiles>
 		<profile>
@@ -391,6 +396,7 @@
 		</profile>
 	</profiles>
 	<build>
+		<finalName>wac-unionQuery</finalName>
 		<resources>
 			<resource>
 				<directory>${basedir}/src/main/java</directory>

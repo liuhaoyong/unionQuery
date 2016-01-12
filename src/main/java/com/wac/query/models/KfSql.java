@@ -1,9 +1,6 @@
 package com.wac.query.models;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author huangjinsheng
@@ -19,7 +16,7 @@ public class KfSql extends BaseBean{
     private Integer sqlStatus;
     private String sqlStatement;
     private String sqlDesc;
-    
+    private List<Integer> busniessIds;
     
     private String[] pids;
     private String[] paramId;
@@ -171,6 +168,14 @@ public class KfSql extends BaseBean{
         this.sqlDesc = sqlDesc;
     }
 
+    public List<Integer> getBusniessIds() {
+        return busniessIds;
+    }
+
+    public void setBusniessIds(List<Integer> busniessIds) {
+        this.busniessIds = busniessIds;
+    }
+
     @Override
     public String toString() {
         return "KfSql{" +
@@ -181,6 +186,13 @@ public class KfSql extends BaseBean{
                 ", sqlStatus=" + sqlStatus +
                 ", sqlStatement='" + sqlStatement + '\'' +
                 ", sqlDesc='" + sqlDesc + '\'' +
-                "} " + super.toString();
+                ", busniessIds=" + busniessIds +
+                ", pids=" + Arrays.toString(pids) +
+                ", paramId=" + Arrays.toString(paramId) +
+                ", sqlField=" + Arrays.toString(sqlField) +
+                ", paramDesc=" + Arrays.toString(paramDesc) +
+                ", params=" + params +
+                ", sqlParamMap=" + sqlParamMap +
+                '}';
     }
 }
