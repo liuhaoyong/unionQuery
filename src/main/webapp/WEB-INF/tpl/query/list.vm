@@ -16,7 +16,7 @@
     
     var tbl;
     function singleSearch(){
-    	var hasV = false;
+    	/*var hasV = false;
     	$("input[name='param_ids_']").each(function(){
         	var obj = $(this);
             if(obj.val  != null && obj.val()!=''){
@@ -27,7 +27,7 @@
         if(!hasV){
         	showError("请正确填写参数！");
 		    return ;
-        }
+        }*/
     
     	var bid = $("#bid").val();
     	var url = "${SITE_DYN}/q/singleList.html?bid="+bid;
@@ -58,7 +58,6 @@
         var paramId = $("#paramId").val();
         var paramValue = $("#paramValue").val();
 	
-		
 		if(bid == null || bid <=0
 		        || paramId==null || paramId<=0
 		        || paramValue==null || paramValue==''){
