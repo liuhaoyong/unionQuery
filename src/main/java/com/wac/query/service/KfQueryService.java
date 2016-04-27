@@ -153,7 +153,10 @@ public class KfQueryService extends QueryHelper{
             		.filter(sqlParam -> sqlParam.getParamId().intValue() == paramId)
                     .map(sqlParam->{return sqlParam.getSqlField();})
                     .findFirst();
-        	
+        	//过滤万能参数
+            if(StringUtils.equalsIgnoreCase(field.get(),"1") || paramId == 20){
+                continue;
+            }
         	whereStr.append(" and ").append(field.get()).append("=").append("\""+paramValue+"\"");
         }
 
