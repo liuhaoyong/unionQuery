@@ -148,7 +148,7 @@
 		<dependency>
 			<groupId>com.wacai.boss</groupId>
 			<artifactId>boss-base-client</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>1.0.1-SNAPSHOT</version>
 		</dependency>
 
 		<!-- <dependency>
@@ -376,6 +376,12 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
 			<version>4.1.5.RELEASE</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.wacai.pt</groupId>
+			<artifactId>masking-process</artifactId>
+			<version>1.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 	<profiles>

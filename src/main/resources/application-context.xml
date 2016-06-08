@@ -77,6 +77,11 @@
         <property name="maxPoolPreparedStatementPerConnectionSize" value="${druid.maxPoolPreparedStatementPerConnectionSize}" />
         <!-- 配置监控统计拦截的filters -->
         <property name="filters" value="${druid.filters}" />
+		<property name="proxyFilters">
+			<list>
+				<ref bean="wacDruid-filter" /> <!-- 引入拦截 -->
+			</list>
+		</property>
     </bean>
 	<bean id="commonSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="commonDataSource" />
@@ -92,6 +97,10 @@
 	<bean name="commonMapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="basePackage" value="com.wac.query.dao,com.wac.business.datastatistics.persistence,com.wac.business.setting.persistence,com.wac.common.persistence,com.wac.user.persistence" />
 		<property name="sqlSessionFactory" ref="commonSqlSessionFactory" />
+	</bean>
+
+	<bean id="wacDruid-filter" class="com.wacai.pt.druid.masking.process.filter.WacDruidLogFilter">
+		<property name="logEnable" value="true" /> <!-- 开启输出 -->
 	</bean>
 
 	<!--<websocket:handlers>

@@ -1,14 +1,20 @@
 package com.wac.query.factory;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.Resource;
 
+import com.alibaba.dubbo.rpc.Filter;
+import com.google.common.collect.Lists;
+import com.wacai.pt.druid.masking.process.filter.WacDruidLogFilter;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -34,9 +40,10 @@ public class DefaultDataSourceFactory implements DataSourceFactory {
     @Resource
     private KfDatabaseSourceService kfDatabaseSourceService;
 
+    @Autowired
+    private WacDruidLogFilter wacDruidLogFilter;
     /** 模板MAP */
     private final static Map<Integer, JdbcTemplate> templateMap = new ConcurrentHashMap<>();
-    
 
     /*
      * (non-Javadoc)
@@ -110,7 +117,8 @@ public class DefaultDataSourceFactory implements DataSourceFactory {
             	ds.setPoolPreparedStatements(true);
             	ds.setMaxPoolPreparedStatementPerConnectionSize(20);
             	ds.setFilters("wall,config");
-            	
+                List filters = Lists.newArrayList(wacDruidLogFilter);
+            	ds.setProxyFilters(filters);
             	ds.init();
 
                 JdbcTemplate template = new JdbcTemplate(ds);
@@ -148,6 +156,9 @@ public class DefaultDataSourceFactory implements DataSourceFactory {
             	ds.setPoolPreparedStatements(true);
             	ds.setMaxPoolPreparedStatementPerConnectionSize(20);
             	ds.setFilters("wall,config");
+
+                List filters = Lists.newArrayList(wacDruidLogFilter);
+                ds.setProxyFilters(filters);
 
                 JdbcTemplate template = new JdbcTemplate(ds);
                 templateMap.put(kfds.getId(), template);

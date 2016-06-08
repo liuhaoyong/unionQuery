@@ -36,6 +36,27 @@
 	<logger name="com.wac.query" level="debug" />
 
 
+	<appender name="wacDruid" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>/data/program/logs/com.wac.kf/com.wac.unionQuery/wac-unionQuery/wacDruid.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME:-${user.dir}}/wacDruid-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>100MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%date{ISO8601} %-5level [%thread] %logger{32} - %message%n</pattern>
+			<immediateFlush>false</immediateFlush>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>INFO</level>
+		</filter>
+	</appender>
+
+	<logger name="com.wacai.pt.druid.masking.process.filter.WacDruidLogFilter">
+		<appender-ref ref="wacDruid" />
+	</logger>
+
 	<root level="info">
 		<appender-ref ref="querylogfile" />
 		<appender-ref ref="console" />
