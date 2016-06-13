@@ -445,7 +445,7 @@
 					<warName>wac-unionQuery</warName>
 				</configuration>
 			</plugin>
-			<plugin>
+			<!--<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
 				<executions>
@@ -455,7 +455,6 @@
 							<goal>jar</goal>
 						</goals>
 						<configuration>
-							<finalName>${project.artifactId}</finalName>
 							<outputDirectory>target</outputDirectory>
 							<includes>
 								<include>**/client/**</include>
@@ -463,7 +462,7 @@
 						</configuration>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin>-->
 			<plugin>
 				<groupId>org.apache.tomcat.maven</groupId>
 				<artifactId>tomcat7-maven-plugin</artifactId>
