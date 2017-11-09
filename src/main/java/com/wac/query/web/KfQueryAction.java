@@ -10,9 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -61,7 +58,6 @@ public class KfQueryAction extends AbstractAction {
     * @throws UnsupportedEncodingException
     */
    @RequestMapping(method = RequestMethod.GET, value = "/list")
-   @RequiresPermissions("unionquery:q:*")
    public String list(HttpServletRequest request, HttpServletResponse response,
           KfMultiQuery kfQuery, Model model) throws UnsupportedEncodingException {
        List<KfBusniess> kfBusniessList = getKfBusniesses();
@@ -70,13 +66,10 @@ public class KfQueryAction extends AbstractAction {
    }
 
     private List<KfBusniess> getKfBusniesses() {
-        Subject currentUser = SecurityUtils.getSubject();
         List<KfBusniess> allBusinessList = kfBusniessService.all(new KfBusniess());
         List<KfBusniess> kfBusniessList = new ArrayList<>();
         for (KfBusniess kfBusniess : allBusinessList) {
-            if (currentUser.isPermitted("business:" + kfBusniess.getId())) {
                 kfBusniessList.add(kfBusniess);
-            }
         }
         return kfBusniessList;
     }
@@ -91,7 +84,6 @@ public class KfQueryAction extends AbstractAction {
      * @throws UnsupportedEncodingException
      */
     @RequestMapping(method = RequestMethod.GET, value = "/multiList")
-    @RequiresPermissions("unionquery:q:*")
     public String multiList(HttpServletRequest request, HttpServletResponse response,
            KfMultiQuery kfMultiQuery, Model model) throws UnsupportedEncodingException {
         if (StringUtils.isNotBlank(kfMultiQuery.getParamValue())) {
@@ -119,7 +111,6 @@ public class KfQueryAction extends AbstractAction {
     * @throws UnsupportedEncodingException
     */
    @RequestMapping(method = RequestMethod.GET, value = "/singleList")
-   @RequiresPermissions("unionquery:q:*")
    public String singleList(HttpServletRequest request, HttpServletResponse response,
 		   KfSingleQuery kfSingleQuery, Model model) throws UnsupportedEncodingException {
        if (kfSingleQuery.getParamValues() != null && kfSingleQuery.getParamValues().length > 0) {
@@ -147,7 +138,6 @@ public class KfQueryAction extends AbstractAction {
      * @param model
      */
     @RequestMapping(method = RequestMethod.GET, value = "/getParams")
-    @RequiresPermissions("unionquery:q:*")
     public void getParams(HttpServletRequest request,HttpServletResponse response, int busniessId, Model model) {
         try {
             QueryRelatedInfo info = kfQueryService.getQueryRelatedInfo(busniessId);

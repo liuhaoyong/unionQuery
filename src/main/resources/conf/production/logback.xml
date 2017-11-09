@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration  scan="true" scanPeriod="30 seconds">
 
-	<property name="app.log.dir" value="/home/appweb/logs" />
+	<property name="app.log.dir" value="/data/webroot/union-query/logs" />
 
 
 	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">

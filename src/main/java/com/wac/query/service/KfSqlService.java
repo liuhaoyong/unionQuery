@@ -85,7 +85,7 @@ public class KfSqlService extends AbstractService<KfSql,KfSql>{
     public KfSql selectByPk(Integer pk) {
         KfSql sql = super.selectByPk(pk);
         if(sql != null){
-            sql.getParams().addAll(getParams(sql.getId()));
+            sql.getParamList().addAll(getParams(sql.getId()));
         }
         return sql;
     }
@@ -152,7 +152,7 @@ public class KfSqlService extends AbstractService<KfSql,KfSql>{
         
 
         //原有的参数id
-        List<Integer> oldParamIds = sql.getParams().stream().map(param -> {
+        List<Integer> oldParamIds = sql.getParamList().stream().map(param -> {
             return param.getId();
         }).collect(Collectors.toList());
 
@@ -192,7 +192,7 @@ public class KfSqlService extends AbstractService<KfSql,KfSql>{
         
         int sqlId = abstractMapper.insert(e);
         
-        this.saveParams(e.getParams(), sqlId);
+        this.saveParams(e.getParamList(), sqlId);
         
         return sqlId;
     }
@@ -202,7 +202,7 @@ public class KfSqlService extends AbstractService<KfSql,KfSql>{
     @Transactional(propagation= Propagation.REQUIRED,readOnly=false)
     public int update(KfSql e){
         int count = abstractMapper.updateByPrimaryKey(e);
-        this.saveParams(e.getParams(), e.getId());
+        this.saveParams(e.getParamList(), e.getId());
         //eventOf影响联合查询缓存.post(new ClearUnionQueryCacheBySqlEvent(e.getId()));
         return count;
     }

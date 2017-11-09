@@ -1,117 +1,149 @@
 package com.wac.query.models;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author huangjinsheng
  */
-public class KfSql extends BaseBean{
+public class KfSql extends BaseBean {
 
-    private static final long serialVersionUID = 7508623487147522020L;
+    private static final long       serialVersionUID = 7508623487147522020L;
 
-    private String sqlName;
-    private Integer busniessId;
-    private Integer priority = 0;
-    private Integer dataSourceId;
-    private Integer sqlStatus;
-    private String sqlStatement;
-    private String sqlDesc;
-    private List<Integer> busniessIds;
+    private String                  sqlName;
+    private Integer                 busniessId;
+    private Integer                 dataSourceId;
+    private Integer                 priority         = 0;
+    private Integer                 sqlStatus;
+    private String                  sqlStatement;
+    private String                  sqlDesc;
+    private List<Integer>           busniessIds;
+
+    private String[]                pids;
+    private String[]                paramId;
+    private String[]                sqlField;
+    private String[]                paramDesc;
+
+    private List<KfSqlParam>        params           = new LinkedList<KfSqlParam>();
+
+    private Map<String, KfSqlParam> sqlParamMap;
+    private KfDatabaseSource dataSource;
     
-    private String[] pids;
-    private String[] paramId;
-    private String[] sqlField;
-    private String[] paramDesc;
-
-
-    private List<KfSqlParam> params = new LinkedList();
     
-    private Map<String,KfSqlParam> sqlParamMap = null;
     
-	/**
-	 * @return the pids
-	 */
-	public String[] getPids() {
-		return pids;
-	}
+    
 
-	/**
-	 * @param pids the pids to set
-	 */
-	public void setPids(String[] pids) {
-		this.pids = pids;
-	}
+    public KfDatabaseSource getDataSource() {
+        return dataSource;
+    }
 
-	/**
-	 * @return the paramId
-	 */
-	public String[] getParamId() {
-		return paramId;
-	}
+    public void setDataSource(KfDatabaseSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
-	/**
-	 * @param paramId the paramId to set
-	 */
-	public void setParamId(String[] paramId) {
-		this.paramId = paramId;
-	}
+    public void setDataSourceId(Integer dataSourceId) {
+        this.dataSourceId = dataSourceId;
+    }
 
-	/**
-	 * @return the sqlField
-	 */
-	public String[] getSqlField() {
-		return sqlField;
-	}
+    public void setSqlParamMap(Map<String, KfSqlParam> sqlParamMap) {
+        this.sqlParamMap = sqlParamMap;
+    }
 
-	/**
-	 * @param sqlField the sqlField to set
-	 */
-	public void setSqlField(String[] sqlField) {
-		this.sqlField = sqlField;
-	}
+    /**
+     * @return the pids
+     */
+    public String[] getPids() {
+        return pids;
+    }
 
-	/**
-	 * @return the paramDesc
-	 */
-	public String[] getParamDesc() {
-		return paramDesc;
-	}
+    /**
+     * @param pids the pids to set
+     */
+    public void setPids(String[] pids) {
+        this.pids = pids;
+    }
 
-	/**
-	 * @param paramDesc the paramDesc to set
-	 */
-	public void setParamDesc(String[] paramDesc) {
-		this.paramDesc = paramDesc;
-	}
+    /**
+     * @return the paramId
+     */
+    public String[] getParamId() {
+        return paramId;
+    }
 
-	/**
-	 * @return the sqlParamMap
-	 */
-	public Map<String, KfSqlParam> getSqlParamMap() {
-		if(sqlParamMap == null){
-			sqlParamMap = new HashMap<>();
-			for (KfSqlParam kfSqlParam : params) {
-				sqlParamMap.put(kfSqlParam.getSqlField(), kfSqlParam);
-			}
-		}
-		
-		return sqlParamMap;
-	}
+    /**
+     * @param paramId the paramId to set
+     */
+    public void setParamId(String[] paramId) {
+        this.paramId = paramId;
+    }
 
-	/**
-	 * @param sqlParamMap the sqlParamMap to set
-	 */
-	public void setSqlParamMap(Map<String, KfSqlParam> sqlParamMap) {
-		this.sqlParamMap = sqlParamMap;
-	}
+    /**
+     * @return the sqlField
+     */
+    public String[] getSqlField() {
+        return sqlField;
+    }
 
-	public List<KfSqlParam> getParams() {
+    /**
+     * @param sqlField the sqlField to set
+     */
+    public void setSqlField(String[] sqlField) {
+        this.sqlField = sqlField;
+    }
+
+    /**
+     * @return the paramDesc
+     */
+    public String[] getParamDesc() {
+        return paramDesc;
+    }
+
+    /**
+     * @param paramDesc the paramDesc to set
+     */
+    public void setParamDesc(String[] paramDesc) {
+        this.paramDesc = paramDesc;
+    }
+
+    /**
+     * @return the sqlParamMap
+     */
+    public Map<String, KfSqlParam> getSqlParamMap() {
+        if (sqlParamMap == null) {
+            synchronized (this) {
+                if (sqlParamMap != null) {
+                    return sqlParamMap;
+                }
+                sqlParamMap = new HashMap<>();
+                for (KfSqlParam kfSqlParam : params) {
+                    sqlParamMap.put(StringUtils.upperCase(StringUtils.trim(kfSqlParam.getSqlField())), kfSqlParam);
+                }
+            }
+        }
+        return sqlParamMap;
+    }
+
+    public List<KfSqlParam> getParamList() {
+        return params;
+    }
+    
+    /**
+     * vm页面里写死了这个值
+     * @return
+     */
+    public List<KfSqlParam> getParams() {
         return params;
     }
 
     public void setParams(List<KfSqlParam> params) {
         this.params = params;
     }
+
     public String getSqlName() {
         return sqlName;
     }
@@ -136,12 +168,10 @@ public class KfSql extends BaseBean{
         this.priority = priority;
     }
 
+
+
     public Integer getDataSourceId() {
         return dataSourceId;
-    }
-
-    public void setDataSourceId(Integer dataSourceId) {
-        this.dataSourceId = dataSourceId;
     }
 
     public Integer getSqlStatus() {
@@ -176,23 +206,18 @@ public class KfSql extends BaseBean{
         this.busniessIds = busniessIds;
     }
 
+    public KfSqlParam getParam(String paramName) {
+        return this.getSqlParamMap().get(StringUtils.upperCase(StringUtils.trim(paramName)));
+    }
+
+
     @Override
     public String toString() {
-        return "KfSql{" +
-                "sqlName='" + sqlName + '\'' +
-                ", busniessId=" + busniessId +
-                ", priority=" + priority +
-                ", dataSourceId=" + dataSourceId +
-                ", sqlStatus=" + sqlStatus +
-                ", sqlStatement='" + sqlStatement + '\'' +
-                ", sqlDesc='" + sqlDesc + '\'' +
-                ", busniessIds=" + busniessIds +
-                ", pids=" + Arrays.toString(pids) +
-                ", paramId=" + Arrays.toString(paramId) +
-                ", sqlField=" + Arrays.toString(sqlField) +
-                ", paramDesc=" + Arrays.toString(paramDesc) +
-                ", params=" + params +
-                ", sqlParamMap=" + sqlParamMap +
-                '}';
+        return "KfSql{" + "sqlName='" + sqlName + '\'' + ", busniessId=" + busniessId + ", priority=" + priority
+                + ", dataSourceId=" + dataSourceId + ", sqlStatus=" + sqlStatus + ", sqlStatement='" + sqlStatement
+                + '\'' + ", sqlDesc='" + sqlDesc + '\'' + ", busniessIds=" + busniessIds + ", pids="
+                + Arrays.toString(pids) + ", paramId=" + Arrays.toString(paramId) + ", sqlField="
+                + Arrays.toString(sqlField) + ", paramDesc=" + Arrays.toString(paramDesc) + ", params=" + params
+                + ", sqlParamMap=" + sqlParamMap + '}';
     }
 }

@@ -1,16 +1,15 @@
 package com.wac.query.web;
 
-import com.wac.query.enums.SqlStatusEnum;
-import com.wac.query.models.*;
-import com.wac.query.service.KfBusniessService;
-import com.wac.query.service.KfDatabaseSourceService;
-import com.wac.query.service.KfParamService;
-import com.wac.query.service.KfSqlService;
-import com.wac.query.utils.JsonTool;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.lang.StringUtils;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -18,13 +17,17 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import com.wac.query.enums.SqlStatusEnum;
+import com.wac.query.models.KfBusniess;
+import com.wac.query.models.KfDatabaseSource;
+import com.wac.query.models.KfParam;
+import com.wac.query.models.KfSql;
+import com.wac.query.models.KfSqlParam;
+import com.wac.query.service.KfBusniessService;
+import com.wac.query.service.KfDatabaseSourceService;
+import com.wac.query.service.KfParamService;
+import com.wac.query.service.KfSqlService;
+import com.wac.query.utils.JsonTool;
 
 /**
  * @author huangjinsheng on 2015/6/18.
@@ -54,7 +57,6 @@ public class KfSqlAction extends AbstractAction {
      * @return
      */
     @RequestMapping(method = RequestMethod.GET, value = "/list")
-    @RequiresPermissions("unionquery:sql:*")
     public String list(HttpServletRequest request, HttpServletResponse response, String toPage, KfSql param, Model model) throws UnsupportedEncodingException {
         boolean isPage = StringUtils.equalsIgnoreCase(toPage, "true");
         if (StringUtils.isNotBlank(param.getSqlName())) {
@@ -88,13 +90,10 @@ public class KfSqlAction extends AbstractAction {
     }
 
     private List<KfBusniess> getKfBusniesses() {
-        Subject currentUser = SecurityUtils.getSubject();
         List<KfBusniess> allBusinessList = kfBusniessService.all(new KfBusniess());
         List<KfBusniess> kfBusniessList = new ArrayList<>();
         for (KfBusniess kfBusniess : allBusinessList) {
-            if (currentUser.isPermitted("business:" + kfBusniess.getId())) {
                 kfBusniessList.add(kfBusniess);
-            }
         }
         return kfBusniessList;
     }
@@ -106,7 +105,6 @@ public class KfSqlAction extends AbstractAction {
      * @return
      */
     @RequestMapping(method = RequestMethod.GET, value = "/new")
-    @RequiresPermissions("unionquery:sql:*")
     public String toInput(HttpServletRequest request, Integer id, Model model) {
         KfSql com = new KfSql();
         if (id == null || id.intValue() == 0) {
@@ -136,7 +134,6 @@ public class KfSqlAction extends AbstractAction {
      * @return
      */
     @RequestMapping(method = RequestMethod.POST, value = "/save")
-    @RequiresPermissions("unionquery:sql:*")
     public String save(HttpServletRequest request, HttpServletResponse response, KfSql pro) {
         try {
         	logger.info("sqlId");
@@ -196,7 +193,6 @@ public class KfSqlAction extends AbstractAction {
      */
     @Deprecated
     @RequestMapping(method = RequestMethod.GET, value = "/paramNew")
-    @RequiresPermissions("unionquery:sql:*")
     public String toParamInput(HttpServletRequest request, Integer id, Model model) {
         KfSql com = kfSqlService.selectByPk(id);
         model.addAttribute("kfSql", com);
@@ -214,7 +210,6 @@ public class KfSqlAction extends AbstractAction {
      */
     @Deprecated
     @RequestMapping(method = RequestMethod.POST, value = "/saveParam")
-    @RequiresPermissions("unionquery:sql:*")
     public String saveParam(HttpServletRequest request,
                             HttpServletResponse response,
                             Integer sqlId,

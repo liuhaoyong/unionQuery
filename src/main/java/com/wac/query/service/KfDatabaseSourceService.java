@@ -55,7 +55,7 @@ public class KfDatabaseSourceService extends AbstractService<KfDatabaseSource,Kf
             List<String> slist = new LinkedList();
             slist.add(""+b.getId());
             slist.add(b.getDbsName());
-            slist.add(DriverTypeEnum.Mysql.getByCode(b.getDriverType()).name());
+            slist.add(DriverTypeEnum.getByCode(b.getDriverType()).name());
             slist.add(b.getUserName());
             slist.add(b.getPwd());
             slist.add(b.getJdbcUrl());

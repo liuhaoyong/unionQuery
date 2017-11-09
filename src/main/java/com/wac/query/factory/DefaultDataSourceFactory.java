@@ -1,27 +1,19 @@
 package com.wac.query.factory;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.Resource;
 
-import com.alibaba.dubbo.rpc.Filter;
-import com.google.common.collect.Lists;
-import com.wacai.pt.druid.masking.process.filter.WacDruidLogFilter;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.druid.pool.DruidDataSource;
-import com.mchange.v2.c3p0.ComboPooledDataSource;
-import com.wac.query.enums.DriverTypeEnum;
 import com.wac.query.models.KfDatabaseSource;
 import com.wac.query.service.KfDatabaseSourceService;
 
@@ -40,8 +32,6 @@ public class DefaultDataSourceFactory implements DataSourceFactory {
     @Resource
     private KfDatabaseSourceService kfDatabaseSourceService;
 
-    @Autowired
-    private WacDruidLogFilter wacDruidLogFilter;
     /** 模板MAP */
     private final static Map<Integer, JdbcTemplate> templateMap = new ConcurrentHashMap<>();
 
@@ -50,11 +40,11 @@ public class DefaultDataSourceFactory implements DataSourceFactory {
      * @see com.sdo.basis.biz.query.factory.DataSourceFactory#loadTemplate(int)
      */
     @Override
-    public Optional<JdbcTemplate> loadTemplate(int sourceId) {
-        JdbcTemplate template = templateMap.get(sourceId);
+    public Optional<JdbcTemplate> loadTemplate(KfDatabaseSource dataSource) {
+        JdbcTemplate template = templateMap.get(dataSource.getId());
         if (template == null) {
-            makeTemplate(sourceId);
-            template = templateMap.get(sourceId);
+            makeTemplate(dataSource);
+            template = templateMap.get(dataSource.getId());
         }
         return Optional.ofNullable(template);
     }
@@ -86,19 +76,6 @@ public class DefaultDataSourceFactory implements DataSourceFactory {
             logger.info("=====================================================");
             
             if(StringUtils.equalsIgnoreCase(env,"www")){//正式环境
-                /*SecurityDataSource ds = new SecurityDataSource();
-                ds.setDriverClass(DriverTypeEnum.getByCode(kfds.getDriverType()).driverStr());
-                ds.setJdbcUrl(kfds.getJdbcUrl());
-                ds.setUsername(kfds.getUserName());
-                ds.setPassword(kfds.getPwd());
-                ds.setIdleConnectionTestPeriod(120, TimeUnit.SECONDS);
-                ds.setIdleMaxAge(60, TimeUnit.SECONDS);
-                ds.setPartitionCount(1);
-                ds.setAcquireIncrement(1);
-                ds.setStatementsCacheSize(10);
-                ds.setReleaseHelperThreads(1);
-                ds.setConnectionTestStatement("SELECT 1");*/
-            	
             	DruidDataSource ds = new DruidDataSource();
             	ds.setUrl(kfds.getJdbcUrl());
             	ds.setUsername(kfds.getUserName());
@@ -117,27 +94,11 @@ public class DefaultDataSourceFactory implements DataSourceFactory {
             	ds.setPoolPreparedStatements(true);
             	ds.setMaxPoolPreparedStatementPerConnectionSize(20);
             	ds.setFilters("wall,config");
-                List filters = Lists.newArrayList(wacDruidLogFilter);
-            	ds.setProxyFilters(filters);
             	ds.init();
 
                 JdbcTemplate template = new JdbcTemplate(ds);
                 templateMap.put(kfds.getId(), template);
             }else{
-               /* ComboPooledDataSource ds =  new ComboPooledDataSource();
-                ds.setDriverClass(DriverTypeEnum.getByCode(kfds.getDriverType()).driverStr());
-                ds.setJdbcUrl(kfds.getJdbcUrl());
-                ds.setUser(kfds.getUserName());
-                ds.setPassword(kfds.getPwd());
-                ds.setInitialPoolSize(1);
-                ds.setMinPoolSize(1);
-                ds.setMaxPoolSize(20);
-                ds.setAcquireIncrement(1);
-                ds.setMaxIdleTime(20);
-                ds.setCheckoutTimeout(3000);
-                ds.setTestConnectionOnCheckin(true);
-                ds.setIdleConnectionTestPeriod(120);*/
-            	
             	DruidDataSource ds = new DruidDataSource();
             	ds.setUrl(kfds.getJdbcUrl());
             	ds.setUsername(kfds.getUserName());
@@ -156,10 +117,6 @@ public class DefaultDataSourceFactory implements DataSourceFactory {
             	ds.setPoolPreparedStatements(true);
             	ds.setMaxPoolPreparedStatementPerConnectionSize(20);
             	ds.setFilters("wall,config");
-
-                List filters = Lists.newArrayList(wacDruidLogFilter);
-                ds.setProxyFilters(filters);
-
                 JdbcTemplate template = new JdbcTemplate(ds);
                 templateMap.put(kfds.getId(), template);
             }

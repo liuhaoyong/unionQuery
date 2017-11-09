@@ -1,10 +1,10 @@
 package com.wac.query.factory;
 
-import com.wac.query.models.KfDatabaseSource;
+import java.util.Optional;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import javax.swing.text.html.Option;
-import java.util.Optional;
+import com.wac.query.models.KfDatabaseSource;
 
 /**
  * 数据源工程
@@ -17,7 +17,7 @@ public interface DataSourceFactory {
      * @param sourceId
      * @return
      */
-    public Optional<JdbcTemplate> loadTemplate(int sourceId);
+    public Optional<JdbcTemplate> loadTemplate(KfDatabaseSource dataSource);
 
     /**
      * 创建数据源模板

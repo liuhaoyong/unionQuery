@@ -1,13 +1,12 @@
 package com.wac.query.web;
 
-import org.apache.log4j.Logger;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  *
@@ -17,7 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 @RequestMapping("/exception")
 public class ExceptionAction extends AbstractAction {
-	private static Logger logger = Logger.getLogger(ExceptionAction.class);
 
 	@RequestMapping(value = "/nopage", method = RequestMethod.GET)
 	public String pageNotFound(HttpServletRequest request,HttpServletResponse response,Model model) throws Exception {

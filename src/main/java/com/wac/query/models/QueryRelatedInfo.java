@@ -1,13 +1,13 @@
 package com.wac.query.models;
 
-import com.google.common.collect.LinkedListMultimap;
-import com.google.common.collect.Multimap;
-import com.wac.query.utils.JsonTool;
-
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import com.alibaba.fastjson.JSON;
+import com.google.common.collect.LinkedListMultimap;
+import com.google.common.collect.Multimap;
 
 /**
  * @author huangjinsheng on 2015/7/29.
@@ -72,6 +72,6 @@ public class QueryRelatedInfo implements java.io.Serializable{
 
     @Override
     public String toString() {
-        return JsonTool.writeValueAsString(this);
+        return JSON.toJSONString(this);
     }
 }

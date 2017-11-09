@@ -1,5 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.wac.unionQuery</groupId>
 	<artifactId>wac-unionQuery</artifactId>
@@ -11,7 +11,7 @@
 		<java.version>1.8</java.version>
 		<java.encoding>UTF-8</java.encoding>
 		<project.build.sourceEncoding>${java.encoding}</project.build.sourceEncoding>
-		<spring.version>4.1.6.RELEASE</spring.version>
+		<spring.version>4.3.7.RELEASE</spring.version>
 		<logback.version>1.1.2</logback.version>
 		<org.mybatis.generator>1.3.2</org.mybatis.generator>
 	</properties>
@@ -53,6 +53,12 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-tx</artifactId>
 			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.6</version>
 		</dependency>
 		<!-- <dependency> <groupId>org.springframework</groupId> <artifactId>spring-expression</artifactId> 
 			<version>${spring.version}</version> </dependency> -->
@@ -116,68 +122,16 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.8</version>
-		</dependency>
-		 <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid</artifactId>
-            <version>1.0.9</version>
-        </dependency>
-		<!-- 挖财 -->
-		<dependency>
-			<groupId>com.wacai</groupId>
-			<artifactId>wac-common</artifactId>
-			<version>2.0.3</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>servlet-api</artifactId>
-					<groupId>javax.servlet</groupId>
-				</exclusion>
-			</exclusions>
+			<version>5.1.41</version>
 		</dependency>
 		<dependency>
-		  	<groupId>com.wacai</groupId>
-		  	<artifactId>wac-dubbo</artifactId>
-		  	<version>2.1.0</version>
-		</dependency>
-		<!--<dependency>
-		        <groupId>com.wac.bops</groupId>
-		        <artifactId>bops-shiro-client</artifactId>
-		        <version>1.2.1</version>
-		    </dependency>-->
-		<dependency>
-			<groupId>com.wacai.boss</groupId>
-			<artifactId>boss-base-client</artifactId>
-			<version>1.0.1-SNAPSHOT</version>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid</artifactId>
+			<version>1.0.29</version>
 		</dependency>
 
-		<!-- <dependency>
-		  	<groupId>com.wacai</groupId>
-		  	<artifactId>wac-dubbo</artifactId>
-		  	<version>2.1.0</version>
-		</dependency>
-		 <dependency>
-		        <groupId>com.wac.bops</groupId>
-		        <artifactId>bops-shiro-client</artifactId>
-		        <version>1.1-SNAPSHOT</version>
-		    </dependency> -->
 
-		<!-- <dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>1.7.5</version>
-		</dependency>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>0.0.99</version>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-ext</artifactId>
-			<version>1.6.4</version>
-		</dependency> -->
+
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>log4j-over-slf4j</artifactId>
@@ -249,29 +203,7 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		<dependency>
-			<groupId>com.github.diamond</groupId>
-			<artifactId>super-diamond-client</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>log4j-over-slf4j</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>ch.qos.logback</groupId>
-					<artifactId>logback-classic</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>ch.qos.logback</groupId>
-					<artifactId>logback-access</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>ch.qos.logback</groupId>
-					<artifactId>logback-core</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
+
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
@@ -313,11 +245,7 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		<dependency>
-			<groupId>com.wacai</groupId>
-			<artifactId>goodies</artifactId>
-			<version>1.0.0</version>
-		</dependency>
+
 
 		<dependency>
 			<groupId>jstl</groupId>
@@ -379,10 +307,11 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.wacai.pt</groupId>
-			<artifactId>masking-process</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<groupId>com.microsoft.sqlserver</groupId>
+			<artifactId>mssql-jdbc</artifactId>
+			<version>6.2.2.jre8</version>
 		</dependency>
+
 	</dependencies>
 	<profiles>
 		<profile>
@@ -408,7 +337,7 @@
 		</profile>
 	</profiles>
 	<build>
-		<finalName>wac-unionQuery</finalName>
+		<finalName>unionQuery</finalName>
 		<resources>
 			<resource>
 				<directory>${basedir}/src/main/java</directory>
@@ -437,32 +366,13 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
-				<!-- <configuration>
-                    <warSourceDirectory>${project.artifactId}</warSourceDirectory>  
-                    <webXml>${project.artifactId}\WEB-INF\web.xml</webXml> 
-                </configuration>   -->
+				<!-- <configuration> <warSourceDirectory>${project.artifactId}</warSourceDirectory> 
+					<webXml>${project.artifactId}\WEB-INF\web.xml</webXml> </configuration> -->
 				<configuration>
-					<warName>wac-unionQuery</warName>
+					<warName>unionQuery</warName>
 				</configuration>
 			</plugin>
-			<!--<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>target</outputDirectory>
-							<includes>
-								<include>**/client/**</include>
-							</includes>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>-->
+
 			<plugin>
 				<groupId>org.apache.tomcat.maven</groupId>
 				<artifactId>tomcat7-maven-plugin</artifactId>

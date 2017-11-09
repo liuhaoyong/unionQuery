@@ -19,10 +19,6 @@
 	</context:component-scan>
 	
 	<aop:config proxy-target-class="true"></aop:config>
-    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
-        <property name="securityManager" ref="securityManager"/>
-    </bean>
-
     <mvc:annotation-driven/>
 	
 	
@@ -34,19 +30,8 @@
 
 	<bean class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter" />
 	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
-	<!-- <property name="webBindingInitializer">
-		<bean class="org.springframework.samples.petclinic.web.ClinicBindingInitializer" />
-	</property> -->
 	</bean>
 
-	<!--视图定义
-	<bean name="jsonResolver" class="org.springframework.web.servlet.view.XmlViewResolver" />
- 
-	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
-		<property name="prefix" value="/WEB-INF/views/" />
-		<property name="suffix" value=".jsp" />
-	</bean>-->
 	
 	<bean id="velocityConfig" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
 		<property name="resourceLoaderPath" value="/WEB-INF/tpl/"/>

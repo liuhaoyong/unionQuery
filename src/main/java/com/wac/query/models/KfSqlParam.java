@@ -9,9 +9,16 @@ public class KfSqlParam extends BaseBean{
 
     private static final long serialVersionUID = 7508623487147522020L;
 
+    //关联的sqlID
     private Integer sqlId;
+    
+    //参数ID
     private Integer paramId;
+    
+    //参数字段名
     private String sqlField;
+    
+    //参数描述
     private String paramDesc;
 
     public Integer getParamId() {

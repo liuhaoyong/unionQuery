@@ -12,6 +12,13 @@ public enum DriverTypeEnum implements BaseEnum {
         public String driverStr(){
             return "com.mysql.jdbc.Driver";
         }
+    },
+    SQL_SERVER("2")
+    {
+        @Override
+        public String driverStr(){
+            return "com.microsoft.sqlserver.jdbc.SQLServerDriver";
+        }
     };
 
     private final String code;

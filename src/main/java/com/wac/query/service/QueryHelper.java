@@ -17,6 +17,7 @@ import com.wac.query.enums.SqlStatusEnum;
 import com.wac.query.factory.DataSourceFactory;
 import com.wac.query.models.BaseBean;
 import com.wac.query.models.KfBusniess;
+import com.wac.query.models.KfDatabaseSource;
 import com.wac.query.models.KfParam;
 import com.wac.query.models.KfSql;
 import com.wac.query.models.KfSqlParam;
@@ -64,8 +65,12 @@ public class QueryHelper extends AbstractService<ParamBean,BaseBean>{
                 .stream()
                 .filter(sql -> sql.getSqlStatus().intValue() == SqlStatusEnum.正常.toInt())
                 .collect(Collectors.toList());
+        sqls.forEach(sql ->{
+            KfDatabaseSource dataSource = kfDatabaseSourceService.selectByPk(sql.getDataSourceId());
+            sql.setDataSource(dataSource);
+        });
         info.setSqls(sqls);
-
+        
         Map<Integer,KfSql> tempSqlMap = sqls.stream()
                 .collect(Collectors.toMap(KfSql::getId, (v) -> v));
 
@@ -73,7 +78,7 @@ public class QueryHelper extends AbstractService<ParamBean,BaseBean>{
         List<KfSqlParam> sqlParams = sqls.stream()
                 .map(sql -> {
                     List<KfSqlParam> sqlParamList = kfSqlService.getParams(sql.getId());
-                    sql.getParams().addAll(sqlParamList);
+                    sql.getParamList().addAll(sqlParamList);
                     return sqlParamList;
                 })
                 .flatMap(params -> params.stream())
@@ -117,6 +122,12 @@ public class QueryHelper extends AbstractService<ParamBean,BaseBean>{
         } else {
             return null;
         }
+    }
+    
+    public static void main(String[] args)
+    {
+        Timestamp  timestamp = new Timestamp(2017, 5,26,20,27,13,356);
+        System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(timestamp));
     }
 
 

@@ -3,9 +3,7 @@ package com.wac.query.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +30,6 @@ public class IndexAction extends AbstractAction {
 	 * @param searchParams
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/frame")
-	@RequiresPermissions("unionuery:*")
 	public String frame(HttpServletRequest request,HttpServletResponse response,Model model){
 		request.getSession().setAttribute("source", "query");//在session保存来源是来自query，用于嵌入现有bops功能
 		return "frame";
@@ -47,7 +44,6 @@ public class IndexAction extends AbstractAction {
 	 * @param searchParams
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/index")
-	@RequiresPermissions("unionuery:*")
 	public String index(HttpServletRequest request,HttpServletResponse response){
 		return "index";
 	}
@@ -61,7 +57,6 @@ public class IndexAction extends AbstractAction {
 	 * @param searchParams
 	 */
 	@RequestMapping(value="/ping")
-	@RequiresPermissions("unionuery:*")
 	public void ping(HttpServletRequest request,HttpServletResponse response){
 		this.renderText(response, "i'm alive!");
 	}

@@ -22,9 +22,6 @@
 	default-autowire="byName">
 	<description>Spring公共配置文件</description>
 
-	<!-- <context:annotation-config />
-	<context:component-scan base-package="com.wac" />
-	<aop:aspectj-autoproxy proxy-target-class="true" /> -->
 	<context:component-scan base-package="com.wac"/>
 
 	<bean id="propertyConfigurer"
@@ -38,20 +35,6 @@
 		<property name="order" value="1" />
 	</bean>
 
-	<!-- <bean id="commonDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" >
-		<property name="driverClass" value="${mysql.driver}" />
-		<property name="jdbcUrl" value="${common.r.jdbc.url}" />
-		<property name="user" value="${common.r.jdbc.username}" />
-		<property name="password" value="${common.r.jdbc.password}" />
-		<property name="initialPoolSize" value="${common.r.initialPoolSize}" />
-		<property name="minPoolSize" value="${common.r.minPoolSize}" />
-		<property name="maxPoolSize" value="${common.r.maxPoolSize}" />
-		<property name="acquireIncrement" value="${common.r.acquireIncrement}" />
-		<property name="maxIdleTime" value="${common.r.maxIdleTime}" />
-		<property name="checkoutTimeout" value="${common.r.checkoutTimeout}" />
-		<property name="testConnectionOnCheckin" value="true" />
-		<property name="idleConnectionTestPeriod" value="120" /> 
-	</bean> -->
 	<bean id="commonDataSource"  class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
         <!-- 基本属性 url、user、password -->
         <property name="url" value="${connection.url}"/>
@@ -77,11 +60,6 @@
         <property name="maxPoolPreparedStatementPerConnectionSize" value="${druid.maxPoolPreparedStatementPerConnectionSize}" />
         <!-- 配置监控统计拦截的filters -->
         <property name="filters" value="${druid.filters}" />
-		<property name="proxyFilters">
-			<list>
-				<ref bean="wacDruid-filter" /> <!-- 引入拦截 -->
-			</list>
-		</property>
     </bean>
 	<bean id="commonSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="commonDataSource" />
@@ -99,17 +77,5 @@
 		<property name="sqlSessionFactory" ref="commonSqlSessionFactory" />
 	</bean>
 
-	<bean id="wacDruid-filter" class="com.wacai.pt.druid.masking.process.filter.WacDruidLogFilter">
-		<property name="logEnable" value="true" /> <!-- 开启输出 -->
-	</bean>
-
-	<!--<websocket:handlers>
-		<websocket:mapping path="/ws" handler="wsHandler"/>
-		<websocket:handshake-interceptors>
-			<bean class="com.wac.query.web.websocket.HandshakeInterceptor"/>
-		</websocket:handshake-interceptors>
-		<websocket:sockjs/>
-	</websocket:handlers>
-	<bean id="wsHandler" class="com.wac.query.web.websocket.WsHandler"/>-->
 </beans>
 
