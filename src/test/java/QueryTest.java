@@ -1,6 +1,5 @@
 import java.io.UnsupportedEncodingException;
 
-import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.alibaba.druid.filter.config.ConfigTools;
 import com.wac.query.models.KfDatabaseSource;
 import com.wac.query.models.KfSingleQuery;
 import com.wac.query.service.KfQueryService;
@@ -64,17 +64,33 @@ public class QueryTest {
         kfDatabaseSourceAction.list(null, null, "false", ds, null);
     }
     
+    
+    @Test
+    public void testQueryForSingleQuery() throws Exception {
+        KfSingleQuery query = new KfSingleQuery();
+        query.setBid(4);
+        query.setParamIds(new String[]{"4"});
+        query.setParamValues(new String[]{"1"});
+        query.setiDisplayStart(1);
+        query.setiDisplayLength(100);
+        query.setEndIndex(100);
+        String result = queryService.singleQuery(query);
+        System.out.println(result);
+    }
+    
+    
+    
     public static void main(String args[]) throws Exception
     {
         
-        StringBuilder result = new StringBuilder();
-        System.out.println(StringUtils.substringAfter("select ss from sdfsdf;", "select"));
-
-        result.append(" select top (100) ").append(StringUtils.substringAfter("select ss from sdfsdf;", "select") );
+//        StringBuilder result = new StringBuilder();
+//        System.out.println(StringUtils.substringAfter("select ss from sdfsdf;", "select"));
+//
+//        result.append(" select top (100) ").append(StringUtils.substringAfter("select ss from sdfsdf;", "select") );
+//        
+//        System.out.println(result.toString());
         
-        System.out.println(result.toString());
-        
-//        System.out.println(ConfigTools.encrypt("itsme999"));
-//        System.out.println(ConfigTools.decrypt("flMB3tzvlR+JJEcxGffQNYZVyRvRSL0zmbulcXdphGyeru7tgUWVBmo8AJi+ZDQOb5j3RJoC6M2Sm7ZASdK6fg=="));
+        System.out.println(ConfigTools.encrypt("Kj5sa_C6DsLmx"));
+        System.out.println(ConfigTools.decrypt("OXMhzblmkmV9vHtaebjiwXIoNFf9ca3AKHrA6+OB+BkLFCq8Uw4RsMvka5WZvcAorqu6uuvQgRnMDjTyQhOm4Q=="));
     }
 }

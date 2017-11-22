@@ -77,8 +77,7 @@ public class KfSqlAction extends AbstractAction {
             param.setBusniessIds(businessIds);
         }
         System.out.println("businessIds: " + businessIds);
-
-        param.setSqlStatus(SqlStatusEnum.正常.toInt());
+        
         String json = kfSqlService.tableJson(param, param.getsEcho(), kfSqlService.search(param));
         if (isPage) {
             model.addAttribute("busniessList", kfBusniessList);

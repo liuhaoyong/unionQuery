@@ -70,8 +70,8 @@ public class KfQueryService extends QueryHelper {
             QueryRelatedInfo info = this.getQueryRelatedInfo(query.getBid());
             KfSql sql = info.getSqls().get(0);
             sql.setSqlStatement(StringUtils.replaceEach(sql.getSqlStatement(),
-                    new String[] { "\n", "\t", "/n", "/t", " as ", " AS ", "  ", ";" },
-                    new String[] { " ", " ", " ", " ", " ", " ", " ", "" }));
+                    new String[] { "\n", "\t", "/n", "/t", " as ", " AS ", "  ", ";", "SELECT", "FROM", "GROUP BY", "ORDER BY","LIMIT"},
+                    new String[] { " ", " ", " ", " ", " ", " ", " ", "", "select", "from", "group by", "order by","limit" }));
 
             /**
              * sql数据源
@@ -81,10 +81,11 @@ public class KfQueryService extends QueryHelper {
                 throw new NullPointerException("can not found datasouce : sourceId:[" + sql.getDataSourceId() + "]");
             }
 
-            int total = template.get().queryForObject(buildSingleQuerySql(query, info, sql, true), Integer.class);
+            int total = template.get().queryForObject("select count(*) from (" + sql.getSqlStatement() + " ) a ",
+                    Integer.class);
 
             List<List<String>> aaData = new LinkedList<>();
-            SqlRowSet rowSet = template.get().queryForRowSet(buildSingleQuerySql(query, info, sql, false));
+            SqlRowSet rowSet = template.get().queryForRowSet(buildSingleQuerySql(query, info, sql));
 
             int titleSize = getSingleParamTitle(info).size();
             while (rowSet.next()) {
@@ -119,15 +120,9 @@ public class KfQueryService extends QueryHelper {
      * @param count
      * @return
      */
-    private String buildSingleQuerySql(KfSingleQuery query, QueryRelatedInfo info, KfSql sql, boolean count) {
+    private String buildSingleQuerySql(KfSingleQuery query, QueryRelatedInfo info, KfSql sql) {
         StringBuilder sqlStat = new StringBuilder();
-        sql.setSqlStatement(StringUtils.replaceEach(sql.getSqlStatement(), new String[] { "SELECT", "FROM" }, new String[] { "select", "from" }));
-        String oldSql = "";
-        if (count) {
-            oldSql = "select count(*) from " + StringUtils.substringAfter(sql.getSqlStatement(), " from ");
-        } else {
-            oldSql = sql.getSqlStatement();
-        }
+        String oldSql = sql.getSqlStatement();
 
         //单表分页查询，需要去除原有sql的limit语句
         if (StringUtils.containsIgnoreCase(oldSql, " limit ")) {
@@ -152,39 +147,36 @@ public class KfQueryService extends QueryHelper {
                         return sqlParam.getSqlField();
                     }).findFirst();
             //过滤万能参数
-            if (StringUtils.equalsIgnoreCase(field.get(), "1") || paramId == 20) {
+            if ("1".equals(StringUtils.trim(field.get()))) {
                 continue;
             }
             whereStr.append(" and ").append(field.get()).append("=").append("\'" + paramValue + "\'");
         }
 
-        if (StringUtils.containsIgnoreCase(sqlStat.toString(), " group by ")) {
-            String afterGroupBy = StringUtils.substringAfter(sqlStat.toString(), "group by");
-            String beforeGroupBy = StringUtils.substringBefore(sqlStat.toString(), "group by");
-            sqlStat = new StringBuilder();
-            sqlStat.append(beforeGroupBy).append(whereStr).append(" group by ").append(afterGroupBy);
-        } else if (StringUtils.containsIgnoreCase(sqlStat.toString(), " order by ")) {
-            String afterOrderBy = StringUtils.substringAfter(sqlStat.toString(), "order by");
-            String beforeOrderBy = StringUtils.substringBefore(sqlStat.toString(), "order by");
-            sqlStat = new StringBuilder();
-            sqlStat.append(beforeOrderBy).append(whereStr).append(" order by ").append(afterOrderBy);
-        } else {
-            sqlStat.append(whereStr);
+        if (whereStr.length() > 0) {
+            if (StringUtils.containsIgnoreCase(sqlStat.toString(), " group by ")) {
+                String afterGroupBy = StringUtils.substringAfter(sqlStat.toString(), "group by");
+                String beforeGroupBy = StringUtils.substringBefore(sqlStat.toString(), "group by");
+                sqlStat = new StringBuilder();
+                sqlStat.append(beforeGroupBy).append(whereStr).append(" group by ").append(afterGroupBy);
+            } else if (StringUtils.containsIgnoreCase(sqlStat.toString(), " order by ")) {
+                String afterOrderBy = StringUtils.substringAfter(sqlStat.toString(), "order by");
+                String beforeOrderBy = StringUtils.substringBefore(sqlStat.toString(), "order by");
+                sqlStat = new StringBuilder();
+                sqlStat.append(beforeOrderBy).append(whereStr).append(" order by ").append(afterOrderBy);
+            } else {
+                sqlStat.append(whereStr);
+            }
         }
-        if(count)
-        {
-            return sqlStat.toString();
-        }
-        
+
         query.cal();
         if (sql.getDataSource().getDriverType() == DriverTypeEnum.Mysql.toInt()) {
             sqlStat.append(" limit ").append(query.getStartIndex()).append(",").append(query.getEndIndex());
-        }else if( sql.getDataSource().getDriverType() == DriverTypeEnum.SQL_SERVER.toInt())
-        {
+        } else if (sql.getDataSource().getDriverType() == DriverTypeEnum.SQL_SERVER.toInt()) {
             //sql server数据库暂简单些, 直接返回前100条数据
             String resultStr = sqlStat.toString();
             sqlStat = new StringBuilder();
-            sqlStat.append(" select top (100) ").append(StringUtils.substringAfter(resultStr, "select") );
+            sqlStat.append(" select top (100) ").append(StringUtils.substringAfter(resultStr, "select"));
         }
 
         logger.info(String.format("singlqQuerySql:[%s]", sqlStat.toString()));
@@ -333,8 +325,8 @@ public class KfQueryService extends QueryHelper {
 
         //替换sql中的特殊字符
         sql.setSqlStatement(StringUtils.replaceEach(sql.getSqlStatement(),
-                new String[] { "\n", "\t", "/n", "/t", " as ", " AS ", "  ", ";", "SELECT", "FROM" },
-                new String[] { " ", " ", " ", " ", " ", " ", " ", "", "select", "from" }));
+                new String[] { "\n", "\t", "/n", "/t", " as ", " AS ", "  ", ";", "SELECT", "FROM",  "GROUP BY", "ORDER BY" },
+                new String[] { " ", " ", " ", " ", " ", " ", " ", "", "select", "from",  "group by", "order by"}));
 
         //获得sql中的select到form部分的内容
         String selectFieldStr = StringUtils.substringBetween(sql.getSqlStatement(), "select", "from");
@@ -376,11 +368,10 @@ public class KfQueryService extends QueryHelper {
             if (!StringUtils.containsIgnoreCase(result.toString(), " limit ")) {
                 result.append(" limit 0,100");
             }
-        }else if(DriverTypeEnum.SQL_SERVER.toInt() == sql.getDataSource().getDriverType().intValue())
-        {
+        } else if (DriverTypeEnum.SQL_SERVER.toInt() == sql.getDataSource().getDriverType().intValue()) {
             String resultStr = result.toString();
             result = new StringBuilder();
-            result.append(" select top (100) ").append(StringUtils.substringAfter(resultStr, "select") );
+            result.append(" select top (100) ").append(StringUtils.substringAfter(resultStr, "select"));
         }
         return result.toString();
     }
