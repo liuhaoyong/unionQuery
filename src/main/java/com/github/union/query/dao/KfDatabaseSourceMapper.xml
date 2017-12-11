@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.wac.query.dao.KfDatabaseSourceMapper">
+<mapper namespace="com.github.union.query.dao.KfDatabaseSourceMapper">
 
-	<resultMap id="KfDatabaseSourceMapper.KfDatabaseSource" type="com.wac.query.models.KfDatabaseSource">
+	<resultMap id="KfDatabaseSourceMapper.KfDatabaseSource" type="com.github.union.query.models.KfDatabaseSource">
 		<id column="id" property="id"/>
 		<result column="dbs_name" property="dbsName"/>
 		<result column="user_name" property="userName"/>
@@ -23,7 +23,7 @@
 		</if>
 	</sql>
 
-	<select id="queryByCondition" parameterType="com.wac.query.models.KfDatabaseSource" resultMap="KfDatabaseSourceMapper.KfDatabaseSource" >
+	<select id="queryByCondition" parameterType="com.github.union.query.models.KfDatabaseSource" resultMap="KfDatabaseSourceMapper.KfDatabaseSource" >
 		SELECT <include refid="KfDatabaseSourceMapper.fields"/>
 		FROM kf_database_source t1
 		<include refid="KfDatabaseSourceMapper.condition" />
@@ -31,7 +31,7 @@
 		limit #{startIndex},#{endIndex}
 	</select>
 
-	<select id="countByCondition" resultType="int" parameterType="com.wac.query.models.KfDatabaseSource">
+	<select id="countByCondition" resultType="int" parameterType="com.github.union.query.models.KfDatabaseSource">
 			SELECT count(*) FROM kf_database_source t1
 		<include refid="KfDatabaseSourceMapper.condition" />
 	</select>
@@ -41,11 +41,11 @@
 		where t1.id=#{id}
 	</select>
 
-	<delete id="deleteByCondition" parameterType="com.wac.query.models.KfDatabaseSource">
+	<delete id="deleteByCondition" parameterType="com.github.union.query.models.KfDatabaseSource">
 		DELETE from kf_database_source where id=#{id}
 	</delete>
 	
-	<update id="updateByPrimaryKey" parameterType="com.wac.query.models.KfDatabaseSource">
+	<update id="updateByPrimaryKey" parameterType="com.github.union.query.models.KfDatabaseSource">
 		UPDATE kf_database_source
 			SET dbs_name=#{dbsName},
 			user_name=#{userName},
@@ -55,7 +55,7 @@
 		where id=#{id}
 	</update>
 
-	<insert id="insert" parameterType="com.wac.query.models.KfDatabaseSource">
+	<insert id="insert" parameterType="com.github.union.query.models.KfDatabaseSource">
 		INSERT INTO kf_database_source(dbs_name,user_name,pwd,jdbc_url,driver_type,created_time,updated_time)
 		VALUES
 		(#{dbsName},#{userName},#{pwd},#{jdbcUrl},#{driverType},#{createTime,jdbcType=TIMESTAMP },#{createTime,jdbcType=TIMESTAMP})

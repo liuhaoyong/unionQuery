@@ -22,7 +22,7 @@
 	default-autowire="byName">
 	<description>Spring公共配置文件</description>
 
-	<context:component-scan base-package="com.wac"/>
+	<context:component-scan base-package="com.github.union.query"/>
 
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
@@ -63,7 +63,7 @@
     </bean>
 	<bean id="commonSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="commonDataSource" />
-		<property name="typeAliasesPackage" value="com.wac.query.models" />
+		<property name="typeAliasesPackage" value="com.github.union.query.models" />
 	</bean>
 	
 	<!-- 配置事务支持 -->
@@ -73,7 +73,7 @@
 	<tx:annotation-driven transaction-manager="commonManager"/>
 
 	<bean name="commonMapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="com.wac.query.dao,com.wac.business.datastatistics.persistence,com.wac.business.setting.persistence,com.wac.common.persistence,com.wac.user.persistence" />
+		<property name="basePackage" value="com.github.union.query.dao" />
 		<property name="sqlSessionFactory" ref="commonSqlSessionFactory" />
 	</bean>
 

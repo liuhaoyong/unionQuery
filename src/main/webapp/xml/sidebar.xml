@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sidebar>
+	<!-- -->
 	<item id="xd1" text="业务类型定义" icon="video.png"/>
 	<item id="xd2" text="数据源定义" icon="video.png"/>
 	<item id="xd3" text="SQL语句定义" icon="video.png"/>
 	<item id="xd4" text="参数定义" icon="video.png"/>
 	<item type="separator"/>
+	
 	<item id="xd5" text="查询" icon="video.png"/>
 </sidebar>

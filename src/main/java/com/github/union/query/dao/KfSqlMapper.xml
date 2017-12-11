@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.wac.query.dao.KfSqlMapper">
+<mapper namespace="com.github.union.query.dao.KfSqlMapper">
 
-	<resultMap id="KfSqlMapper.KfSql" type="com.wac.query.models.KfSql">
+	<resultMap id="KfSqlMapper.KfSql" type="com.github.union.query.models.KfSql">
 		<id column="id" property="id"/>
 		<result column="sql_name" property="sqlName"/>
 		<result column="busniess_id" property="busniessId"/>
@@ -40,7 +40,7 @@
 			AND t1.sql_status =#{sqlStatus}
 		</if>
 	</sql>
-	<select id="queryByCondition" resultMap="KfSqlMapper.KfSql" parameterType="com.wac.query.models.KfSql" >
+	<select id="queryByCondition" resultMap="KfSqlMapper.KfSql" parameterType="com.github.union.query.models.KfSql" >
 		SELECT <include refid="KfSqlMapper.fields"/>
 		FROM kf_sql t1
 		<include refid="KfSqlMapper.condition" />
@@ -55,7 +55,7 @@
 		limit #{startIndex},#{endIndex}
 	</select>
 
-	<select id="countByCondition" resultType="int" parameterType="com.wac.query.models.KfSql">
+	<select id="countByCondition" resultType="int" parameterType="com.github.union.query.models.KfSql">
 			SELECT count(*) FROM kf_sql t1
 		<include refid="KfSqlMapper.condition" />
 	</select>
@@ -65,11 +65,11 @@
 		where t1.id=#{id}
 	</select>
 
-	<delete id="deleteByCondition" parameterType="com.wac.query.models.KfSql">
+	<delete id="deleteByCondition" parameterType="com.github.union.query.models.KfSql">
 		DELETE from kf_sql where id=#{id}
 	</delete>
 	
-	<update id="updateByPrimaryKey" parameterType="com.wac.query.models.KfSql">
+	<update id="updateByPrimaryKey" parameterType="com.github.union.query.models.KfSql">
 		UPDATE kf_sql
 			SET sql_name=#{sqlName},
 			busniess_id=#{busniessId},
@@ -81,7 +81,7 @@
 		where id=#{id}
 	</update>
 
-	<insert id="insert" parameterType="com.wac.query.models.KfSql">
+	<insert id="insert" parameterType="com.github.union.query.models.KfSql">
 		INSERT INTO kf_sql(sql_name,busniess_id,priority,data_source_id,sql_status,sql_statement,sql_desc,created_time,updated_time)
 		VALUES
 		(#{sqlName},#{busniessId},#{priority},#{dataSourceId},#{sqlStatus},#{sqlStatement},#{sqlDesc},#{createTime,jdbcType=TIMESTAMP },#{createTime,jdbcType=TIMESTAMP})
