@@ -6,7 +6,7 @@
     <display-name>query</display-name>
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath*:META-INF/client/wacAppContext-boss-base-*.xml,classpath:/*-context.xml</param-value>
+		<param-value>classpath:/*-context.xml</param-value>
 	</context-param>
 
 	<filter>
