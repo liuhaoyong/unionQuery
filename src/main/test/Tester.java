@@ -1,7 +1,7 @@
-import com.wac.query.enums.DriverTypeEnum;
+import com.github.union.query.enums.DriverTypeEnum;
 
 /**
- * @author huangjinsheng on 2015/6/23.
+ * @author liuhaoyong on 2015/6/23.
  */
 public class Tester {
     public static void main(String[] args){

@@ -1,4 +1,5 @@
 import java.io.UnsupportedEncodingException;
+import java.util.concurrent.ExecutionException;
 
 import org.junit.After;
 import org.junit.Before;
@@ -9,10 +10,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.alibaba.druid.filter.config.ConfigTools;
-import com.wac.query.models.KfDatabaseSource;
-import com.wac.query.models.KfSingleQuery;
-import com.wac.query.service.KfQueryService;
-import com.wac.query.web.KfDatabaseSourceAction;
+import com.github.union.query.models.KfDatabaseSource;
+import com.github.union.query.models.KfSingleQuery;
+import com.github.union.query.service.KfQueryService;
+import com.github.union.query.web.KfDatabaseSourceAction;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -37,15 +38,15 @@ public class QueryTest {
 
     @Test
     public void testQueryForMYSQL() throws Exception {
-        String result = queryService.query(1, 2, "146");
+        String result = queryService.query(1, 2, "1460000");
         System.out.println(result);
     }
     
-    @Test
-    public void testQueryForMSSQL() throws Exception {
-        String result = queryService.query(2, 1, "123");
-        System.out.println(result);
-    }
+//    @Test
+//    public void testQueryForMSSQL() throws Exception {
+//        String result = queryService.query(2, 1, "123");
+//        System.out.println(result);
+//    }
     
     @Test
     public void testQueryForMSSQL2() throws Exception {
@@ -68,7 +69,7 @@ public class QueryTest {
     @Test
     public void testQueryForSingleQuery() throws Exception {
         KfSingleQuery query = new KfSingleQuery();
-        query.setBid(4);
+        query.setBid(5);
         query.setParamIds(new String[]{"4"});
         query.setParamValues(new String[]{"1"});
         query.setiDisplayStart(1);
@@ -78,6 +79,13 @@ public class QueryTest {
         System.out.println(result);
     }
     
+    @Test
+    public void testQueryForSingleTableTitle() throws ExecutionException
+    {
+        String str = queryService.getSingleParamTableTitle(queryService.getQueryRelatedInfo(5));
+        System.out.println(str);
+        
+    }
     
     
     public static void main(String args[]) throws Exception
@@ -89,8 +97,12 @@ public class QueryTest {
 //        result.append(" select top (100) ").append(StringUtils.substringAfter("select ss from sdfsdf;", "select") );
 //        
 //        System.out.println(result.toString());
+//        DruidDataSource source = new DruidDataSource();
+//        Properties pro = new Properties();
+//        pro.setProperty(DruidDataSourceFactory.PROP_PASSWORD, "co2aiZRITm9E/Xqxae6At/ZcWQ7t8RO3kt3wQsRMIHdn7agU7vEuKbeE2m/x6VhBtaGy8FB/6MLBSnYI+Lo88g==");
+//        new ConfigFilter().decrypt(source,pro);
         
-        System.out.println(ConfigTools.encrypt("Kj5sa_C6DsLmx"));
-        System.out.println(ConfigTools.decrypt("OXMhzblmkmV9vHtaebjiwXIoNFf9ca3AKHrA6+OB+BkLFCq8Uw4RsMvka5WZvcAorqu6uuvQgRnMDjTyQhOm4Q=="));
+       System.out.println(ConfigTools.encrypt("H1d2D_x8G"));
+        System.out.println(ConfigTools.decrypt("It7jmzilkrGqaG71TPP0DwTQBaYP2GZhNcE6gn/E+S8T2aH6mq+4XNWynYhdLYfumOsFhCkT1l/0Kl4l0QwYKg=="));
     }
 }
