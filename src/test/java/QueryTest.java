@@ -91,18 +91,8 @@ public class QueryTest {
     public static void main(String args[]) throws Exception
     {
         
-//        StringBuilder result = new StringBuilder();
-//        System.out.println(StringUtils.substringAfter("select ss from sdfsdf;", "select"));
-//
-//        result.append(" select top (100) ").append(StringUtils.substringAfter("select ss from sdfsdf;", "select") );
-//        
-//        System.out.println(result.toString());
-//        DruidDataSource source = new DruidDataSource();
-//        Properties pro = new Properties();
-//        pro.setProperty(DruidDataSourceFactory.PROP_PASSWORD, "co2aiZRITm9E/Xqxae6At/ZcWQ7t8RO3kt3wQsRMIHdn7agU7vEuKbeE2m/x6VhBtaGy8FB/6MLBSnYI+Lo88g==");
-//        new ConfigFilter().decrypt(source,pro);
         
-       System.out.println(ConfigTools.encrypt("H1d2D_x8G"));
-        System.out.println(ConfigTools.decrypt("It7jmzilkrGqaG71TPP0DwTQBaYP2GZhNcE6gn/E+S8T2aH6mq+4XNWynYhdLYfumOsFhCkT1l/0Kl4l0QwYKg=="));
+       System.out.println(ConfigTools.encrypt(""));
+        System.out.println(ConfigTools.decrypt(""));
     }
 }
